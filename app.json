@@ -1,0 +1,28 @@
+{
+    "name": "Inflex Music Bot",
+    "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
+    "logo": "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg",
+    "keywords": [
+    "python3",
+    "telegram",
+    "bot",
+    "Aviax",
+    "MusicBot",
+    "telegram-bot",
+    "pyrogram"
+    ],
+    "env": {
+    },
+    "buildpacks": [
+          {
+              "url": "heroku/python"
+          },
+          {
+              "url": "heroku/nodejs"
+          },
+          {
+              "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+          }
+      ],
+      "stack": "container"
+  }
