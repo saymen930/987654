@@ -23,7 +23,7 @@ LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002894584465"))
 
 # Get this value from @MissRose_Bot on Telegram by /id
 OWNER_ID = int(getenv("OWNER_ID", "7925819123"))
-OWNER_NAME = getenv("OWNER_NAME", "t.me/Rahid_7")
+OWNER_NAME = getenv("OWNER_NAME", "t.me/Eliko7x7")
 
 
 # Fill Queue Limit . Example - 15
