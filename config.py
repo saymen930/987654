@@ -75,36 +75,36 @@ autoclean = []
 confirmer = {}
 
 
-START_IMG_URL = ["https://files.catbox.moe/5mrbh7.jpg", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"]
+START_IMG_URL = ["https://files.catbox.moe/czs328.jpg"]
 
-PING_IMG_URL = "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
-STATS_IMG_URL = "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+PING_IMG_URL = "https://files.catbox.moe/czs328.jpg"
+STATS_IMG_URL = "https://files.catbox.moe/czs328.jpg"
 PLAYLIST_IMG_URL = getenv(
-    "PLAYLIST_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "PLAYLIST_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 TELEGRAM_AUDIO_URL = getenv(
-    "TELEGRAM_AUDIO_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "TELEGRAM_AUDIO_URL", "https://files.catbox.moe/czs328.jpg"
 )
 TELEGRAM_VIDEO_URL = getenv(
-    "TELEGRAM_VIDEO_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "TELEGRAM_VIDEO_URL", "https://files.catbox.moe/czs328.jpg"
 )
 STREAM_IMG_URL = getenv(
-    "STREAM_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "STREAM_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 SOUNCLOUD_IMG_URL = getenv(
-    "SOUNCLOUD_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "SOUNCLOUD_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 YOUTUBE_IMG_URL = getenv(
-    "YOUTUBE_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "YOUTUBE_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 SPOTIFY_ARTIST_IMG_URL = getenv(
-    "SPOTIFY_ARTIST_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "SPOTIFY_ARTIST_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 SPOTIFY_ALBUM_IMG_URL = getenv(
-    "SPOTIFY_ALBUM_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "SPOTIFY_ALBUM_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 SPOTIFY_PLAYLIST_IMG_URL = getenv(
-    "SPOTIFY_PLAYLIST_IMG_URL", "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg"
+    "SPOTIFY_PLAYLIST_IMG_URL", "https://files.catbox.moe/czs328.jpg"
 )
 
 
