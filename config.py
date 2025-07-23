@@ -12,14 +12,14 @@ API_ID = int(getenv("API_ID", "23470912"))
 API_HASH = getenv("API_HASH", "33ac02b7891c5396e6b305802d56cf4f")
 
 # Get your token from @BotFather on Telegram.
-BOT_TOKEN = getenv("BOT_TOKEN", "")
+BOT_TOKEN = getenv("BOT_TOKEN", "7980772601:AAF4Y_cOA_maz5QY8h--9-yOVxb6CCkszEo")
 
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
 
 # Chat id of a group for logging bot's activities
-LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002894584465"))
+LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-2889437074"))
 
 # Get this value from @MissRose_Bot on Telegram by /id
 OWNER_ID = int(getenv("OWNER_ID", "7800338935"))
