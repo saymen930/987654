@@ -14,7 +14,7 @@ async def fsfsfs(client, message):
     # Yanıtlanacak mesajı oluştur
     reply_message = await message.reply_text("Mahnı yükləmək üçün aşağıdakı bota daxil olun.")
     keyboard = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("➡️ Bota daxil ol", url="https://t.me/MultiAzBot"),
-        InlineKeyboardButton("Kanal", url="https://t.me/multiazofficiall")]] 
+        [[InlineKeyboardButton("➡️ Bota daxil ol", url="https://t.me/Expertmusicbot"),
+        InlineKeyboardButton("Kanal", url="https://t.me/QrupBotlari")]] 
     )# bunu silen rahide ata desin
     await reply_message.edit_reply_markup(reply_markup=keyboard)
