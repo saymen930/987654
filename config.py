@@ -75,36 +75,36 @@ autoclean = []
 confirmer = {}
 
 
-START_IMG_URL = ["https://files.catbox.moe/vnpuan.jpg"]
+START_IMG_URL = ["https://files.catbox.moe/jd07nn.jpg"]
 
-PING_IMG_URL = "https://files.catbox.moe/vnpuan.jpg"
-STATS_IMG_URL = "https://files.catbox.moe/vnpuan.jpg"
+PING_IMG_URL = "https://files.catbox.moe/jd07nn.jpg"
+STATS_IMG_URL = "https://files.catbox.moe/jd07nn.jpg"
 PLAYLIST_IMG_URL = getenv(
-    "PLAYLIST_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "PLAYLIST_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 TELEGRAM_AUDIO_URL = getenv(
-    "TELEGRAM_AUDIO_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "TELEGRAM_AUDIO_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 TELEGRAM_VIDEO_URL = getenv(
-    "TELEGRAM_VIDEO_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "TELEGRAM_VIDEO_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 STREAM_IMG_URL = getenv(
-    "STREAM_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "STREAM_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 SOUNCLOUD_IMG_URL = getenv(
-    "SOUNCLOUD_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "SOUNCLOUD_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 YOUTUBE_IMG_URL = getenv(
-    "YOUTUBE_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "YOUTUBE_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 SPOTIFY_ARTIST_IMG_URL = getenv(
-    "SPOTIFY_ARTIST_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "SPOTIFY_ARTIST_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 SPOTIFY_ALBUM_IMG_URL = getenv(
-    "SPOTIFY_ALBUM_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "SPOTIFY_ALBUM_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 SPOTIFY_PLAYLIST_IMG_URL = getenv(
-    "SPOTIFY_PLAYLIST_IMG_URL", "https://files.catbox.moe/vnpuan.jpg"
+    "SPOTIFY_PLAYLIST_IMG_URL", "https://files.catbox.moe/jd07nn.jpg"
 )
 
 
