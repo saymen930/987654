@@ -131,7 +131,7 @@ cplay_5: "Yalnız kanallar dəstəklənir."
 cplay_6: "» {0} kanalını bağlamaq üçün kanal sahibi olmalısınız.\n<b>Kanal Sahibi:</b> @{1}\n\nAlternativ olaraq, qrupunuzu həmin kanala bağlaya və sonra <code>/channelplay linked</code> əmri ilə cəhd edə bilərsiniz."
 cplay_7: "» Kanal oynatma deaktiv edildi."
 
-play_1: "🔍 Sorğunuz işlənir, zəhmət olmasa gözləyin..."
+play_1: "💎"
 play_2: "<b>➻ Kanal İfa Rejimi</b>\n\nİşlənir, zəhmət olmasa gözləyin...\n\n<b>Əlaqəli Kanal:</b> {0}"
 play_3: "» İşləmə zamanı xəta baş verdi."
 play_4: "<b>Yalnız Administratorlar üçün İfa</b>\nBu söhbətin adminlərinə yalnız ifa icazəsi verilib\n\n/playmode ilə ifa rejimini dəyişə bilərsiniz"
