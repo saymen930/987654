@@ -1,4 +1,4 @@
-from BrandrdXMusic import app
+from InflexMusic import app
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
