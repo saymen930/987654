@@ -15,4 +15,4 @@ RUN python3 -m pip install --upgrade pip setuptools
 RUN pip3 install --no-cache-dir --requirement requirements.txt
 
 # Botu işə salırıq
-CMD ["python3", "-m", "SaybuMusicBot"]
+CMD ["python3", "-m", "InflexMusic"]
