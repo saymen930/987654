@@ -1,12 +1,18 @@
-FROM nikolaik/python-nodejs:python3.10-nodejs20
+FROM python:3.10-slim
 
+# ffmpeg və digər tələbləri quraşdırırıq
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg \
+    && apt-get install -y --no-install-recommends ffmpeg gcc libffi-dev libssl-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
+# Bot fayllarını konteynerə kopyalayırıq
 COPY . /app/
 WORKDIR /app/
-RUN pip3 install --no-cache-dir -U -r requirements.txt
 
-CMD bash start
+# Pip və requirements-ləri quraşdırırıq
+RUN python3 -m pip install --upgrade pip setuptools
+RUN pip3 install --no-cache-dir --requirement requirements.txt
+
+# Botu işə salırıq
+CMD ["python3", "-m", "SaybuMusicBot"]
