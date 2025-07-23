@@ -12,7 +12,7 @@ API_ID = int(getenv("API_ID", "23470912"))
 API_HASH = getenv("API_HASH", "33ac02b7891c5396e6b305802d56cf4f")
 
 # Get your token from @BotFather on Telegram.
-BOT_TOKEN = getenv("BOT_TOKEN", "8018337594:AAE9KX1wf_YZ4BWeC2lGKVmzIvPpdGFoKyk")
+BOT_TOKEN = getenv("BOT_TOKEN", "8025984970:AAE48m0S5uGdxsN0Z6VxJyZSvRt9_YzJcQM")
 
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
@@ -22,8 +22,8 @@ DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
 LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002894584465"))
 
 # Get this value from @MissRose_Bot on Telegram by /id
-OWNER_ID = int(getenv("OWNER_ID", "7926847490"))
-OWNER_NAME = getenv("OWNER_NAME", "t.me/x7Miro")
+OWNER_ID = int(getenv("OWNER_ID", "7800338935"))
+OWNER_NAME = getenv("OWNER_NAME", "t.me/SWoBranket")
 
 
 # Fill Queue Limit . Example - 15
@@ -37,8 +37,8 @@ HEROKU_API_KEY = getenv("HEROKU_API_KEY", None)
 
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "main")
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/MiroBotlar")
-SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/MiroBotlar")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/QrupBotlari")
+SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/QrupBotlariDestek")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", None))
