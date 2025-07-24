@@ -304,7 +304,3 @@ gban_9: "» {0} tərəfindən ümumi qadağa götürüldü.\n\n{1} söhbətdən 
 gban_10: "» Heç bir istifadəçi bot tərəfindən ümumi qadağan olunmayıb."
 gban_11: "» Ümumi qadağan olunmuş istifadəçilər siyahısı yüklənir..."
 gban_12: "<b>Ümumi Qadağan Olunmuş İstifadəçilər:</b>\n\n"
-#--------------------------------------------------------------------------------------------------------------------------------------
-H_B_K : "İstifadəçi"
-H_B_U : "Admin"
-H_B_S : "Sudo"
