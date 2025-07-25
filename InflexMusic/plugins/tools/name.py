@@ -1,0 +1,39 @@
+from pyrogram import Client, filters
+from pyrogram.types import Message
+from datetime import datetime
+
+api_id = YOUR_API_ID
+api_hash = "YOUR_API_HASH"
+bot_token = "YOUR_BOT_TOKEN"
+
+app = Client("name_change_alert_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
+
+usernames = {}
+
+@app.on_message(filters.group & filters.text)
+async def detect_name_change(client: Client, message: Message):
+    user = message.from_user
+    user_id = user.id
+    current_name = user.first_name
+    if user.last_name:
+        current_name += " " + user.last_name
+
+    old_name = usernames.get(user_id)
+    if old_name is None:
+        usernames[user_id] = current_name
+    else:
+        if old_name != current_name:
+            usernames[user_id] = current_name
+            chat_title = message.chat.title or "Qrup"
+            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            alert_text = (
+                "Ad dəyişdirildi 🔃\n"
+                f"🆕 Yeni Adı  {current_name}\n"
+                f"🔄 Köhnə adı  {old_name}\n"
+                f"🆔 ID  {user_id}\n"
+                f"⏳ Tarix {now}\n"
+                f"💬 Chat {chat_title}"
+            )
+            await message.reply_text(alert_text)
+
+app.run()
