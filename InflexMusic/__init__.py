@@ -14,6 +14,7 @@ userbot = Userbot()
 
 
 from .platforms import *
+from .owner import *
 
 Apple = AppleAPI()
 SoundCloud = SoundAPI()
