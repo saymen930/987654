@@ -12,6 +12,26 @@ import config
 from ..logging import LOGGER
 
 
+#############
+import random, os, logging, asyncio
+from telethon import TelegramClient, events
+from telethon.sessions import StringSession
+from telethon.tl.types import ChannelParticipantsAdmins
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(name)s - [%(levelname)s] - %(message)s'
+)
+LOGGER = logging.getLogger(__name__)
+
+api_id = config.API_ID
+api_hash = config.API_HASH
+bot_token = config.BOT_TOKEN
+xaos = TelegramClient('client', api_id, api_hash).start(bot_token=bot_token)
+
+################
+
+
+
 class Inflex(Client):
     def __init__(self):
         LOGGER(__name__).info(f"Starting Bot...")
