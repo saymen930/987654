@@ -1,12 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from datetime import datetime
-
-api_id = YOUR_API_ID
-api_hash = "YOUR_API_HASH"
-bot_token = "YOUR_BOT_TOKEN"
-
-app = Client("name_change_alert_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
+from InflexMusic import app  # Sənin layihə modulu
 
 usernames = {}
 
@@ -35,5 +30,3 @@ async def detect_name_change(client: Client, message: Message):
                 f"💬 Chat {chat_title}"
             )
             await message.reply_text(alert_text)
-
-app.run()
