@@ -5,6 +5,7 @@ from InflexMusic.misc import dbb, heroku
 
 from .logging import LOGGER
 
+# Lazım olsa main.py-də çağır
 dirr()
 dbb()
 heroku()
@@ -12,9 +13,16 @@ heroku()
 app = Inflex()
 userbot = Userbot()
 
+from .platforms import (
+    AppleAPI,
+    SoundAPI,
+    SpotifyAPI,
+    RessoAPI,
+    TeleAPI,
+    YouTubeAPI
+)
 
-from .platforms import *
-from .owner import *
+from .owner import OWNER_ID
 
 Apple = AppleAPI()
 SoundCloud = SoundAPI()
