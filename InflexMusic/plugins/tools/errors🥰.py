@@ -2,7 +2,6 @@ import logging, asyncio, random
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from telethon.tl.types import ChannelParticipantsAdmins
-from AylinRobot.config import Config
 from telethon import events, errors
 from InflexMusic.core.bot import xaos as client 
 import time
