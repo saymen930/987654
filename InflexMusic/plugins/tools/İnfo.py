@@ -1,9 +1,8 @@
 from pyrogram import Client, filters
-from InflexMusic import app  # Səndə `app` necədirsə, eyni saxla
+from InflexMusic import app  # əgər `app` Client-dirsə
 
 @app.on_message(filters.command("info") & (filters.group | filters.private))
-async def info(client: Client, message):
-    # Qrupda başqasının məlumatını almaq üçün cavab yoxla
+async def info(client, message):
     if message.reply_to_message:
         user = message.reply_to_message.from_user
     else:
@@ -21,7 +20,7 @@ async def info(client: Client, message):
         f"🥷 <b>Profil:</b> {profile_link}"
     )
 
-await message.reply(
-    text,
-    parse_mode="HTML"
-)
+    await message.reply(
+        text,
+        parse_mode="HTML"
+    )
