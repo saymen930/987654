@@ -1,6 +1,8 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message, ChatMember
 import config  # config.py faylını import edirik
+from InflexMusic import app  # Sənin layihə modulu
+
 
 async def is_admin(client: Client, message: Message) -> bool:
     # İstifadəçi OWNER_ID siyahısındadırsa, icazə ver
