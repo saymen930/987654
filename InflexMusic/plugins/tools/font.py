@@ -1,7 +1,7 @@
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from İnflexMusic import app
+from InflexMusic import app
 from InflexMusic.utils.branded_font import Fonts
 
 
