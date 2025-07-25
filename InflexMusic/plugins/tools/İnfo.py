@@ -1,3 +1,4 @@
+from pyrogram import filters
 from InflexMusic import app, userbot
 
 @app.on_message(filters.command("info") & (filters.group | filters.private))
