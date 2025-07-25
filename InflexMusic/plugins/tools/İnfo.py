@@ -1,11 +1,8 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message
-
-from InflexMusic import app  # Səndə app belədirsə, eyni saxla
+from InflexMusic import app
 
 @app.on_message(filters.command("info") & (filters.group | filters.private))
-async def info(client: Client, message: Message):
-    # Qrupda başqasının mesajına cavab verilibsə, cavablanan adamı götür
+async def info(client, message):
     if message.reply_to_message:
         user = message.reply_to_message.from_user
     else:
@@ -40,3 +37,5 @@ async def info(client: Client, message: Message):
             text,
             parse_mode="html"
         )
+
+app.run()
