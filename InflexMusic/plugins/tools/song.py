@@ -13,8 +13,7 @@ from pyrogram.types import (
 
 from config import (
     BANNED_USERS,
-    SONG_DOWNLOAD_DURATION,
-    SONG_DOWNLOAD_DURATION_LIMIT,
+    DURATION_LIMIT_MIN,
 )
 from InflexMusic import YouTube, app
 from InflexMusic.utils.decorators.language import language, languageCB
