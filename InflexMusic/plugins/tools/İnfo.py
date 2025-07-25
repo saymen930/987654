@@ -1,19 +1,21 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 
-from InflexMusic import app  # səndə app Client obyekti belə adlanırsa
+from InflexMusic import app  # Səndə app belədirsə, eyni saxla
 
-@app.on_message(filters.command("info") & filters.private)
+@app.on_message(filters.command("info") & (filters.group | filters.private))
 async def info(client: Client, message: Message):
-    user = message.from_user
+    # Qrupda başqasının mesajına cavab verilibsə, cavablanan adamı götür
+    if message.reply_to_message:
+        user = message.reply_to_message.from_user
+    else:
+        user = message.from_user
 
-    # İstifadəçi məlumatları
     name = user.first_name or "Yoxdur"
     username = f"@{user.username}" if user.username else "Yoxdur"
     user_id = user.id
     profile_link = f'<a href="tg://user?id={user_id}">{name}</a>'
 
-    # Profil şəkli varsa götür
     photos = await client.get_profile_photos(user.id)
     if photos.total_count > 0:
         photo_id = photos.photos[0].file_id
