@@ -1,16 +1,15 @@
 from pyrogram import Client, filters
-from pyrogram.types import Message, ChatMember
-import config  # config.py faylını import edirik
-from InflexMusic import app  # Sənin layihə modulu
+from pyrogram.types import Message
+from InflexMusic.owner import OWNER_ID  # owner.py-dən gəlir
+
+from InflexMusic import app
 
 
 async def is_admin(client: Client, message: Message) -> bool:
-    # İstifadəçi OWNER_ID siyahısındadırsa, icazə ver
-    if message.from_user.id in config.OWNER_ID:
+    if message.from_user.id in OWNER_ID:
         return True
 
-    # Əgər yoxdursa, qrupda admin statusunu yoxla
-    member: ChatMember = await client.get_chat_member(message.chat.id, message.from_user.id)
+    member = await client.get_chat_member(message.chat.id, message.from_user.id)
     return member.status in ["administrator", "creator"]
 
 
@@ -21,11 +20,11 @@ async def pin_message(client, message: Message):
         return
 
     if await is_admin(client, message):
-        try:
-            await message.reply_to_message.pin()
-            await message.reply("📌 Bir mesajı sabitlədim...")
-        except Exception as e:
-            await message.reply(f"Xəta baş verdi: {e}")
+        await client.pin_chat_message(
+            chat_id=message.chat.id,
+            message_id=message.reply_to_message.id
+        )
+        await message.reply("📌 Bir mesajı sabitlədim...")
     else:
         await message.reply("❌ Sizin admin olduğunuzu görmürəm.....")
 
@@ -37,10 +36,10 @@ async def unpin_message(client, message: Message):
         return
 
     if await is_admin(client, message):
-        try:
-            await message.reply_to_message.unpin()
-            await message.reply("📌 Bir mesajı sabitdən sildim.....")
-        except Exception as e:
-            await message.reply(f"Xəta baş verdi: {e}")
+        await client.unpin_chat_message(
+            chat_id=message.chat.id,
+            message_id=message.reply_to_message.id
+        )
+        await message.reply("📌 Bir mesajı sabitdən sildim.....")
     else:
         await message.reply("❌ Sizin admin olduğunuzu görmürəm.....")
