@@ -6,6 +6,7 @@ import time
 import os
 import datetime
 import json
+from InflexMusic import app
 
 # Bot start vaxtı
 bot_start_time = datetime.datetime.now()
