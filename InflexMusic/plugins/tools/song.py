@@ -65,7 +65,7 @@ def song(client, message):
         }
 
         # Cookie faylı varsa əlavə et
-        if os.path.exists("cookies/cookies.txt"):
+        if os.path.exists("cookies/cookies(7).txt"):
             ydl_opts["cookiefile"] = "cookies/cookies(7).txt"
 
         m.delete()
