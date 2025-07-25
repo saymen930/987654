@@ -1,40 +1,46 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from InflexMusic.owner import OWNER_ID  # owner.py-dən gəlir
-
 from InflexMusic import app
 
 
-@bot.message_handler(commands=['pin'])
-def pin(message):
-    if not is_admin(message.from_user.id, message.chat.id):
-        return bot.reply_to(message, "❌ Bu əmri istifadə etmək üçün admin olmalısınız.")
-    if not message.reply_to_message:
-        return bot.reply_to(message, "🔺 Zəhmət olmasa, hər hansısa mesaja cavab verin ✅")
-    try:
-        bot.pin_chat_message(message.chat.id, message.reply_to_message.message_id)
-        bot.reply_to(message.reply_to_message, "📌 Bir mesajı sabitlədim")
-    except Exception as e:
-        bot.reply_to(message, "❌ Pin edilə bilmədi. Yetkiniz olmaya bilər.")
+async def is_admin(user_id: int, chat_id: int) -> bool:
+    member = await app.get_chat_member(chat_id, user_id)
+    return member.status in ("administrator", "creator")
 
-@bot.message_handler(commands=['unpin'])
-def unpin(message):
-    if not is_admin(message.from_user.id, message.chat.id):
-        return bot.reply_to(message, "❌ Bu əmri istifadə etmək üçün admin olmalısınız.")
-    if not message.reply_to_message:
-        return bot.reply_to(message, "🔺 Zəhmət olmasa, hər hansısa mesaja cavab verin ✅")
-    try:
-        bot.unpin_chat_message(message.chat.id, message.reply_to_message.message_id)
-        bot.reply_to(message.reply_to_message, "✅ Bir mesajı pindən sildim")
-    except Exception as e:
-        bot.reply_to(message, "❌ Pin silinə bilmədi. Yetkiniz olmaya bilər.")
 
-@bot.message_handler(commands=['unpinall'])
-def unpinall(message):
-    if not is_admin(message.from_user.id, message.chat.id):
-        return bot.reply_to(message, "❌ Bu əmri istifadə etmək üçün admin olmalısınız.")
+@app.on_message(filters.command("pin") & filters.group)
+async def pin(client: Client, message: Message):
+    if not await is_admin(message.from_user.id, message.chat.id):
+        return await message.reply("❌ Sizin admin olduğunuzu görmürəm...")
+    if not message.reply_to_message:
+        return await message.reply("🔺 Zəhmət olmasa, bir mesaja cavab verin ✅")
+
     try:
-        bot.unpin_all_chat_messages(message.chat.id)
-        bot.reply_to(message, "✅ Bütün sabitləmələr silindi")
+        await client.pin_chat_message(message.chat.id, message.reply_to_message.message_id)
+        await message.reply("📌 Bir mesajı sabitlədim...")
     except Exception as e:
-        bot.reply_to(message, "❌ Bütün pinlər silinə bilmədi. Yetkiniz olmaya bilər.")
+        await message.reply(f"❌ Pin edilə bilmədi: {e}")
+
+@app.on_message(filters.command("unpin") & filters.group)
+async def unpin(client: Client, message: Message):
+    if not await is_admin(message.from_user.id, message.chat.id):
+        return await message.reply("❌ Sizin admin olduğunuzu görmürəm...")
+    if not message.reply_to_message:
+        return await message.reply("🔺 Zəhmət olmasa, bir mesaja cavab verin ✅")
+
+    try:
+        await client.unpin_chat_message(message.chat.id, message.reply_to_message.message_id)
+        await message.reply("✅ Bir mesajı pindən sildim")
+    except Exception as e:
+        await message.reply(f"❌ Pin silinə bilmədi: {e}")
+
+@app.on_message(filters.command("unpinall") & filters.group)
+async def unpin_all(client: Client, message: Message):
+    if not await is_admin(message.from_user.id, message.chat.id):
+        return await message.reply("❌ Sizin admin olduğunuzu görmürəm...")
+
+    try:
+        await client.unpin_all_chat_messages(message.chat.id)
+        await message.reply("✅ Bütün sabitləmələr silindi")
+    except Exception as e:
+        await message.reply(f"❌ Bütün pinlər silinə bilmədi: {e}")
