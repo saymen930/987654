@@ -21,7 +21,7 @@ async def info(client: Client, message):
         f"🥷 <b>Profil:</b> {profile_link}"
     )
 
-    await message.reply(
-        text,
-        parse_mode="html"
-    )
+await message.reply(
+    text,
+    parse_mode="HTML"
+)
