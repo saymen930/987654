@@ -2,7 +2,7 @@ import telethon, asyncio
 import random
 from random import choice
 from telethon import TelegramClient, events
-from InflexMusic import xaos as client 
+from InflexMusic.core.bot import xaos as client 
  
 Y_D = ["Yalan Danışır 🎃", "Doğru danışır 👻", "Balamın canı onun başın buraq. O nə danışır heç özüdə bilmir 🤐 Yuxuludu o"]
 
