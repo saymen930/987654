@@ -1,5 +1,14 @@
+#
+# Copyright (C) 2024-2025 by TheTeamVivek@Github, < https://github.com/TheTeamVivek >.
+#
+# This file is part of < https://github.com/TheTeamVivek/YukkiMusic > project,
+# and is released under the MIT License.
+# Please see < https://github.com/TheTeamVivek/YukkiMusic/blob/master/LICENSE >
+#
+# All rights reserved.
+#
 from pyrogram.types import InlineKeyboardButton
-import config
+
 
 def song_markup(_, vidid):
     buttons = [
@@ -14,12 +23,7 @@ def song_markup(_, vidid):
             ),
         ],
         [
-            InlineKeyboardButton(
-                text="🥀 sᴜᴩᴩᴏʀᴛ 🥀", url=f"{config.SUPPORT_CHAT}",
-            ),
-            InlineKeyboardButton(
-                text=_["CLOSE_BUTTON"], callback_data="close"
-            ),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
         ],
     ]
     return buttons
