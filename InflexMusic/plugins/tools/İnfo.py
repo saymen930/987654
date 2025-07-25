@@ -38,4 +38,3 @@ async def info(client, message):
             parse_mode="html"
         )
 
-app.run()
