@@ -3,12 +3,11 @@
 # Repo Açığdısa İcazəsis Götürmə Oğlum
 
 
-from AylinRobot import AylinRobot as app
+from InflexMusic import AylinRobot as app
 from pyrogram.errors import FloodWait
 import random
 from random import choice
 from pyrogram import Client, filters
-from AylinRobot.config import Config
 from pyrogram.types import Message
 
 
