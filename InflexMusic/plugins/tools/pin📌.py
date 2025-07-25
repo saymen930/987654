@@ -17,7 +17,7 @@ async def is_admin(client: Client, message: Message) -> bool:
 @app.on_message(filters.command("pin") & filters.group)
 async def pin_message(client, message: Message):
     if not message.reply_to_message:
-        await message.reply("Bir mesajı cavablayaraq /pin yazmalısınız!")
+        await message.reply("Bir mesajı cavablayaraq /pin yazmalısınız 🔮")
         return
 
     if await is_admin(client, message):
@@ -33,7 +33,7 @@ async def pin_message(client, message: Message):
 @app.on_message(filters.command("unpin") & filters.group)
 async def unpin_message(client, message: Message):
     if not message.reply_to_message:
-        await message.reply("Bir mesajı cavablayaraq /unpin yazmalısınız!")
+        await message.reply("Bir mesajı cavablayaraq /unpin yazmalısınız 🔮")
         return
 
     if await is_admin(client, message):
