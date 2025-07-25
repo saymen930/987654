@@ -64,4 +64,4 @@ async def helper_cb(client, CallbackQuery, _):
     elif cb == "hb3":
         await CallbackQuery.edit_message_text(_["sudos"], reply_markup=keyboard)
     elif cb == "hb4":
-            await CallBackQuery.edit_message_text(_["lists"], reply_markup=keyboard)
+            await CallbackQuery.edit_message_text(_["lists"], reply_markup=keyboard)
