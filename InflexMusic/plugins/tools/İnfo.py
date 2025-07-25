@@ -1,5 +1,4 @@
-from pyrogram import Client, filters
-from InflexMusic import app
+from InflexMusic import app, userbot
 
 @app.on_message(filters.command("info") & (filters.group | filters.private))
 async def info(client, message):
@@ -13,7 +12,7 @@ async def info(client, message):
     user_id = user.id
     profile_link = f'<a href="tg://user?id={user_id}">{name}</a>'
 
-    photos = await client.get_profile_photos(user.id)
+    photos = await userbot.get_profile_photos(user.id)
     if photos.total_count > 0:
         photo_id = photos.photos[0].file_id
     else:
@@ -37,4 +36,3 @@ async def info(client, message):
             text,
             parse_mode="html"
         )
-
