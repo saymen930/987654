@@ -11,12 +11,11 @@ import config
 
 from ..logging import LOGGER
 
-
-#############
 import random, os, logging, asyncio
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
 from telethon.tl.types import ChannelParticipantsAdmins
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(name)s - [%(levelname)s] - %(message)s'
@@ -28,13 +27,10 @@ api_hash = config.API_HASH
 bot_token = config.BOT_TOKEN
 xaos = TelegramClient('client', api_id, api_hash).start(bot_token=bot_token)
 
-################
-
-
 
 class Inflex(Client):
     def __init__(self):
-        LOGGER(__name__).info(f"Starting Bot...")
+        LOGGER.info(f"Starting Bot...")
         super().__init__(
             name="InflexMusic",
             api_id=config.API_ID,
@@ -55,60 +51,53 @@ class Inflex(Client):
         try:
             await self.send_message(
                 chat_id=config.LOG_GROUP_ID,
-                text=f"<u>{self.mention} bot aktiv edildi</b><u>\n\n🆔: <code>{self.id}</code>\n🤖: {self.name}\n🔗: @{self.username}",
+                text=f"<u>{self.mention} bot aktiv edildi</u>\n\n🆔: <code>{self.id}</code>\n🤖: {self.name}\n🔗: @{self.username}",
             )
         except (errors.ChannelInvalid, errors.PeerIdInvalid):
-            LOGGER(__name__).error(
+            LOGGER.error(
                 "Bot has failed to access the log group/channel. Make sure that you have added your bot to your log group/channel."
             )
             exit()
         except Exception as ex:
-            LOGGER(__name__).error(
+            LOGGER.error(
                 f"Bot has failed to access the log group/channel.\n  Reason : {type(ex).__name__}."
             )
             exit()
         try:
             GROUP_COMMANDS = [
-                # BotCommand("start", "🎧 Botu başlatır"),
                 BotCommand("play", "🎶"),
                 BotCommand("vplay", "🎥"),
                 BotCommand("skip", "⏭"),
                 BotCommand("end", "⏹"),
                 BotCommand("setting", "⚙️"),
                 BotCommand("lang", "🇦🇿🇹🇷🇷🇺"),
-                ]
+            ]
 
             PRIVATE_COMMANDS = [
-            BotCommand("start", "🎧"), 
-            BotCommand("help", "📖"),
-            BotCommand("sudolist", "🧑🏻‍💻👩🏻‍💻"),
+                BotCommand("start", "🎧"),
+                BotCommand("help", "📖"),
+                BotCommand("sudolist", "🧑🏻‍💻👩🏻‍💻"),
             ]
-            await self.set_bot_commands(  # * Group Commands
+
+            await self.set_bot_commands(
                 commands=GROUP_COMMANDS,
                 scope=BotCommandScopeAllGroupChats(),
             )
-            await self.set_bot_commands(  # * Private Commands
+            await self.set_bot_commands(
                 commands=PRIVATE_COMMANDS,
                 scope=BotCommandScopeAllPrivateChats(),
             )
-            LOGGER(__name__).info("Commands are set successfully")
-        except Exception as e:
+            LOGGER.info("Commands are set successfully")
+        except Exception:
             trace = traceback.format_exc()
-            LOGGER(__name__).error(f"Error during setting commands: {trace}")
+            LOGGER.error(f"Error during setting commands: {trace}")
             sys.exit()
-        else:
-            pass
 
-            a = await self.get_chat_member(config.LOG_GROUP_ID, self.id)
-            if a.status != ChatMemberStatus.ADMINISTRATOR:
-                LOGGER(__name__).error("Please promote Bot as Admin in Logger Group")
-                sys.exit()        
         a = await self.get_chat_member(config.LOG_GROUP_ID, self.id)
         if a.status != ChatMemberStatus.ADMINISTRATOR:
-            LOGGER(__name__).error(
-                "Please promote your bot as an admin in your log group/channel."
-            )
-            exit()
+            LOGGER.error("Please promote Bot as Admin in Logger Group")
+            sys.exit()
+
         LOGGER.info(f"Music Bot Started As {self.name}")
 
     async def stop(self):
