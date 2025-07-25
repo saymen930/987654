@@ -1,9 +1,21 @@
+#
+# Copyright (C) 2024-2025 by TheTeamVivek@Github, < https://github.com/TheTeamVivek >.
+#
+# This file is part of < https://github.com/TheTeamVivek/YukkiMusic > project,
+# and is released under the MIT License.
+# Please see < https://github.com/TheTeamVivek/YukkiMusic/blob/master/LICENSE >
+#
+# All rights reserved.
+#
+
 import os
 import re
+import traceback
+
 import yt_dlp
-from pyrogram import Client, filters
+from pykeyboard import InlineKeyboard
+from pyrogram import enums, filters
 from pyrogram.types import (
-    CallbackQuery,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     InputMediaAudio,
@@ -13,186 +25,291 @@ from pyrogram.types import (
 
 from config import (
     BANNED_USERS,
-    DURATION_LIMIT_MIN,
+    SONG_DOWNLOAD_DURATION,
+    SONG_DOWNLOAD_DURATION_LIMIT,
+    cookies,
 )
-from InflexMusic import YouTube, app
+from strings import command
+from InflexMusic import app
+from InflexMusic.platforms import youtube
 from InflexMusic.utils.decorators.language import language, languageCB
 from InflexMusic.utils.formatters import convert_bytes
 from InflexMusic.utils.inline.song import song_markup
 
-# Song Command — Qrup və Private üçün
 
-@app.on_message(filters.command(["song"]) & ~BANNED_USERS)
+@app.on_message(command("SONG_COMMAND") & filters.group & ~BANNED_USERS)
 @language
-async def song_command(client, message: Message, _):
-    # Əgər private-disə mesajı sil (qruplarda silmir)
-    if message.chat.type == "private":
-        await message.delete()
+async def song_commad_group(client, message: Message, _):
+    upl = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton(
+                    text=_["SG_B_1"],
+                    url=f"https://t.me/{app.username}?start=song",
+                ),
+            ]
+        ]
+    )
 
-    url = await YouTube.url(message)
+    await message.reply_text(_["song_1"], reply_markup=upl)
+
+
+# Song Module
+
+
+@app.on_message(command("SONG_COMMAND") & filters.private & ~BANNED_USERS)
+@language
+async def song_commad_private(client, message: Message, _):
+    await message.delete()
+
+    url = await youtube.url(message)
+
     if url:
-        if not await YouTube.exists(url):
+        if not await youtube.exists(url):
             return await message.reply_text(_["song_5"])
+
         mystic = await message.reply_text(_["play_1"])
+
         (
             title,
             duration_min,
             duration_sec,
             thumbnail,
             vidid,
-        ) = await YouTube.details(url)
+        ) = await youtube.details(url)
+
         if str(duration_min) == "None":
             return await mystic.edit_text(_["song_3"])
+
         if int(duration_sec) > SONG_DOWNLOAD_DURATION_LIMIT:
             return await mystic.edit_text(
-                _["play_4"].format(
-                    SONG_DOWNLOAD_DURATION, duration_min
-                )
+                _["play_4"].format(SONG_DOWNLOAD_DURATION, duration_min)
             )
+
         buttons = song_markup(_, vidid)
+
         await mystic.delete()
-        await message.reply_photo(
+
+        return await message.reply_photo(
             thumbnail,
             caption=_["song_4"].format(title),
             reply_markup=InlineKeyboardMarkup(buttons),
         )
+
     else:
         if len(message.command) < 2:
             return await message.reply_text(_["song_2"])
-        mystic = await message.reply_text(_["play_1"])
-        query = message.text.split(None, 1)[1]
-        try:
-            (
-                title,
-                duration_min,
-                duration_sec,
-                thumbnail,
-                vidid,
-            ) = await YouTube.details(query)
-        except:
-            return await mystic.edit_text(_["play_3"])
-        if str(duration_min) == "None":
-            return await mystic.edit_text(_["song_3"])
-        if int(duration_sec) > SONG_DOWNLOAD_DURATION_LIMIT:
-            return await mystic.edit_text(
-                _["play_6"].format(SONG_DOWNLOAD_DURATION, duration_min)
-            )
-        buttons = song_markup(_, vidid)
-        await mystic.delete()
-        await message.reply_photo(
+
+    mystic = await message.reply_text(_["play_1"])
+
+    query = message.text.split(None, 1)[1]
+
+    try:
+        (
+            title,
+            duration_min,
+            duration_sec,
             thumbnail,
-            caption=_["song_4"].format(title),
-            reply_markup=InlineKeyboardMarkup(buttons),
+            vidid,
+        ) = await youtube.details(query)
+
+    except Exception:
+        return await mystic.edit_text(_["play_3"])
+
+    if str(duration_min) == "None":
+        return await mystic.edit_text(_["song_3"])
+
+    if int(duration_sec) > SONG_DOWNLOAD_DURATION_LIMIT:
+        return await mystic.edit_text(
+            _["play_6"].format(SONG_DOWNLOAD_DURATION, duration_min)
         )
 
-# Geri düyməsi
+    buttons = song_markup(_, vidid)
+
+    await mystic.delete()
+
+    return await message.reply_photo(
+        thumbnail,
+        caption=_["song_4"].format(title),
+        reply_markup=InlineKeyboardMarkup(buttons),
+    )
+
 
 @app.on_callback_query(filters.regex(pattern=r"song_back") & ~BANNED_USERS)
 @languageCB
-async def songs_back_helper(client, callback_query: CallbackQuery, _):
-    callback_data = callback_query.data.strip()
+async def songs_back_helper(client, query, _):
+    callback_data = query.data.strip()
+
     callback_request = callback_data.split(None, 1)[1]
+
     stype, vidid = callback_request.split("|")
+
     buttons = song_markup(_, vidid)
-    await callback_query.edit_message_reply_markup(
+
+    return await query.edit_message_reply_markup(
         reply_markup=InlineKeyboardMarkup(buttons)
     )
 
-# Format Seçimi
 
 @app.on_callback_query(filters.regex(pattern=r"song_helper") & ~BANNED_USERS)
 @languageCB
-async def song_helper_cb(client, callback_query: CallbackQuery, _):
-    callback_data = callback_query.data.strip()
+async def song_helper_cb(client, query, _):
+    callback_data = query.data.strip()
+
     callback_request = callback_data.split(None, 1)[1]
+
     stype, vidid = callback_request.split("|")
+
     try:
-        await callback_query.answer(_["song_6"], show_alert=True)
-    except:
+        await query.answer(_["song_6"], show_alert=True)
+
+    except Exception:
         pass
-    formats_available, link = await YouTube.formats(vidid, True)
-    keyboard = InlineKeyboardMarkup(inline_keyboard=[])
-    done = []
 
     if stype == "audio":
+        try:
+            formats_available, link = await youtube.formats(vidid, True)
+
+        except Exception:
+            return await query.edit_message_text(_["song_7"])
+
+        keyboard = InlineKeyboard()
+
+        done = []
+
         for x in formats_available:
             check = x["format"]
-            if "audio" in check and x["filesize"]:
+
+            if "audio" in check:
+                if x["filesize"] is None:
+                    continue
+
                 form = x["format_note"].title()
+
                 if form not in done:
                     done.append(form)
+
                 else:
                     continue
+
                 sz = convert_bytes(x["filesize"])
+
                 fom = x["format_id"]
-                keyboard.inline_keyboard.append(
-                    [
-                        InlineKeyboardButton(
-                            text=f"{form} Quality Audio = {sz}",
-                            callback_data=f"song_download {stype}|{fom}|{vidid}",
-                        ),
-                    ]
-                )
-    else:
-        done_ids = [160, 133, 134, 135, 136, 137, 298, 299, 264, 304, 266]
-        for x in formats_available:
-            if x["filesize"] and int(x["format_id"]) in done_ids:
-                sz = convert_bytes(x["filesize"])
-                ap = x["format"].split("-")[1]
-                keyboard.inline_keyboard.append(
-                    [
-                        InlineKeyboardButton(
-                            text=f"{ap} = {sz}",
-                            callback_data=f"song_download {stype}|{x['format_id']}|{vidid}",
-                        ),
-                    ]
+
+                keyboard.row(
+                    InlineKeyboardButton(
+                        text=f"{form} Quality Audio = {sz}",
+                        callback_data=f"song_download {stype}|{fom}|{vidid}",
+                    ),
                 )
 
-    keyboard.inline_keyboard.append(
-        [
+        keyboard.row(
             InlineKeyboardButton(
                 text=_["BACK_BUTTON"],
                 callback_data=f"song_back {stype}|{vidid}",
             ),
-            InlineKeyboardButton(
-                text=_["CLOSE_BUTTON"],
-                callback_data=f"close"
-            ),
-        ]
-    )
-    await callback_query.edit_message_reply_markup(reply_markup=keyboard)
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+        )
 
-# Yüklə və göndər
+        return await query.edit_message_reply_markup(reply_markup=keyboard)
+
+    else:
+        try:
+            formats_available, link = await youtube.formats(vidid, True)
+
+        except Exception as e:
+            print(e)
+
+            return await query.edit_message_text(_["song_7"])
+
+        keyboard = InlineKeyboard()
+
+        # AVC Formats Only
+
+        done = [160, 133, 134, 135, 136, 137, 298, 299, 264, 304, 266]
+
+        for x in formats_available:
+            check = x["format"]
+
+            if x["filesize"] is None:
+                continue
+
+            if int(x["format_id"]) not in done:
+                continue
+
+            sz = convert_bytes(x["filesize"])
+
+            ap = check.split("-")[1]
+
+            to = f"{ap} = {sz}"
+
+            keyboard.row(
+                InlineKeyboardButton(
+                    text=to,
+                    callback_data=f"song_download {stype}|{x['format_id']}|{vidid}",
+                )
+            )
+
+        keyboard.row(
+            InlineKeyboardButton(
+                text=_["BACK_BUTTON"],
+                callback_data=f"song_back {stype}|{vidid}",
+            ),
+            InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data="close"),
+        )
+
+        return await query.edit_message_reply_markup(reply_markup=keyboard)
+
+
+# Downloading Songs Here
+
 
 @app.on_callback_query(filters.regex(pattern=r"song_download") & ~BANNED_USERS)
 @languageCB
-async def song_download_cb(client, callback_query: CallbackQuery, _):
+async def song_download_cb(client, query, _):
     try:
-        await callback_query.answer("Downloading...")
-    except:
+        await query.answer("ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ...")
+
+    except Exception:
         pass
-    callback_data = callback_query.data.strip()
+
+    callback_data = query.data.strip()
+
     callback_request = callback_data.split(None, 1)[1]
+
     stype, format_id, vidid = callback_request.split("|")
-    mystic = await callback_query.edit_message_text(_["song_8"])
+
+    mystic = await query.edit_message_text(_["song_8"])
+
     yturl = f"https://www.youtube.com/watch?v={vidid}"
-    with yt_dlp.YoutubeDL({"quiet": True}) as ytdl:
+
+    with yt_dlp.YoutubeDL({"quiet": True, "cookiefile": f"{cookies()}"}) as ytdl:
         x = ytdl.extract_info(yturl, download=False)
-    title = re.sub(r"\W+", " ", x["title"]).title()
-    thumb_image_path = await callback_query.message.download()
+
+    title = (x["title"]).title()
+
+    title = re.sub(r"\W+", " ", title)
+
+    thumb_image_path = await query.message.download()
+
     duration = x["duration"]
 
     if stype == "video":
-        width = callback_query.message.photo.width
-        height = callback_query.message.photo.height
+        thumb_image_path = await query.message.download()
+
+        width = query.message.photo.width
+
+        height = query.message.photo.height
+
         try:
-            file_path = await YouTube.download(
+            file_path = await youtube.download(
                 yturl,
                 mystic,
                 songvideo=True,
                 format_id=format_id,
                 title=title,
             )
+
         except Exception as e:
             return await mystic.edit_text(_["song_9"].format(e))
 
@@ -205,27 +322,34 @@ async def song_download_cb(client, callback_query: CallbackQuery, _):
             caption=title,
             supports_streaming=True,
         )
+
         await mystic.edit_text(_["song_11"])
+
         await app.send_chat_action(
-            chat_id=callback_query.message.chat.id,
-            action="upload_video",
+            chat_id=query.message.chat.id,
+            action=enums.ChatAction.UPLOAD_VIDEO,
         )
+
         try:
-            await callback_query.edit_message_media(media=med)
-        except Exception as e:
-            print(e)
+            await query.edit_message_media(media=med)
+
+        except Exception:
+            traceback.print_exc()
+
             return await mystic.edit_text(_["song_10"])
+
         os.remove(file_path)
 
     elif stype == "audio":
         try:
-            filename = await YouTube.download(
+            filename = await youtube.download(
                 yturl,
                 mystic,
                 songaudio=True,
                 format_id=format_id,
                 title=title,
             )
+
         except Exception as e:
             return await mystic.edit_text(_["song_9"].format(e))
 
@@ -236,14 +360,20 @@ async def song_download_cb(client, callback_query: CallbackQuery, _):
             title=title,
             performer=x["uploader"],
         )
+
         await mystic.edit_text(_["song_11"])
+
         await app.send_chat_action(
-            chat_id=callback_query.message.chat.id,
-            action="upload_audio",
+            chat_id=query.message.chat.id,
+            action=enums.ChatAction.UPLOAD_AUDIO,
         )
+
         try:
-            await callback_query.edit_message_media(media=med)
-        except Exception as e:
-            print(e)
+            await query.edit_message_media(media=med)
+
+        except Exception:
+            traceback.print_exc()
+
             return await mystic.edit_text(_["song_10"])
+
         os.remove(filename)
