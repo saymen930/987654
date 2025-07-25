@@ -109,7 +109,7 @@ class Inflex(Client):
                 "Please promote your bot as an admin in your log group/channel."
             )
             exit()
-        LOGGER(__name__).info(f"Music Bot Started As {self.name}")
+        LOGGER.info(f"Music Bot Started As {self.name}")
 
     async def stop(self):
         await super().stop()
