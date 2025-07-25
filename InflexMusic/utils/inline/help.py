@@ -1,16 +1,16 @@
 from typing import Union
-
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from InflexMusic import app
+from InflexMusic.utils.helpers import get_string as _
 
 
 def help_pannel(_, START: Union[bool, int] = None):
-    first = [InlineKeyboardButton(text=_["CLOSE_BUTTON"], callback_data=f"close")]
+    first = [InlineKeyboardButton(text=_("CLOSE_BUTTON"), callback_data="close")]
     second = [
         InlineKeyboardButton(
-            text=_["BACK_BUTTON"],
-            callback_data=f"settingsback_helper",
+            text=_("BACK_BUTTON"),
+            callback_data="settingsback_helper",
         ),
     ]
     mark = second if START else first
@@ -18,18 +18,18 @@ def help_pannel(_, START: Union[bool, int] = None):
         [
             [
                 InlineKeyboardButton(
-                    text=_["H_B_K"],
+                    text=_("H_B_K"),
                     callback_data="help_callback hb1",
                 ),
                 InlineKeyboardButton(
-                    text=_["H_B_U"],
+                    text=_("H_B_U"),
                     callback_data="help_callback hb2",
                 ),
                 InlineKeyboardButton(
-                    text=_["H_B_S"],
+                    text=_("H_B_S"),
                     callback_data="help_callback hb3",
                 ),
-                ],
+            ],
             mark,
         ]
     )
@@ -41,8 +41,8 @@ def help_back_markup(_):
         [
             [
                 InlineKeyboardButton(
-                    text=_["BACK_BUTTON"],
-                    callback_data=f"settings_back_helper",
+                    text=_("BACK_BUTTON"),
+                    callback_data="settings_back_helper",
                 ),
             ]
         ]
@@ -54,7 +54,7 @@ def private_help_panel(_):
     buttons = [
         [
             InlineKeyboardButton(
-                text=_["S_B_4"],
+                text=_("S_B_4"),
                 url=f"https://t.me/{app.username}?start=help",
             ),
         ],
