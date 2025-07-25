@@ -7,36 +7,9 @@ import os
 import datetime
 import json
 
-TOKEN = os.getenv('BOT_TOKEN', "7214999509:AAEJSKDGi2l7ry-Rlbu6kWTvFZvCS6BvM9w")
-bot = TeleBot(TOKEN)
-
 # Bot start vaxtı
 bot_start_time = datetime.datetime.now()
 start_message_count = 0
-
-# Dil fayllarını saxlamaq üçün
-user_languages = {}  # user_id: language_code
-
-# =============== DİL SİSTEMİ ===============
-
-LANGUAGES = {
-    'az': {
-        'name': '🇦🇿 Azərbaycan',
-        'start_text': """<b>👩‍⚕ Salam {username}</b>
-<b>👻 Mənim adım 🇦🇿 𝙻𝚊𝚕𝚎 𝙶𝚊𝚖𝚎 𝙱𝚘𝚝 🇦🇿</b>
-<b>🌟 Mən çoxlu oyun funksiyasıdan ibarətəm</b>
-<b>✨ Mənim komandalarımı və ibarət olduğum oyunları görmək üçün</b>
-<b>📚 Əmrlər buttonuna bas</b>""",
-        'commands_text': """🎮 Oyunları başlatmaq üçün /game yaz və oyun seç
-🎲 Oyunlar:
-- İzah oyunu
-- Söz oyunu
-- Təxmin oyunu
-- Tapmaca oyunu
-- Rəqəm oyunu
-- Qrupun Enləri
-- Köstəbək Game
-- Doğruluq / Cəsarət
 
 /bitir komandası ilə istənilən vaxt bütün oyunları dayandırmaq olar.""",
         'game_menu': "🎮 İstədiyiniz oyunu seçin:",
@@ -60,103 +33,9 @@ LANGUAGES = {
         'mole_game': "🦫 Köstəbək Game",
         'truth_dare': "🔥 Doğruluq / Cəsarət",
         'blank_game': "🧩 Boş Xana"
-    },
-    'tr': {
-        'name': '🇹🇷 Türkçe',
-        'start_text': """<b>👩‍⚕ Merhaba {username}</b>
-<b>👻 Benim adım 🇹🇷 𝙻𝚊𝚕𝚎 𝙶𝚊𝚖𝚎 𝙱𝚘𝚝 🇹🇷</b>
-<b>🌟 Ben çoklu oyun fonksiyonlarından oluşuyorum</b>
-<b>✨ Komutlarımı ve oyunlarımı görmek için</b>
-<b>📚 Komutlar butonuna bas</b>""",
-        'commands_text': """🎮 Oyunları başlatmak için /game yaz ve oyun seç
-🎲 Oyunlar:
-- Açıklama oyunu
-- Kelime oyunu
-- Tahmin oyunu
-- Bilmece oyunu
-- Sayı oyunu
-- Grubun Enleri
-- Köstebek Game
-- Doğruluk / Cesaret
-
-/bitir komutu ile istediğin zaman tüm oyunları durdurabilirsin.""",
-        'game_menu': "🎮 İstediğiniz oyunu seçin:",
-        'group_only': "🛡️ Sahibim bu komutu sadece gruplar için ayarladı\n✓ Beni gruba ekle ve komutu dene",
-        'games_stopped': "🔚 Tüm oyunlar durduruldu, yeni oyun için /game yaz",
-        'language_changed': "✅ Dil Türkçe olarak değiştirildi",
-        'language_menu': "🌍 Dil seçin:",
-        'support': "📤 Destek",
-        'add_group': "➕ Beni Grubuna Ekle ➕",
-        'commands': "📚 Komutlar",
-        'owner': "👤 Sahibim",
-        'chat_group': "🌐 Sohbet Grubumuz",
-        'developer': "🧑‍💻 Geliştirici",
-        'main_menu': "Ana Menü 🏡",
-        'explain_game': "🗣 Açıklama Oyunu",
-        'word_game': "🔤 Kelime Oyunu",
-        'guess_game': "🎯 Tahmin Oyunu",
-        'riddle_game': "❓ Bilmece Oyunu",
-        'number_game': "🔢 Sayı Oyunu",
-        'group_bests': "👑 Grubun Enleri",
-        'mole_game': "🦫 Köstebek Game",
-        'truth_dare': "🔥 Doğruluk / Cesaret",
-        'blank_game': "🧩 Boş Xana"
-    },
-    'ru': {
-        'name': '🇷🇺 Русский',
-        'start_text': """<b>👩‍⚕ Привет {username}</b>
-<b>👻 Меня зовут 🇷🇺 𝙻𝚊𝚕𝚎 𝙶𝚊𝚖𝚎 𝙱𝚘𝚝 🇷🇺</b>
-<b>🌟 Я состою из множества игровых функций</b>
-<b>✨ Чтобы увидеть мои команды и игры</b>
-<b>📚 Нажми кнопку Команды</b>""",
-        'commands_text': """🎮 Чтобы начать игры, напиши /game и выбери игру
-🎲 Игры:
-- Игра объяснений
-- Игра слов
-- Игра угадываний
-- Игра загадок
-- Игра чисел
-- Лучшие группы
-- Игра Крот
-- Правда / Действие
-
-Командой /bitir можно остановить все игры в любое время.""",
-        'game_menu': "🎮 Выберите желаемую игру:",
-        'group_only': "🛡️ Хозяин настроил эту команду только для групп\n✓ Добавь меня в группу и попробуй команду",
-        'games_stopped': "🔚 Все игры остановлены, для новой игры напиши /game",
-        'language_changed': "✅ Язык изменен на русский",
-        'language_menu': "🌍 Выберите язык:",
-        'support': "📤 Поддержка",
-        'add_group': "➕ Добавить в группу ➕",
-        'commands': "📚 Команды",
-        'owner': "👤 Хозяин",
-        'chat_group': "🌐 Наша группа",
-        'developer': "🧑‍💻 Разработчик",
-        'main_menu': "Главное меню 🏡",
-        'explain_game': "🗣 Игра объяснений",
-        'word_game': "🔤 Игра слов",
-        'guess_game': "🎯 Игра угадываний",
-        'riddle_game': "❓ Игра загадок",
-        'number_game': "🔢 Игра чисел",
-        'group_bests': "👑 Лучшие группы",
-        'mole_game': "🦫 Игра Крот",
-        'truth_dare': "🔥 Правда / Действие",
-        'blank_game': "🧩 Пустые Клетки"
     }
-}
-
-def get_user_language(user_id):
-    return user_languages.get(user_id, 'az')  # Default Azərbaycan dili
-
-def get_text(user_id, key):
-    lang = get_user_language(user_id)
-    return LANGUAGES[lang].get(key, LANGUAGES['az'][key])
-
-def set_user_language(user_id, lang_code):
-    if lang_code in LANGUAGES:
-        user_languages[user_id] = lang_code
-        return True
-    return False
+ }
+  
 
 # =============== OYUNLARIN VERİLƏRİ ===============
 
@@ -481,10 +360,6 @@ games_state = {}
 # Timer thread-ləri saxlamaq üçün
 game_timers = {}
 
-# Bot sahibi və admin ID-ləri
-OWNER_ID = 7926847490  # Buraya öz ID-nizi yazın
-ADMIN_IDS = [7926847490, 7926847490]  # Admin ID-lərini buraya əlavə edin
-
 # İstifadəçi və qrup məlumatlarını saxlamaq üçün
 user_chats = set()
 group_chats = set()
@@ -570,125 +445,6 @@ def reset_game_state(chat_id):
     game_state['bos_xana_soz'] = None
     game_state['bos_xana_gosterilen'] = None
 
-# =============== START MENYU ===============
-
-@bot.message_handler(commands=['start'])
-def send_start(message):
-    global start_message_count
-    start_message_count += 1
-    # İstifadəçini saxla
-    user_chats.add(message.chat.id)
-
-    keyboard = types.InlineKeyboardMarkup(row_width=2)
-    keyboard.add(
-        types.InlineKeyboardButton(get_text(message.from_user.id, 'support'), url="https://t.me/RoseRobotlar"),
-        types.InlineKeyboardButton(get_text(message.from_user.id, 'add_group'), url="https://t.me/lalegamebot?startgroup=true")
-    )
-    keyboard.add(
-        types.InlineKeyboardButton(get_text(message.from_user.id, 'commands'), callback_data="show_commands"),
-        types.InlineKeyboardButton(get_text(message.from_user.id, 'owner'), url="https://t.me/axtarmatagyoxdu")
-    )
-    keyboard.add(
-        types.InlineKeyboardButton(get_text(message.from_user.id, 'chat_group'), url="https://t.me/Rosexsupp"),
-        types.InlineKeyboardButton(get_text(message.from_user.id, 'developer'), url="https://t.me/AliyevRiad")
-    )
-    keyboard.add(
-        types.InlineKeyboardButton("🌍 Dil / Lang / Язык", callback_data="select_language")
-    )
-
-    bot.send_photo(
-        message.chat.id,
-        "https://imgur.com/a/O6nEKx5",
-        caption=get_text(message.from_user.id, 'start_text').format(username=message.from_user.first_name),
-        reply_markup=keyboard,
-        parse_mode="HTML"
-    )
-
-@bot.callback_query_handler(func=lambda call: call.data == "show_commands")
-def show_commands(call):
-    keyboard = types.InlineKeyboardMarkup()
-    keyboard.add(types.InlineKeyboardButton(get_text(call.from_user.id, 'main_menu'), callback_data="back_to_start"))
-
-    # Əvvəlki mesajı sil və yeni mesaj göndər
-    bot.delete_message(call.message.chat.id, call.message.message_id)
-    bot.send_message(
-        call.message.chat.id,
-        text=get_text(call.from_user.id, 'commands_text'),
-        reply_markup=keyboard
-    )
-    bot.answer_callback_query(call.id)
-
-@bot.callback_query_handler(func=lambda call: call.data == "back_to_start")
-def back_to_start(call):
-    keyboard = types.InlineKeyboardMarkup(row_width=2)
-    keyboard.add(
-        types.InlineKeyboardButton(get_text(call.from_user.id, 'support'), url="https://t.me/RoseRobotlar"),
-        types.InlineKeyboardButton(get_text(call.from_user.id, 'add_group'), url="https://t.me/lalegamebot?startgroup=true")
-    )
-    keyboard.add(
-        types.InlineKeyboardButton(get_text(call.from_user.id, 'commands'), callback_data="show_commands"),
-        types.InlineKeyboardButton(get_text(call.from_user.id, 'owner'), url="https://t.me/axtarmatagyoxdu")
-    )
-    keyboard.add(
-        types.InlineKeyboardButton(get_text(call.from_user.id, 'chat_group'), url="https://t.me/Rosexsupp"),
-        types.InlineKeyboardButton(get_text(call.from_user.id, 'developer'), url="https://t.me/AliyevRiad")
-    )
-    keyboard.add(
-        types.InlineKeyboardButton("🌍 Dil / Lang / Язык", callback_data="select_language")
-    )
-
-    # Əvvəlki mesajı sil və yeni şəkil mesajı göndər
-    bot.delete_message(call.message.chat.id, call.message.message_id)
-    bot.send_photo(
-        call.message.chat.id,
-         "https://imgur.com/a/O6nEKx5",
-        caption=get_text(call.from_user.id, 'start_text').format(username=call.from_user.first_name),
-        reply_markup=keyboard,
-        parse_mode="HTML"
-    )
-    bot.answer_callback_query(call.id)
-
-# =============== DİL SEÇİMİ ===============
-
-@bot.callback_query_handler(func=lambda call: call.data == "select_language")
-def select_language(call):
-    keyboard = types.InlineKeyboardMarkup(row_width=1)
-    for lang_code, lang_data in LANGUAGES.items():
-        keyboard.add(types.InlineKeyboardButton(lang_data['name'], callback_data=f"set_lang_{lang_code}"))
-    keyboard.add(types.InlineKeyboardButton(get_text(call.from_user.id, 'main_menu'), callback_data="back_to_start"))
-
-    bot.edit_message_caption(
-        chat_id=call.message.chat.id,
-        message_id=call.message.message_id,
-        caption=get_text(call.from_user.id, 'language_menu'),
-        reply_markup=keyboard
-    )
-    bot.answer_callback_query(call.id)
-
-@bot.callback_query_handler(func=lambda call: call.data.startswith("set_lang_"))
-def set_language(call):
-    lang_code = call.data.split("_")[2]
-    set_user_language(call.from_user.id, lang_code)
-
-    bot.answer_callback_query(call.id, get_text(call.from_user.id, 'language_changed'))
-    back_to_start(call)
-
-@bot.message_handler(commands=['lang'])
-def change_language_command(message):
-    # Komanda formatını yoxla
-    args = message.text.split()
-    if len(args) != 2:
-        bot.send_message(message.chat.id, "📝 İstifadə: /lang az/tr/ru")
-        return
-
-    lang_code = args[1].lower()
-
-    if lang_code in LANGUAGES:
-        set_user_language(message.from_user.id, lang_code)
-        bot.send_message(message.chat.id, get_text(message.from_user.id, 'language_changed'))
-    else:
-        bot.send_message(message.chat.id, "❌ Mövcud dillər: az, tr, ru")
-
 # =============== BAŞLANĞIC MENYU ===============
 
 def main_menu(message):
@@ -724,113 +480,7 @@ def start_game(message):
     # Qrup mesajlarını saxla
     group_chats.add(message.chat.id)
     main_menu(message)
-
-# =============== BROADCAST SİSTEMİ ===============
-
-@bot.message_handler(commands=['stat'])
-def show_stats(message):
-    # Yalnız sahibi və adminlər istifadə edə bilər
-    if message.from_user.id not in ADMIN_IDS:
-        bot.send_message(message.chat.id, "❌ Bu komandanı yalnız adminlər istifadə edə bilər!")
-        return
-
-    # Bot işləmə müddəti
-    uptime = datetime.datetime.now() - bot_start_time
-    hours = int(uptime.total_seconds() // 3600)
-    minutes = int((uptime.total_seconds() % 3600) // 60)
-
-    stats_text = f"""
-📊 Bot Statistikası:
-👥 Qruplar: {len(group_chats)} ədəd
-👤 İstifadəçilər: {len(user_chats)} ədəd
-🚀 Start mesajları: {start_message_count} ədəd
-⏰ İşləmə müddəti: {hours} saat {minutes} dəqiqə
-🤖 Bot versiyası: v2.0
-"""
-    bot.send_message(message.chat.id, stats_text)
-
-@bot.message_handler(commands=['broadcast'])
-def broadcast_message(message):
-    # Yalnız sahibi və adminlər istifadə edə bilər
-    if message.from_user.id not in ADMIN_IDS:
-        bot.send_message(message.chat.id, "❌ Bu komandanı yalnız adminlər istifadə edə bilər!")
-        return
-
-    # Mesaj mətni götür
-    text_to_broadcast = message.text[11:].strip()  # "/broadcast " sözünü sil
-
-    # Əgər yanıt mesajı varsa, onu götür
-    if message.reply_to_message:
-        # Yanıt mesajının məzmununu götür
-        if message.reply_to_message.text:
-            text_to_broadcast = message.reply_to_message.text
-        elif message.reply_to_message.caption:
-            text_to_broadcast = message.reply_to_message.caption
-        else:
-            text_to_broadcast = "📢 Broadcast mesajı"
-
-    if not text_to_broadcast:
-        bot.send_message(message.chat.id, "❌ Broadcast üçün mesaj yazın!\nİstifadə: /broadcast <mesaj>\nvə ya hər hansı mesaja yanıt atıb /broadcast yazın")
-        return
-
-    # Broadcast məlumatları
-    sent_users = 0
-    sent_groups = 0
-    failed_users = 0
-    failed_groups = 0
-
-    # İstifadəçilərə göndər
-    for chat_id in user_chats.copy():
-        try:
-            bot.send_message(chat_id, f"📢 ELAN:\n\n{text_to_broadcast}")
-            sent_users += 1
-        except Exception as e:
-            failed_users += 1
-            # Əgər bot bloklanıbsa və ya chat mövcud deyilsə, siyahıdan sil
-            if "bot was blocked" in str(e).lower() or "chat not found" in str(e).lower():
-                user_chats.discard(chat_id)
-
-    # Qruplara göndər və pin et
-    for chat_id in group_chats.copy():
-        try:
-            msg = bot.send_message(chat_id, f"📢 ELAN:\n\n{text_to_broadcast}")
-            # Mesajı pin et
-            try:
-                bot.pin_chat_message(chat_id, msg.message_id, disable_notification=False)
-            except:
-                pass  # Pin etməkdə səhv olarsa, davam et
-            sent_groups += 1
-        except Exception as e:
-            failed_groups += 1
-            # Əgər bot qrupdan çıxarılıbsa, siyahıdan sil
-            if "bot was kicked" in str(e).lower() or "chat not found" in str(e).lower():
-                group_chats.discard(chat_id)
-
-    # Nəticə hesabatı
-    report = f"""
-📊 Broadcast Hesabatı:
-👥 İstifadəçilər: {sent_users} uğurlu, {failed_users} səhv
-👥 Qruplar: {sent_groups} uğurlu, {failed_groups} səhv
-📝 Mesaj: {text_to_broadcast[:50]}{'...' if len(text_to_broadcast) > 50 else ''}
-"""
-    bot.send_message(message.chat.id, report)
-
-@bot.message_handler(commands=['bitir'])
-def oyunu_bitir(message):
-    # Yalnız qruplarda işləsin
-    if message.chat.type not in ['group', 'supergroup']:
-        bot.send_message(message.chat.id, get_text(message.from_user.id, 'group_only'))
-        return
-
-    reset_game_state(message.chat.id)
-
-    # Timer-i ləğv et
-    if message.chat.id in game_timers:
-        game_timers[message.chat.id].cancel()
-        del game_timers[message.chat.id]
-
-    bot.send_message(message.chat.id, get_text(message.from_user.id, 'games_stopped'))
-
+    
 # =============== İZAH OYUNU ===============
 
 @bot.callback_query_handler(func=lambda call: call.data == "oyun_izah")
@@ -1552,10 +1202,6 @@ def handle_all_messages(message):
             bot.send_message(message.chat.id, f"🎉 Əla! {username} sözü tapdı! 🌟")
             yeni_bos_xana_tur(message)
             return
-
-print("Bot işə düşdü")
-bot.infinity_polling()
-
 
 
 # =============== YENİ ÜZV QARŞILAMA ===============
