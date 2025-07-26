@@ -2,11 +2,10 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 
 qadağan_sözlər = [
-    "raxa", "raxaa", "safo", "safoo", "ayxan", "ayxann", "elcan", "elcann",
-    "salayev", "quliyev", "xelilof", "globus", "atlas", "aysel", "ayxoss",
-    "ayxos", "raxaaa", "safooo", "elcannn", "coni", 'conii', "rahim", "rahimm", "rahimmm"
+    "sik", "sikdir", "peyser", "peysər", "oğras", "qəhbə", "qehbe", "anavi",
+    "Bacivi", "nin", "sikim", "dalbayov", "blət", "blet", "qələt",
+    "Pox", "heyvan", "varyox", "doğduğu", "bicbala", "bicok", "ble", "blə", "pesi", "cındır", "cindir", "ogras", "nənəvi"
 ]
-
 @app.on_message(filters.text & filters.group)
 async def check_and_delete(client: Client, message: Message):
     lower_text = message.text.lower()
