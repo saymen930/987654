@@ -1,6 +1,6 @@
 import os
 from pyrogram import Client, filters
-from InflexMusic import ps as riz4d
+from InflexMusic import app as riz4d
  
  
 DOWNLOAD_LOCATION = os.environ.get("DOWNLOAD_LOCATION", "./DOWNLOADS/")
@@ -22,7 +22,7 @@ async def mp3(bot, message):
     
     # convert to audio
     await txt.edit_text("**♻️ AUDİİYO Gətrilir**\n**💿 Gözləyin**")
-    await message.reply_audio(audio=file_path, caption="**🤖 BOT**: @XAOS_Tagbot", quote=True)
+    await message.reply_audio(audio=file_path, caption="**❤️ Uğurla Yükləndi**", quote=True)
     
     # remove file
     try:
