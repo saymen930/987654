@@ -132,7 +132,7 @@ async def stag_command(client, message):
     await tag_users(client, message, "Sevgilərimizlə ❤️", users, tag_type="love")
 
 
-@app.on_message(filters.command(["stop", "cancel"]) & filters.group)
+@app.on_message(filters.command(["dayan", "cancel"]) & filters.group)
 async def stop_command(client, message):
     chat_id = message.chat.id
     active_tags[chat_id] = False
@@ -144,12 +144,12 @@ async def stop_command(client, message):
 @app.on_message(filters.command(["tag", "tektag", "atag", "etag", "stag"]) & filters.private)
 async def tag_commands_private(client, message):
     await message.reply(
-        "🛡️ Sahibim tağ əmrini yalnız qruplar üçün nəzərdə tutub 🙎",
+        "🛡️ Sahibim tağ əmrirlərini yalnız qruplar üçün nəzərdə tutub 🙎",
         reply_markup=support_keyboard
     )
 
 
-@app.on_message(filters.command(["stop", "cancel"]) & filters.private)
+@app.on_message(filters.command(["dayan", "cancel"]) & filters.private)
 async def stop_command_private(client, message):
     await message.reply(
         "🛡️ Sahibim tağ əmrini yalnız qruplar üçün nəzərdə tutub 🙎",
