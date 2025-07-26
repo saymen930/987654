@@ -12,7 +12,7 @@ chat_start_times = {}  # Hər qrup üçün start vaxtını yadda saxlayırıq
 @app.on_message(filters.video_chat_started & filters.group)
 async def video_chat_started_handler(client: Client, message: Message):
     chat_id = message.chat.id
-    text = "💁 **Qrupda səsli söhbət başladı!**"
+    text = "💁 Qrupda səsli söhbət başladı!"
 
     msg = await message.reply(text)
     await client.pin_chat_message(chat_id=chat_id, message_id=msg.id)
@@ -39,7 +39,7 @@ async def video_chat_ended_handler(client: Client, message: Message):
     else:
         duration_text = "Naməlum"
 
-    end_text = f"💆 **Səsli söhbət sona çatdı.**\n⏳ Davam etdi- {duration_text}"
+    end_text = f"💆 Səsli söhbət sona çatdı.\n⏳ Davam etdi- {duration_text}"
 
     # Pinlənmiş mesajı sil
     if chat_id in pinned_messages:
