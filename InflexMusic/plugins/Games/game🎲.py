@@ -21,7 +21,7 @@ JOIN_COUNTDOWN = 15       # Oyuna qoşulma gerisayımı (saniyə)
 ROUND_TIME = 50           # Hər söz üçün vaxt (saniyə)
 GAME_IDLE_TIMEOUT = 40    # Heç kim oynamırsa oyunu dayandır (saniyə)
 
-BOT_NAME = "ʙʀᴀɪɴ🅞ғᴄʜᴀᴏꜱ"
+
 
 DATA_FILES = {
     "custom_words": "Jason/custom_words.json",
