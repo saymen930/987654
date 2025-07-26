@@ -1,4 +1,5 @@
-
+from InflexMusic import app
+#from InflexMusic.core.bot import pls as app
 from pyrogram import filters
 import os, requests, yt_dlp
 from youtube_search import YoutubeSearch
