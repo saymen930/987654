@@ -1,7 +1,7 @@
 from telethon import events, Button, types
-from AylinRobot import xaos as Zaid
-from AylinRobot.status import *
-from AylinRobot.config import Config
+from InflexMusic import xaos as Zaid
+from InflexMusic.status import *
+from InflexMusic.config import Config
 from mesaj.bot import LOCK_TEXT
  
 
