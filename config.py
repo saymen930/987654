@@ -20,6 +20,10 @@ PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "XAOS_PlayAudiolist")
 BOT_USERNAME = os.environ.get("BOT_USERNAME", "XAOS_Tagbot")
 PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
 
+# Bura Soz oynunun ovner idlerini yaz
+# Birdən çox owner ID
+OWNER_IDS = [5663585448, 7774444894]  # Buraya əlavə owner ID-lər yaz
+
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
