@@ -2,6 +2,7 @@
 from pyrogram import filters
 from InflexMusic.core.bot import pls as app
 import config
+import os
 
 DATA_FILES = {
     "custom_words": "Jason/custom_words.json",
