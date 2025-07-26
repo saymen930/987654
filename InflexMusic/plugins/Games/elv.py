@@ -2,8 +2,6 @@
 from pyrogram import filters
 from InflexMusic.core.bot import pls as app
 import config
-from utils import load_json, save_json  # Əgər bu funksiyalar utils.py-dədirsə
-
 
 DATA_FILES = {
     "custom_words": "Jason/custom_words.json",
