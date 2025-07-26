@@ -1,4 +1,3 @@
-Əlbəttə! Aşağıda tam işlək, təkmilləşdirilmiş və izahlarla zəngin “no argo” bot modulu verilir. Bot söyüşləri tapıb silir, mesajı yazan istifadəçiyə xəbərdarlıq edir, yalnız aktiv qruplarda işləyir, və botun admin hüquqlarını yoxlamaq üçün try-except blokları əlavə olunub.
 
 from pyrogram import filters
 from pyrogram.types import Message
