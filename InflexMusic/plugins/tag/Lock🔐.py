@@ -1,12 +1,12 @@
 from telethon import events, Button, types
 from InflexMusic.status import *
 from InflexMusic.core.bot import xaos as Zaid
- 
+import config
 
 @Zaid.on(events.NewMessage(pattern="^[!/.]lock ?(.*)"))
 @is_admin
 async def lock(event, perm):
-    if Config.MANAGEMENT_MODE == "ENABLE":
+    if config.MANAGEMENT_MODE == "ENABLE":
         return
     if not perm.change_info:
       await event.reply("Bu Əmri İsdifadə Edmək Üçun Lazım Olan Adminlik Haqqın Yoxdur!")
@@ -30,7 +30,7 @@ async def lock(event, perm):
 @Zaid.on(events.NewMessage(pattern="^[!./]unlock ?(.*)"))
 @is_admin
 async def unlock(event, perm):
-    if Config.MANAGEMENT_MODE == "ENABLE":
+    if config.MANAGEMENT_MODE == "ENABLE":
         return
     if not perm.change_info:
       await event.reply("Bu Əmri İsdifadə Edmək Üçun Lazım Olan Adminlik Haqqın Yoxdur!")
