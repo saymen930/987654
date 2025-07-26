@@ -1,6 +1,6 @@
 import os
 from pyrogram import Client, filters
-from InflexMusic import app as riz4d
+from InflexMusic import app
  
  
 DOWNLOAD_LOCATION = os.environ.get("DOWNLOAD_LOCATION", "./DOWNLOADS/")
@@ -11,7 +11,7 @@ DOWNLOAD_LOCATION = os.environ.get("DOWNLOAD_LOCATION", "./DOWNLOADS/rizad/")
  
 
  
-@riz4d.on_message(filters.video & filters.private)
+@app.on_message(filters.video & filters.private)
 async def mp3(bot, message):
     
     # download video
