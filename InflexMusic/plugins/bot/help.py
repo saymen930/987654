@@ -58,10 +58,32 @@ async def helper_cb(client, CallbackQuery, _):
     cb = callback_data.split(None, 1)[1]
     keyboard = help_back_markup(_)
     if cb == "hb1":
-        await CallbackQuery.edit_message_text(_["users"], reply_markup=keyboard)
+        await CallbackQuery.edit_message_text(_["musiqis"], reply_markup=keyboard)
     elif cb == "hb2":
-        await CallbackQuery.edit_message_text(_["admins"], reply_markup=keyboard)
+        await CallbackQuery.edit_message_text(_["nezarets"], reply_markup=keyboard)
     elif cb == "hb3":
-        await CallbackQuery.edit_message_text(_["sudos"], reply_markup=keyboard)
+        await CallbackQuery.edit_message_text(_["nosoyus"], reply_markup=keyboard)
     elif cb == "hb4":
-            await CallbackQuery.edit_message_text(_["lists"], reply_markup=keyboard)
+        await CallbackQuery.edit_message_text(_["oyuns"], reply_markup=keyboard)
+    elif cb == "hb5":
+        await CallbackQuery.edit_message_text(_["taggers"], reply_markup=keyboard)
+    elif cb == "hb6":
+        await CallbackQuery.edit_message_text(_["eylences"], reply_markup=keyboard)
+    elif cb == "hb7":
+        await CallbackQuery.edit_message_text(_["nolinks"], reply_markup=keyboard)
+    elif cb == "hb8":
+        await CallbackQuery.edit_message_text(_["antispams"], reply_markup=keyboard)
+    elif cb == "hb9":
+        await CallbackQuery.edit_message_text(_["songs"], reply_markup=keyboard)
+    elif cb == "hb10":
+        await CallbackQuery.edit_message_text(_["infos"], reply_markup=keyboard)   
+    elif cb == "hb11":
+        await CallbackQuery.edit_message_text(_["fonts"], reply_markup=keyboard) 
+    elif cb == "hb12":
+        await CallbackQuery.edit_message_text(_["welcomes"], reply_markup=keyboard) 
+    elif cb == "hb13":
+        await CallbackQuery.edit_message_text(_["telegraphs"], reply_markup=keyboard) 
+    elif cb == "hb14":
+        await CallbackQuery.edit_message_text(_["afks"], reply_markup=keyboard)
+    elif cb == "hb15":
+        await CallbackQuery.edit_message_text(_["songmatas"], reply_markup=keyboard) 
