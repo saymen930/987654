@@ -1,8 +1,7 @@
 from telethon import events, Button, types
 from InflexMusic import xaos as Zaid
 from InflexMusic.status import *
-from InflexMusic.config import Config
-from mesaj.bot import LOCK_TEXT
+from InflexMusic.core.bot import xaos as Zaid
  
 
 @Zaid.on(events.NewMessage(pattern="^[!/.]lock ?(.*)"))
@@ -52,7 +51,15 @@ async def unlock(event, perm):
           send_polls=True,
           embed_link_previews=True)
        await event.reply("🔓 Chat Açıldı.")
+
+
+
+
+LOCK_TEXT = """
+**Lock:**
  
+‣ all
+"""
  
 @Zaid.on(events.NewMessage(pattern="^[!?/]locktypes"))
 async def locktypes(event):
