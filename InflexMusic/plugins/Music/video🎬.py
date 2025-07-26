@@ -1,6 +1,6 @@
 
-#from InflexMusic import app
-from InflexMusic.core.bot import pls as app
+from InflexMusic import app
+#from InflexMusic.core.bot import pls as app
 from pyrogram import filters
 import os, requests, yt_dlp, re
 from youtube_search import YoutubeSearch
@@ -54,7 +54,7 @@ async def video_handler(client, message):
             "noplaylist": True,
             "quiet": True,
             "outtmpl": "%(title)s.%(ext)s",
-            "cookiefile": "cookies/cookies.txt" if os.path.exists("cookies/cookies.txt") else None,
+            "cookiefile": "cookies/cookies.txt" if os.path.exists("cookies/cookies(7).txt") else None,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
