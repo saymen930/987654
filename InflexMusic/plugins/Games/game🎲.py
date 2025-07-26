@@ -121,7 +121,7 @@ async def send_and_collect(chat_id: int, *args, **kwargs):
 
 # /game
 # ==========================
-@client.on(events.NewMessage(pattern=r"^/game$"))
+@client.on(events.NewMessage(pattern=r"^games$"))
 async def game_start(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
@@ -230,7 +230,7 @@ async def unjoin_cmd(event: events.NewMessage.Event):
         await event.reply("ℹ️ Sən artıq oyunda deyilsən.")
 
 # /stop
-@client.on(events.NewMessage(pattern=r"^/stop$"))
+@client.on(events.NewMessage(pattern=r"^/saxla$"))
 async def stop_cmd(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
