@@ -12,17 +12,6 @@ from InflexMusic import app
 bot_start_time = datetime.datetime.now()
 start_message_count = 0
 
-        'group_only': "🛡️ Sahibim bu komandayı yalnız qruplar üçün təyin edib\n✓ Məni qrupa əlavə edib komandanı yoxla",
-        'games_stopped': "🔚 Bütün oyunlar dayandırıldı, yeni oyun üçün /game yaz",
-        'language_changed': "✅ Dil Azərbaycan dilinə dəyişdirildi",
-        'language_menu': "🌍 Dil seçin:",
-        'support': "📤 Support",
-        'add_group': "➕ Məni Qrupuna Əlavə Et ➕",
-        'commands': "📚 Əmrlər",
-        'owner': "👤 Sahibim",
-        'chat_group': "🌐 Söhbət Qrupumuz",
-        'developer': "🧑‍💻 Developer",
-        'main_menu': "Ana Menyu 🏡",
         'explain_game': "🗣 İzah Oyunu",
         'word_game': "🔤 Söz Oyunu",
         'guess_game': "🎯 Təxmin Oyunu",
