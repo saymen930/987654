@@ -21,7 +21,13 @@ async def welcome_new_members(client: Client, message: Message):
             f"{username} xoş gəlmisən əəəə🤭",
             f"{username} başıma xeyir yenə gəldi",
             f"{username} səni görməy mənə xoş oldu 🤩",
-            f"{username} Sən döyərsən mən?🙎"
+            f"{username} Sən döyərsən mən?🙎",
+            f"{username} zır dəli xəstəsi gəldi😅",
+            f"{username} Avara gəldi🫂",
+            f"{username} qızların dibiri gəldi",
+            f"{username} mədəniyyət ağacı",
+            f"{username} xoş gəlmisən qızəəəə",
+            f"{username} xoş gəlmisən ay quda ay quda"
         ]
         
         await message.reply(random.choice(welcome_messages))
