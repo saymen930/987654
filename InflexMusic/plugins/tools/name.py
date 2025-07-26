@@ -1,32 +1,27 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from datetime import datetime
-from InflexMusic import app  # Sənin layihə modulu
 
-usernames = {}
+from InflexMusic import app  # sənin bot instansın
 
-@app.on_message(filters.group & filters.text)
-async def detect_name_change(client: Client, message: Message):
-    user = message.from_user
-    user_id = user.id
-    current_name = user.first_name
-    if user.last_name:
-        current_name += " " + user.last_name
+# Global dictionary istifadəçi adlarını yadda saxlamaq üçün
+user_names = {}
 
-    old_name = usernames.get(user_id)
-    if old_name is None:
-        usernames[user_id] = current_name
-    else:
-        if old_name != current_name:
-            usernames[user_id] = current_name
-            chat_title = message.chat.title or "Qrup"
-            now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            alert_text = (
-                "Ad dəyişdirildi 🔃\n"
-                f"🆕 Yeni Adı  {current_name}\n"
-                f"🔄 Köhnə adı  {old_name}\n"
-                f"🆔 ID  {user_id}\n"
-                f"⏳ Tarix {now}\n"
-                f"💬 Chat {chat_title}"
-            )
-            await message.reply_text(alert_text)
+@app.on_message(filters.group & ~filters.service)  # yalnız qrup mesajları, system mesajlar deyil
+async def handle_all_messages(client: Client, message: Message):
+    if not message.from_user:
+        return  # anonymous admin və ya sistem mesajları
+
+    user_id = message.from_user.id
+    current_name = message.from_user.first_name
+
+    if user_id in user_names and user_names[user_id] != current_name:
+        chat_name = message.chat.title or "Bu Qrup"
+        await message.reply(
+            f"📛 *Adını dəyişdi*\n"
+            f"🔙 Köhnə: `{user_names[user_id]}`\n"
+            f"🔜 Yeni: `{current_name}`\n"
+            f"💬 Qrup: {chat_name}"
+        )
+
+    # Cari adı yadda saxla
+    user_names[user_id] = current_name
