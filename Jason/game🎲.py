@@ -24,9 +24,9 @@ GAME_IDLE_TIMEOUT = 40    # Heç kim oynamırsa oyunu dayandır (saniyə)
 
 
 DATA_FILES = {
-    "custom_words": "Jason/custom_words.json",
-    "scores": "Jason/scores.json",
-    "stats": "Jason/stats.json"
+    "custom_words": "custom_words.json",
+    "scores": "scores.json",
+    "stats": "stats.json"
 }
 
 # ==========================
