@@ -1,6 +1,6 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
-
+from InflexMusic import app
 qadağan_sözlər = [
     "sik", "sikdir", "peyser", "peysər", "oğras", "qəhbə", "qehbe", "anavi",
     "Bacivi", "nin", "sikim", "dalbayov", "blət", "blet", "qələt",
