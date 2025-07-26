@@ -1203,29 +1203,3 @@ def handle_all_messages(message):
             bot.send_message(message.chat.id, f"🎉 Əla! {username} sözü tapdı! 🌟")
             yeni_bos_xana_tur(message)
             return
-
-
-# =============== YENİ ÜZV QARŞILAMA ===============
-
-@bot.message_handler(content_types=['new_chat_members'])
-def welcome_new_member(message):
-    # Yalnız bot özü əlavə edildikdə qarşılama mesajı göndər
-    for new_member in message.new_chat_members:
-        if new_member.id == bot.get_me().id:
-            # Bot qrupa əlavə edilib
-            keyboard = types.InlineKeyboardMarkup(row_width=2)
-            keyboard.add(
-                types.InlineKeyboardButton("📚 Əmrlər", callback_data="show_commands"),
-                types.InlineKeyboardButton("📤 Support", url="https://t.me/RoseRobotlar")
-            )
-
-            welcome_text = """𝗦𝗮𝗹𝗮𝗺 𝗱𝗼𝘀𝘁𝘂𝗺!
-𝗺𝗲𝗻𝗶 𝗾𝗿𝘂𝗽𝘂𝗻𝘂𝘇𝗮 𝗲𝗹𝗮𝘃𝗲 𝗲𝘁𝗱𝗶𝘆𝗶𝗻 𝘂̈𝗰̧𝘂̈𝗻 𝘁𝗲𝘀𝘀𝗲𝗸𝘂̈𝗿 𝗲𝗱𝗶𝗿𝗲𝗺
-𝗘𝗺𝗿𝗹𝗲𝗿𝗶𝗺𝗶 𝗴𝗼𝗿𝗺𝗲𝗸 𝘂̈𝗰̧𝘂̈𝗻 𝗘𝗺𝗿𝗹𝗲𝗿 𝗯𝘂𝘁𝘁𝗼𝗻𝘂𝗻𝗮 𝗯𝗮𝘀."""
-
-            bot.send_message(message.chat.id, welcome_text, reply_markup=keyboard)
-
-            # Qrup mesajlarını saxla
-            group_chats.add(message.chat.id)
-            break
-
