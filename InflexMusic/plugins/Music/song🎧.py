@@ -34,12 +34,13 @@ async def song(client, message):
         m = await message.reply(f"🔍 Axtarılır: {query}")
 
         results = YoutubeSearch(query, max_results=1).to_dict()
-        if not results:
-            return await m.edit("❌ Mahnı tapılmadı.")
+
+        if not results or not isinstance(results, list) or not results[0].get("url_suffix", "").startswith("/watch"):
+            return await m.edit("❌ Mahnı tapılmadı və ya düzgün məlumat alınmadı.")
 
         result = results[0]
-        link = f"https://youtube.com{result['url_suffix']}"
-        title = result["title"][:100]
+        link = f"https://youtube.com{result.get('url_suffix', '')}"
+        title = result.get("title", "Adsız Mahnı")[:100]
         duration = result.get("duration", "0:00")
         channel = result.get("channel", "Bilinmir")
 
@@ -47,10 +48,7 @@ async def song(client, message):
         safe_title = re.sub(r'[\\/*?:"<>|]', "", title)
 
         # Thumbnail
-        thumbnail_url = None
-        if "thumbnails" in result and result["thumbnails"]:
-            thumbnail_url = result["thumbnails"][0]
-
+        thumbnail_url = result.get("thumbnails", [None])[0]
         if thumbnail_url:
             thumb_name = f"thumb_{config.BOT_USERNAME}.jpg"
             try:
@@ -58,6 +56,7 @@ async def song(client, message):
                     f.write(requests.get(thumbnail_url).content)
             except Exception as e:
                 print("Thumbnail yükləmə xətası:", e)
+                thumb_name = None
 
         ydl_opts = {
             "format": "bestaudio[ext=m4a]",
@@ -71,7 +70,7 @@ async def song(client, message):
 
         await m.edit("🎧 Mahnı yüklənir...")
 
-        # Yükləmə
+        # YouTube-dan yükləmə
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(link, download=True)
             audio_file = ydl.prepare_filename(info)
