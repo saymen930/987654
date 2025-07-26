@@ -69,4 +69,4 @@ Heroku3
 
 python-dotenv
 telegram
-
+tgcrypto
