@@ -54,7 +54,7 @@ async def video_handler(client, message):
             "noplaylist": True,
             "quiet": True,
             "outtmpl": "%(title)s.%(ext)s",
-            "cookiefile": "cookies/cookies.txt" if os.path.exists("cookies/cookies(7).txt") else None,
+            "cookiefile": "cookies/cookies(7).txt" if os.path.exists("cookies/cookies(7).txt") else None,
         }
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
