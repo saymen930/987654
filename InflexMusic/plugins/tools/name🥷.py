@@ -1,27 +1,38 @@
+import sqlite3
 from pyrogram import Client, filters
 from pyrogram.types import Message
+from InflexMusic import app
 
-from InflexMusic import app  # sənin bot instansın
+# DB bağlantısı və cədvəl
+conn = sqlite3.connect("usernames.db")
+cursor = conn.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS usernames (user_id INTEGER PRIMARY KEY, name TEXT)")
+conn.commit()
 
-# Global dictionary istifadəçi adlarını yadda saxlamaq üçün
-user_names = {}
 
-@app.on_message(filters.group & ~filters.service)  # yalnız qrup mesajları, system mesajlar deyil
-async def handle_all_messages(client: Client, message: Message):
+@app.on_message(filters.group & ~filters.service)
+async def detect_name_change(client: Client, message: Message):
     if not message.from_user:
-        return  # anonymous admin və ya sistem mesajları
+        return
 
     user_id = message.from_user.id
     current_name = message.from_user.first_name
 
-    if user_id in user_names and user_names[user_id] != current_name:
-        chat_name = message.chat.title or "Bu Qrup"
-        await message.reply(
-            f"📛 *Adını dəyişdi*\n"
-            f"🔙 Köhnə: `{user_names[user_id]}`\n"
-            f"🔜 Yeni: `{current_name}`\n"
-            f"💬 Qrup: {chat_name}"
-        )
+    cursor.execute("SELECT name FROM usernames WHERE user_id = ?", (user_id,))
+    row = cursor.fetchone()
 
-    # Cari adı yadda saxla
-    user_names[user_id] = current_name
+    if row:
+        old_name = row[0]
+        if old_name != current_name:
+            chat_name = message.chat.title or "Bu Qrup"
+            await message.reply(
+                f"📛 *Adını dəyişdi*\n"
+                f"🔙 Köhnə: `{old_name}`\n"
+                f"🔜 Yeni: `{current_name}`\n"
+                f"💬 Qrup: {chat_name}"
+            )
+            cursor.execute("UPDATE usernames SET name = ? WHERE user_id = ?", (current_name, user_id))
+    else:
+        cursor.execute("INSERT INTO usernames (user_id, name) VALUES (?, ?)", (user_id, current_name))
+
+    conn.commit()
