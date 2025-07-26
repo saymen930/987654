@@ -1,80 +1,90 @@
-from pyrogram import Client, filters
-from pyrogram.types import Message
+import os, time
 from datetime import datetime
 
-from InflexMusic import app  # bot instance
-from InflexMusic.utils.decorators.language import language  # varsa istifadə et, yoxdursa sil
+from pyrogram import Client, filters
+from pyrogram.types import Message, User
+from pyrogram.errors import UserNotParticipant
 
-def format_time():
-    return datetime.now().strftime("%d.%m.%Y • %H:%M")
+from InflexMusic.core.bot import pls as app  # Bot instance
 
-@app.on_message(filters.command("men") & filters.group)
-async def men_command(client: Client, message: Message):
-    user = message.from_user
-    chat = await client.get_chat(message.chat.id)
-    owner = "Tapılmadı"
-    try:
-        admins = await client.get_chat_administrators(message.chat.id)
-        for admin in admins:
-            if admin.status == "creator":
-                owner = admin.user.first_name
-                break
-    except:
-        pass
-
-    text = (
-        f"▻ | • Ad: {user.first_name}\n"
-        f"▻ | • ID: {user.id}\n"
-        f"▻ | • Saat: {format_time()}\n"
-        f"▻ | • Qrup: {chat.title}\n"
-        f"▻ | • Sahibi: {owner}"
-    )
-    await message.reply(text)
-
-@app.on_message(filters.command(["il", "in", "ki"]) & filters.group)
-async def info_commands(client: Client, message: Message):
-    user = None
-    chat = message.chat
-    args = message.text.split()
-
+# 🧠 İstifadəçini müəyyənləşdirən funksiya
+def extract_user(message: Message) -> (int, str):
     if message.reply_to_message:
         user = message.reply_to_message.from_user
-    elif len(args) > 1:
+        return user.id, user.first_name
+    elif len(message.command) > 1:
+        arg = message.command[1]
+        if message.entities and len(message.entities) > 1 and message.entities[1].type == "text_mention":
+            entity = message.entities[1]
+            return entity.user.id, entity.user.first_name
         try:
-            user_id = int(args[1])
-            member = await client.get_chat_member(chat.id, user_id)
-            user = member.user
-        except:
-            try:
-                username = args[1]
-                member = await client.get_chat_member(chat.id, username)
-                user = member.user
-            except:
-                pass
+            return int(arg), arg
+        except ValueError:
+            return arg, arg  # username
     else:
-        user = message.from_user
+        return message.from_user.id, message.from_user.first_name
 
-    if not user:
-        return await message.reply("🔺 Zəhmət olmasa, istifadəçini təyin edin ✅")
+# 🕓 Son görülmə vaxtı
+def last_online(user: User) -> str:
+    if user.is_bot:
+        return "🤖 Bot"
+    status = user.status
+    if status == "recently":
+        return "Yaxınlarda"
+    elif status == "within_week":
+        return "Son 1 həftədə"
+    elif status == "within_month":
+        return "Son 1 ayda"
+    elif status == "long_time_ago":
+        return "Çox uzun müddət əvvəl"
+    elif status == "online":
+        return "Hazırda onlayndır"
+    elif status == "offline":
+        return datetime.fromtimestamp(user.last_online_date).strftime("%d.%m.%Y • %H:%M")
+    return "Bilinmir"
 
-    if message.text.startswith("/il"):
-        return await message.reply(f"Sənin 🆔: {user.id}")
+# 🔍 /info komandası
+@app.on_message(filters.command("info", ["/", ".", "!"]) & filters.group)
+async def info(client: Client, message: Message):
+    status_msg = await message.reply("🔎 İstifadəçi axtarılır...")
 
-    text = (
-        f"▻ | • Ad: {user.first_name}\n"
-        f"▻ | • ID: {user.id}\n"
-        f"▻ | • Saat: {format_time()}\n"
-        f"▻ | • Qrup: {chat.title}"
-    )
+    user_id, _ = extract_user(message)
+    try:
+        user = await client.get_users(user_id)
+    except Exception as e:
+        await status_msg.edit(f"⚠️ Xəta: `{e}`")
+        return
 
-    if message.text.startswith("/in"):
-        try:
-            member = await client.get_chat_member(chat.id, user.id)
-            if member.status in ["kicked", "left"]:
-                text += "\n▻ | • Qadağan: Qadağan olunub 🚫"
-            else:
-                text += "\n▻ | • Qadağan: Yoxdur ✅"
-        except:
-            text += "\n▻ | • Qadağan: Məlumat tapılmadı ❔"
+    # Əsas məlumatlar
+    text = f"<b>🛰 Telegram Məlumatları</b>\n\n"
+    text += f"👤 <b>Ad:</b> <a href='tg://user?id={user.id}'>{user.first_name}</a>\n"
+    text += f"🆔 <b>ID:</b> <code>{user.id}</code>\n"
+    if user.username:
+        text += f"🔗 <b>İstifadəçi adı:</b> @{user.username}\n"
+        text += f"🔗 <b>Link:</b> <a href='https://t.me/{user.username}'>https://t.me/{user.username}</a>\n"
+    text += f"🕓 <b>Son görünmə:</b> {last_online(user)}\n"
+    if user.is_deleted:
+        text += "🗑 <b>Hesab silinib</b>\n"
+    if user.is_verified:
+        text += "✅ <b>Doğrulanmış istifadəçi</b>\n"
+    if user.is_scam:
+        text += "⚠️ <b>Fırıldaqçı istifadəçi</b>\n"
 
-    await message.reply(text)
+    # Qrupda qoşulma vaxtı
+    try:
+        chat_member = await message.chat.get_member(user.id)
+        if chat_member.joined_date:
+            join_time = datetime.fromtimestamp(chat_member.joined_date).strftime("%d.%m.%Y • %H:%M")
+            text += f"👥 <b>Qrupa qoşuldu:</b> {join_time}\n"
+    except UserNotParticipant:
+        text += "📤 <b>İstifadəçi bu qrupda deyil</b>\n"
+
+    # Foto varsa göstər
+    if user.photo:
+        photo = await client.download_media(user.photo.big_file_id)
+        await message.reply_photo(photo, caption=text)
+        os.remove(photo)
+    else:
+        await message.reply(text, disable_web_page_preview=True)
+
+    await status_msg.delete()
