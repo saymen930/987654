@@ -14,6 +14,11 @@ API_HASH = getenv("API_HASH", "33ac02b7891c5396e6b305802d56cf4f")
 # Get your token from @BotFather on Telegram.
 BOT_TOKEN = getenv("BOT_TOKEN", "7924372740:AAHKGwqBBUZ-wZDfjzb4rLjFvyjvivnjt3g")
 
+#KANAL
+PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "XAOS_PlayAudiolist")
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "XAOS_Tagbot")
+PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
+
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
