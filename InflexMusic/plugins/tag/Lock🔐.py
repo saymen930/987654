@@ -1,5 +1,4 @@
 from telethon import events, Button, types
-from InflexMusic import xaos as Zaid
 from InflexMusic.status import *
 from InflexMusic.core.bot import xaos as Zaid
  
