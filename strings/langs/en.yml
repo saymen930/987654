@@ -316,9 +316,3 @@ H_B_3 : "Sudo"
 H_B_4 : "Siyahı"
 
 
-A_Tag_I = "👮‍♂️ QRUP İDARƏÇİLƏRİ VƏ ADMİNLƏRİ"
-A_Tag_Q_A = "📎 QRUP"
-A_Tag_KURUCU = "👑 Kurucu"
-A_Tag_ADMIN = "👮🏻 Admin"
-A_Tag_SAY = "✅ | Toplam İdarəçi Sayı:"
-A_Tag_LEGV = "❌ | Botlar Və Gizli Yönəticilər Iəğv Edildi"
