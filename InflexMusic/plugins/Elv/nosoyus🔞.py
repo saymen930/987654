@@ -1,16 +1,31 @@
+Əlbəttə! Aşağıda tam işlək, təkmilləşdirilmiş və izahlarla zəngin “no argo” bot modulu verilir. Bot söyüşləri tapıb silir, mesajı yazan istifadəçiyə xəbərdarlıq edir, yalnız aktiv qruplarda işləyir, və botun admin hüquqlarını yoxlamaq üçün try-except blokları əlavə olunub.
+
 from pyrogram import filters
-from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton
-import asyncio
-from InflexMusic import app
+from pyrogram.types import Message
+import re
+from InflexMusic import app  # Sənin bot instance-ın
 
 # Söyüş kökləri və şəkilçilər
-söyüşlər = ["sikdir", "qehbe", "qəhbə", "anavı", "cındır", "blət","blet", "sikim", "oğraş", "dalbayov","osduraq", "boynu", "nın", "vı","va", "s2m", "Dalbek", "dalben","qandon", "dişi", "fayşə", "faişə","qehbe", "təpdir", "siydir", "siyim","qehbe", "qəhbə", "vz", "vzqırt","kiwi", "oğlancıq", "bacını", "xirtəyini","boşalıram", "verirəm", "real", "virtual","çal", "banan", "gala", "uç","hamilə", "donbal", "Dombale", "Dombal" ]
+söyüşlər = [
+    "sikdir", "qehbe", "qəhbə", "anavı", "cındır", "blət", "blet",
+    "sikim", "oğraş", "dalbayov", "osduraq", "boynu", "nın", "vı", "va",
+    "s2m", "Dalbek", "dalben", "qandon", "dişi", "fayşə", "faişə", "qehbe",
+    "təpdir", "siydir", "siyim", "qehbe", "qəhbə", "vz", "vzqırt", "kiwi",
+    "oğlancıq", "bacını", "xirtəyini", "boşalıram", "verirəm", "real",
+    "virtual", "çal", "banan", "gala", "uç", "hamilə", "donbal", "Dombale", "Dombal"
+]
 söyüş_şəkilçilər = ["nın", "vı", "vu", "sər", "m", "un", "ni", "nı"]
 
+# Aktiv qrupların chat_id-lərini saxlayır
 aktiv_qruplar = {}
 
-def söyüş_var(metin):
-    metin = metin.lower().replace(" ", "")
+def söyüş_var(metin: str) -> bool:
+    if not metin:
+        return False
+    metin = metin.lower()
+    # Mətnin içindən hərf və rəqəmlərdən başqa simvolları silirik
+    metin = re.sub(r"[^a-zA-Z0-9əöğıüşıçƏÖĞİÜŞİÇ]+", "", metin)
+
     for söz in söyüşlər:
         if söz in metin:
             return True
@@ -37,7 +52,20 @@ async def toggle_no_söyüş(_, message: Message):
 
 @app.on_message(filters.group & ~filters.command("noargo"))
 async def söyüş_yoxla(_, message: Message):
-    if aktiv_qruplar.get(message.chat.id):
-        if message.text and söyüş_var(message.text):
+    if not aktiv_qruplar.get(message.chat.id):
+        return  # Funksiya yalnız aktiv qruplarda işləyir
+
+    text = message.text or message.caption
+    if not text:
+        return  # Mətn yoxdursa yoxla
+
+    if söyüş_var(text):
+        try:
             await message.delete()
-            await message.reply(f"Hörmətli {message.from_user.mention} Zəhmət olmasa Etikdadan kənar Argo kəlmələr istifadə etməyək, Əks halda ban oluna bilərsiniz😊 ")
+            await message.reply(
+                f"Hörmətli {message.from_user.mention}, zəhmət olmasa etikdan kənar argo kəlmələr istifadə etməyək, "
+                "əks halda ban oluna bilərsiniz 😊"
+            )
+        except Exception as e:
+            print(f"[NoArgo] Mesajı silmək mümkün olmadı: {e}")
+
