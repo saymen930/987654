@@ -3,7 +3,7 @@
 # Repo Açığdısa İcazəsis Götürmə Oğlum
 
 
-from InflexMusic import AylinRobot as app
+from InflexMusic import app
 from pyrogram.errors import FloodWait
 import random
 from random import choice
