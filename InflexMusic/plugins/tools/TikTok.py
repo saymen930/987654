@@ -2,7 +2,9 @@ from pyrogram import Client, filters
 from pyrogram.types import Message
 import requests
 import re
-from InflexMusic import app
+#from InflexMusic import app
+from InflexMusic.core.bot import pls as app
+
 
 
 def is_tiktok_link(text):
