@@ -15,7 +15,7 @@ DOWNLOAD_LOCATION = os.environ.get("DOWNLOAD_LOCATION", "./DOWNLOADS/rizad/")
 async def mp3(bot, message):
     
     # download video
-    file_path = DOWNLOAD_LOCATION + f"xaos.mp3"
+    file_path = DOWNLOAD_LOCATION + f"pesrsional.mp3"
     txt = await message.reply_text("`📡 Əsas Serverə Yüklənir...`")
     await message.download(file_path)
     await txt.edit_text("`Uğurla Yükləndi ✅`")
