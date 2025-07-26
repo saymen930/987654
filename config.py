@@ -39,6 +39,8 @@ OWNER_NAME = getenv("OWNER_NAME", "t.me/PersionalTeamBot")
 # Fill Queue Limit . Example - 15
 QUEUE_LIMIT = int(getenv("QUEUE_LIMIT", "20"))
 
+#lockall
+MANAGEMENT_MODE = os.environ.get("MANAGEMENT_MODE", True)
 ## Fill these variables if you're deploying on heroku.
 # Your heroku app name
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME", None)
