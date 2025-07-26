@@ -36,7 +36,7 @@ async def search(_, message: Message):
             text += f"⏱ **Müddət:** `{results[i]['duration']}`\n"
             text += f"👀 **Baxış:** `{results[i]['views']}`\n"
             text += f"📣 **Youtube Kanalı:** {results[i]['channel']}\n"
-            text += f"🔗: https://www.youtube.com{results[i]['url_suffix']}\n\n"
+            text += f"🔗: [Görmək Üçün Toxun](https://www.youtube.com{results[i]['url_suffix']})\n\n"
             i += 1
         await m.edit(text, disable_web_page_preview=True)
     except Exception as e:
