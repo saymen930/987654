@@ -13,6 +13,7 @@ def get_random_word():
 def scramble_word(word):
     return ''.join(random.sample(word, len(word)))
 
+# 🎮 Oyun başlat
 @app.on_message(filters.command("game") & filters.group)
 async def start_game_command(client: Client, message: Message):
     chat_id = message.chat.id
@@ -25,7 +26,7 @@ async def start_game_command(client: Client, message: Message):
         player_scores[chat_id] = {}
 
     markup = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data=f"change_word_{chat_id}")]]
+        [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data="kec")]]
     )
 
     await message.reply(
@@ -39,6 +40,7 @@ async def start_game_command(client: Client, message: Message):
         reply_markup=markup
     )
 
+# 📊 Xallar
 @app.on_message(filters.command("xallar") & filters.group)
 async def show_scores_command(client: Client, message: Message):
     chat_id = message.chat.id
@@ -51,30 +53,12 @@ async def show_scores_command(client: Client, message: Message):
     user_score = player_scores[chat_id][user_id]
     await message.reply(f"📊 {message.from_user.first_name}, sizin xalınız: {user_score} xal 🌟")
 
+# ⏭️ Söz keçmək (/kec və ya button)
 @app.on_message(filters.command("kec") & filters.group)
 async def skip_word_command(client: Client, message: Message):
-    chat_id = message.chat.id
+    await change_word(client, message)
 
-    if chat_id not in game_sessions or not game_sessions[chat_id]['active']:
-        await message.reply("🚫 Aktiv oyun yoxdur. /game ilə başlayın!")
-        return
-
-    word = get_random_word()
-    scrambled = scramble_word(word)
-    game_sessions[chat_id]['word'] = word
-    game_sessions[chat_id]['scrambled'] = scrambled
-
-    markup = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data=f"change_word_{chat_id}")]]
-    )
-
-    await message.reply(
-        f"⏭️ Söz keçildi!\n\n"
-        f"🔤 Yeni qarışdırılmış söz: {scrambled}\n\n"
-        f"Bu hərflərdən düzgün sözü tapın!",
-        reply_markup=markup
-    )
-
+# 🛑 Bitir
 @app.on_message(filters.command(["bitir", "stop"]) & filters.group)
 async def stop_game_command(client: Client, message: Message):
     chat_id = message.chat.id
@@ -102,7 +86,7 @@ async def stop_game_command(client: Client, message: Message):
     else:
         await message.reply("🏁 Söz Oyunu Bitdi! Yeni oyun üçün /game yazın! 🎮")
 
-# ✅ Cavab yoxlama (normal mesajlar üçün)
+# ✅ Cavab yoxlama
 @app.on_message(filters.text & filters.group)
 async def check_answer(client: Client, message: Message):
     chat_id = message.chat.id
@@ -114,7 +98,7 @@ async def check_answer(client: Client, message: Message):
 
     correct_word = game_sessions[chat_id]['word'].lower()
     if text == correct_word:
-        # Xal əlavə et
+        # Xal artır
         if user_id not in player_scores[chat_id]:
             player_scores[chat_id][user_id] = 0
         player_scores[chat_id][user_id] += 25
@@ -126,7 +110,7 @@ async def check_answer(client: Client, message: Message):
         game_sessions[chat_id]['scrambled'] = scrambled
 
         markup = InlineKeyboardMarkup(
-            [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data=f"change_word_{chat_id}")]]
+            [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data="kec")]]
         )
 
         await message.reply(
@@ -136,13 +120,19 @@ async def check_answer(client: Client, message: Message):
             reply_markup=markup
         )
 
-# ✅ Buttonla söz dəyişdirmə
-@app.on_callback_query(filters.regex(r"^change_word_(\d+)$"))
+# 🔃 Buttonla söz dəyişmək (callback)
+@app.on_callback_query(filters.regex(r"^kec$"))
 async def change_word_callback(client: Client, callback_query: CallbackQuery):
-    chat_id = int(callback_query.data.split("_")[2])
+    message = callback_query.message
+    await change_word(client, message)
+    await callback_query.answer("Yeni söz göndərildi!")
+
+# 💡 Funksiya: Söz dəyişdirmə
+async def change_word(client, message):
+    chat_id = message.chat.id
 
     if chat_id not in game_sessions or not game_sessions[chat_id]['active']:
-        await callback_query.answer("Aktiv oyun yoxdur!", show_alert=True)
+        await message.reply("🚫 Aktiv oyun yoxdur. /game ilə başlayın!")
         return
 
     word = get_random_word()
@@ -151,13 +141,12 @@ async def change_word_callback(client: Client, callback_query: CallbackQuery):
     game_sessions[chat_id]['scrambled'] = scrambled
 
     markup = InlineKeyboardMarkup(
-        [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data=f"change_word_{chat_id}")]]
+        [[InlineKeyboardButton("🔃 Sözü dəyişmək", callback_data="kec")]]
     )
 
-    await callback_query.message.edit_text(
-        f"🔁 Söz dəyişdirildi!\n\n"
-        f"🔤 Yeni qarışdırılmış söz: {scrambled}\n"
+    await message.reply(
+        f"⏭️ Söz keçildi!\n\n"
+        f"🔤 Yeni qarışdırılmış söz: {scrambled}\n\n"
         f"Bu hərflərdən düzgün sözü tapın!",
         reply_markup=markup
     )
-    await callback_query.answer("Yeni söz göndərildi!")
