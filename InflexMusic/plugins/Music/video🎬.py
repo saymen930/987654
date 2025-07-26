@@ -1,6 +1,4 @@
-
 from InflexMusic import app
-#from InflexMusic.core.bot import pls as app
 from pyrogram import filters
 import os, requests, yt_dlp, re
 from youtube_search import YoutubeSearch
@@ -30,22 +28,26 @@ def extract_youtube_link(text):
 async def video_handler(client, message):
     video_file = None
     thumb_name = None
+    m = None
+
     try:
-        query = " ".join(message.command[1:]) if message.text.startswith(("/", "!", ".", "@")) else message.text
+        # Komanda və ya sadə linkli mesaj
+        is_command = message.text.startswith(("/", "!", ".", "@"))
+        query = " ".join(message.command[1:]) if is_command else message.text.strip()
         link = extract_youtube_link(query)
 
-        if not link and message.text.startswith(("/", "!", ".", "@")):
-            if not query:
-                await message.reply("📌 İstifadə: /video Video adı və ya linki", quote=True)
-                return
-            search_result = YoutubeSearch(query, max_results=1).to_dict()
-            if not search_result:
-                await message.reply("❌ Video tapılmadı.")
-                return
-            result = search_result[0]
-            link = f"https://youtube.com{result['url_suffix']}"
-        elif not link:
-            return  # Sadə mesajdır, heç nə etmə
+        # Əgər link yoxdursa, axtarış et
+        if not link:
+            if is_command:
+                if not query:
+                    return await message.reply("📌 İstifadə: /video Video adı və ya linki", quote=True)
+                search_result = YoutubeSearch(query, max_results=1).to_dict()
+                if not search_result or not search_result[0].get("url_suffix"):
+                    return await message.reply("❌ Video tapılmadı.")
+                result = search_result[0]
+                link = f"https://youtube.com{result['url_suffix']}"
+            else:
+                return  # Sadə, amma uyğun olmayan mesaj – heç nə etmə
 
         m = await message.reply("🔍 Videoya baxılır...")
 
@@ -54,46 +56,59 @@ async def video_handler(client, message):
             "noplaylist": True,
             "quiet": True,
             "outtmpl": "%(title)s.%(ext)s",
-            "cookiefile": "cookies/cookies(7).txt" if os.path.exists("cookies/cookies(7).txt") else None,
         }
+
+        # Cookie varsa əlavə et
+        cookie_path = "cookies/cookies(7).txt"
+        if os.path.exists(cookie_path):
+            ydl_opts["cookiefile"] = cookie_path
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(link, download=True)
             video_file = ydl.prepare_filename(info)
             title = info.get("title", "Video")
-            duration = info.get("duration")
-            channel = info.get("uploader")
+            duration = info.get("duration", 0)
+            channel = info.get("uploader", "Bilinmir")
             views = info.get("view_count", 0)
             thumbnail_url = info.get("thumbnail")
 
+        # Thumbnail yüklə
         if thumbnail_url:
             thumb_name = f"thumb_{config.BOT_USERNAME}.jpg"
-            with open(thumb_name, "wb") as f:
-                f.write(requests.get(thumbnail_url).content)
+            try:
+                with open(thumb_name, "wb") as f:
+                    f.write(requests.get(thumbnail_url).content)
+            except Exception as e:
+                print("Thumbnail yükləmə xətası:", e)
+                thumb_name = None
 
+        # Caption
+        minutes, seconds = divmod(duration, 60)
         caption = f"""
 🎬 [{title}]({link})
-⏳ Müddət: {duration//60}:{duration%60:02d}
+⏳ Müddət: {minutes}:{seconds:02d}
 👁 Baxış: {views}
 👤 İstəyən: {message.from_user.mention}
 📡 Kanal: {channel}
 """
 
+        # Göndər istifadəçiyə
         await message.reply_video(
             video=video_file,
             caption=caption,
             duration=duration,
-            thumb=thumb_name if os.path.exists(thumb_name) else None,
+            thumb=thumb_name if thumb_name and os.path.exists(thumb_name) else None,
             supports_streaming=True,
             reply_markup=buttons["markup_for_private"]
         )
 
+        # Kanalda paylaş
         await app.send_video(
             chat_id=config.PLAYLIST_ID,
             video=video_file,
             caption=caption,
             duration=duration,
-            thumb=thumb_name if os.path.exists(thumb_name) else None,
+            thumb=thumb_name if thumb_name and os.path.exists(thumb_name) else None,
             supports_streaming=True,
             reply_markup=buttons["add_to_group"]
         )
@@ -101,7 +116,10 @@ async def video_handler(client, message):
         await m.delete()
 
     except Exception as e:
-        await message.reply(f"⚠️ Xəta baş verdi:\n{type(e).__name__}: {str(e)}")
+        if m:
+            await m.edit(f"⚠️ Xəta baş verdi:\n`{type(e).__name__}: {str(e)}`")
+        else:
+            await message.reply(f"⚠️ Xəta baş verdi:\n`{type(e).__name__}: {str(e)}`")
         print("❌ Xəta:", type(e).__name__, e)
 
     finally:
