@@ -28,6 +28,17 @@ bot_token = config.BOT_TOKEN
 xaos = TelegramClient('client', api_id, api_hash).start(bot_token=bot_token)
 
 
+
+pls = Client(
+    'persional',
+    bot_token = config.BOT_TOKEN,
+    api_id = config.API_ID,
+    api_hash = config.API_HASH
+)
+
+
+
+
 class Inflex(Client):
     def __init__(self):
         LOGGER.info(f"Starting Bot...")
