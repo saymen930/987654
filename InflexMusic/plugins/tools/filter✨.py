@@ -1,3 +1,9 @@
+from pyrogram import Client, filters
+from pyrogram.types import Message
+from typing import Dict
+import asyncio
+from InflexMusic import app  # sənin botun app ola bilə
+
 @app.on_message(filters.command("filter") & filters.group)
 async def add_filter(_, message: Message):
     if not message.from_user:
