@@ -1,11 +1,9 @@
-# @AylinRobot
-# Sahib @HuseynH
-# Repo Açığdısa İcazəsis Götürmə Oğlum
 
 import os, asyncio, time, shlex, requests, pyrogram
 from helpers.extract_user import extract_user, last_online
 from datetime import datetime
-from InflexMusic import app
+#from InflexMusic import app
+from InflexMusic.core.bot import pls as app
 from pyrogram import filters, Client
 
 
