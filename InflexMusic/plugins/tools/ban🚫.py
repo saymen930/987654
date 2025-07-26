@@ -27,11 +27,11 @@ async def ban_user(client: Client, message: Message):
             return await message.reply("❌ İstifadəçi tapılmadı.")
 
     if not user:
-        return await message.reply("🔺 İstifadə: `/ban` (cavabla) və ya `/ban <ID/@username>`", quote=True)
+        return await message.reply("🔺 İstifadə: <b>/ban</b> (cavabla) və ya <b>/ban</b> <ID/@username>", quote=True)
 
     try:
         await client.ban_chat_member(message.chat.id, user.id)
-        await message.reply(f"🚫 `{user.first_name}` qrupdan banlandı.")
+        await message.reply(f"🚫 {user.first_name} qrupdan banlandı.")
     except Exception as e:
         await message.reply(f"❌ Ban edilə bilmədi.\n`{e}`")
 
@@ -50,7 +50,7 @@ async def unban_user(client: Client, message: Message):
             return await message.reply("❌ İstifadəçi tapılmadı.")
 
     if not user:
-        return await message.reply("🔺 İstifadə: `/unban` (cavabla) və ya `/unban <ID/@username>`", quote=True)
+        return await message.reply("🔺 İstifadə: <b>/unban</b> (cavabla) və ya <b>/unban</b> <ID/@username>", quote=True)
 
     try:
         await client.unban_chat_member(message.chat.id, user.id)
