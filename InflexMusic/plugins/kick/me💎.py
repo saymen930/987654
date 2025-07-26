@@ -13,9 +13,6 @@ async def me_command(client, message: Message):
     if user.last_name:
         text += f"• 👤 Soyad: `{user.last_name}`\n"
 
-    if user.username:
-        text += f"• 🔗 Username: [@{user.username}](https://t.me/{user.username})\n"
-
     text += f"• 🌐 Dil: `{user.language_code}`\n"
     text += f"• 💎 Premium: {'✅' if user.is_premium else '❌'}\n"
     text += f"• 🤖 Bot: {'✅' if user.is_bot else '❌'}\n"
