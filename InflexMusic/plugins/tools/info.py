@@ -5,7 +5,7 @@
 import os, asyncio, time, shlex, requests, pyrogram
 from helpers.extract_user import extract_user, last_online
 from datetime import datetime
-from ps import ps as app
+from InflexMusic import ps as app
 from pyrogram import filters, Client
 
 
