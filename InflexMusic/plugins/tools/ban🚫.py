@@ -3,7 +3,7 @@ from pyrogram.enums import ChatMemberStatus
 from pyrogram.types import Message
 from InflexMusic import app  # Bot instansiyası
 
-# 👮‍♂️ Admin yoxlama funksiyası
+# 👮‍♂️ İstifadəçi adminmi?
 async def is_admin(client: Client, user_id: int, chat_id: int) -> bool:
     try:
         member = await client.get_chat_member(chat_id, user_id)
@@ -12,11 +12,26 @@ async def is_admin(client: Client, user_id: int, chat_id: int) -> bool:
         print(f"[Admin yoxlama xətası] {e}")
         return False
 
+# 🤖 Bot adminmi və hüququ varmı?
+async def is_self_admin(client: Client, chat_id: int) -> bool:
+    try:
+        member = await client.get_chat_member(chat_id, client.me.id)
+        if member.status not in [ChatMemberStatus.ADMINISTRATOR, ChatMemberStatus.OWNER]:
+            return False
+        # Ban səlahiyyəti varsa: can_restrict_members = True
+        return getattr(member.privileges, "can_restrict_members", False)
+    except Exception as e:
+        print(f"[Bot admin yoxlaması xətası] {e}")
+        return False
+
 # 🚫 Ban əmri
 @app.on_message(filters.command("ban") & filters.group)
 async def ban_user(client: Client, message: Message):
     if not await is_admin(client, message.from_user.id, message.chat.id):
         return await message.reply("❌ Bu əmri istifadə etmək üçün admin olmalısınız.")
+
+    if not await is_self_admin(client, message.chat.id):
+        return await message.reply("🔺Botun ban etmək hüququ yoxdur. Admin edin və səlahiyyət verin.")
 
     user = message.reply_to_message.from_user if message.reply_to_message else None
 
@@ -40,6 +55,9 @@ async def ban_user(client: Client, message: Message):
 async def unban_user(client: Client, message: Message):
     if not await is_admin(client, message.from_user.id, message.chat.id):
         return await message.reply("❌ Bu əmri istifadə etmək üçün admin olmalısınız.")
+
+    if not await is_self_admin(client, message.chat.id):
+        return await message.reply("🔺Botun unban etmək hüququ yoxdur. Admin edin və səlahiyyət verin.")
 
     user = message.reply_to_message.from_user if message.reply_to_message else None
 
