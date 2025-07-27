@@ -6,7 +6,8 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 
-from InflexMusic.core.bot import xaos as client 
+from InflexMusic.core.bot import xaos as bot 
+
 # Faylları oxu və ya boş obyektlər yarat
 if os.path.exists("Jason/welcome.json"):
     with open("Jason/welcome.json", "r", encoding="utf-8") as f:
@@ -133,5 +134,12 @@ async def welcome_user(event):
     text = parse_welcome(welcome_data[chat_id].get("text", ""), user_info, event.chat)
     await event.reply(text)
 
-print("🤖 Bot işə düşdü!")
-bot.run_until_disconnected()
+
+
+
+
+
+
+
+
+
