@@ -30,6 +30,10 @@ DATA_FILES = {
 # ==========================
 # YARDIMÇI FUNKSİYALAR
 # ==========================
+
+
+SCORE_FİLE = "Jason/scores.json"
+
 def load_json(path: str):
     if not os.path.exists(path):
         with open(path, "w", encoding="utf-8") as f:
@@ -40,6 +44,12 @@ def load_json(path: str):
 def save_json(path: str, data):
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+#####
+def save_scores(scores):
+    with open(SCORE_FİLE, "w", encoding="utf-8") as f:
+        json.dump(filters, f, indent=2, ensure_ascii=False)
+
+#####
 
 def is_group(event) -> bool:
     return isinstance(event.chat_id, int) and (event.is_group or event.is_channel and event.is_group)
