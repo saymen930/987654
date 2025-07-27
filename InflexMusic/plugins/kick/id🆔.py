@@ -16,7 +16,7 @@ async def ids(_, message):
         )
     else:
         await message.reply_text(
-           f"💬 Bu qrupun ID-si: `{message.chat.id}`",
+           f"<b>💬 Bu qrupun ID-si: {message.chat.id}</b>",
            reply_markup=markup,
            quote=True
         )
