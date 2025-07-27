@@ -1,7 +1,7 @@
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from datetime import datetime
-
+from InflexMusic import app
 # Mesaj saylarını yadda saxlamaq üçün
 user_message_count = {}
 user_message_day = {}
@@ -27,7 +27,7 @@ async def message_tracker(client: Client, message: Message):
     count = user_message_count[key]
 
     # Xüsusi mərhələlərə uyğun cavablar
-    if count == 201:
+    if count == 10:
         await message.reply(f"{user_name} sən bu gün 201 mesaj yazmısan 🤩\nKurucu tərəfindən 1 cüt corab qazandınız 😅")
     elif count == 500:
         await message.reply(f"{user_name} gözümüz qamaşdı......😮\nSən bu gün 500 mesaj yazmısan 🫢")
