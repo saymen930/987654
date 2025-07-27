@@ -1,48 +1,52 @@
-import requests
-from InflexMusic import app
-from pyrogram import Client, filters
-from pyrogram.types import Message
-import requests
 import json
-import logging
+import requests
+from telethon import events
+from InflexMusic.core.bot import xaos as client  # səndə necədirsə onu istifadə et
 
+API_URL = "https://aicodegenerator.ifscswiftcodeapp.in/api.php"
+HEADERS = {
+    "Content-Type": "application/json",
+    "User-Agent": "Mozilla/5.0"
+}
 
-
-@app.on_message(filters.command("ai"))
-async def ai_command(client: Client, message: Message):
-    user_input = message.text.replace("/ai", "/gemini", 1).strip()
+# /ai, .ai, !ai, @ai ...
+@client.on(events.NewMessage(pattern=r"^[!/\.@]ai(?:\s+(.+))?$"))
+async def ai_command(event: events.NewMessage.Event):
+    user_input = (event.pattern_match.group(1) or "").strip()
 
     if not user_input:
-        await message.reply("✍️ Zəhmət olmasa /ai və ya /gemini əmri ilə sualınızı yazın.\nMəsələn: `/ai Python nədir?`")
-        return
+        return await event.reply(
+            "✍️ Zəhmət olmasa /ai əmri ilə sualınızı yazın.\n"
+            "Məsələn: `/ai Python nədir?`",
+            parse_mode="md"
+        )
+
+    # Pyrogram-da etdiyin kimi /ai -> /gemini string dəyişimi (əslində lazım deyil,
+    # amma eyni davranışı saxlamaq üçün qoyuram)
+    user_input = user_input.replace("/ai", "/gemini", 1)
 
     try:
-        response = requests.post(
-            "https://aicodegenerator.ifscswiftcodeapp.in/api.php",
-            headers={
-                "Content-Type": "application/json",
-                "User-Agent": "Mozilla/5.0"
-            },
+        resp = requests.post(
+            API_URL,
+            headers=HEADERS,
             json={
                 "message": [{"type": "text", "text": user_input}],
-                "chatId": str(message.chat.id),
+                "chatId": str(event.chat_id),
                 "generatorType": "CodeGenerator"
             },
             timeout=10
         )
 
-        if response.status_code == 200:
+        if resp.status_code == 200:
             try:
-                data = response.json()
+                data = resp.json()
                 reply_text = data.get("response", "⚠️ Cavab tapılmadı.")
             except json.JSONDecodeError:
                 reply_text = "⚠️ JSON cavabı alınmadı."
         else:
-            reply_text = f"⚠️ Server xətası: {response.status_code}"
+            reply_text = f"⚠️ Server xətası: {resp.status_code}"
 
     except requests.exceptions.RequestException as e:
         reply_text = f"❌ Sorğu zamanı xəta baş verdi:\n{e}"
 
-    await message.reply(reply_text)
-
-# ▶️ Botu işə salırıq
+    await event.reply(reply_text)
