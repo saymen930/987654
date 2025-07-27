@@ -14,7 +14,7 @@ async def mal_varligi_olcme(event: events.NewMessage.Event):
 
     replied = await event.get_reply_message()
     if not replied or not isinstance(replied.sender, User):
-        return await event.reply("İstifadəçini tapa bilmədim.")
+        return await event.reply("🙅 İstifadəçini tapa bilmədim.")
 
     target = replied.sender
     me = await client.get_me()
@@ -25,15 +25,13 @@ async def mal_varligi_olcme(event: events.NewMessage.Event):
 
     # 2 OWNER_ID üçün yoxlama
     if target.id in config.OWNER_IDS:
-        return await event.reply(f"{mention(target)} mənim sahibimdir, mal sənsən!")
+        return await event.reply(f"🙂‍↕️ {mention(target)} mənim sahibimdir, mal sənsən!")
 
     if target.id == me.id:
-        return await event.reply("Məni də mal deyə çağıra bilməzsən!")
+        return await event.reply("🕺 Məni də mal deyə çağıra bilməzsən!")
 
-    initial = await event.reply(f"{mention(target)}-ın mal varlığı ölçülür... 📊")
-    await asyncio.sleep(0.9)
-    await initial.edit("Varlıq verisi alınır... 📈")
+    initial = await event.reply(f"{mention(target)}-ın mallığı ölçülür... 📊")
     await asyncio.sleep(1)
     
     percentage = random.randint(0, 100)
-    await initial.edit(f"{mention(target)} sən\n\n%{percentage} malsan 😅")
+    await initial.edit(f"{mention(target)} sən\n{percentage}% malsan 😅")
