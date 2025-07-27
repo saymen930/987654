@@ -14,7 +14,7 @@ async def is_admin(event):
     admins = [a.id async for a in client.iter_participants(event.chat_id, filter=ChannelParticipantsAdmins)]
     return event.sender_id in admins
 
-@client.on(events.NewMessage(pattern=r"^[./!]all(?:\s+(.+))?$"))
+@client.on(events.NewMessage(pattern=r"^[./!]tag(?:\s+(.+))?$"))
 async def mention_all(event: events.NewMessage.Event):
     # PM-də blokla
     if event.is_private:
@@ -47,7 +47,7 @@ async def mention_all(event: events.NewMessage.Event):
     tag_count[event.chat_id] = 0
     await event.respond("**✅ Tag prosesi başladı!**\nDayandırmaq üçün: `/cancel`")
 
-    chunk_size = 1
+    chunk_size = 5
     sleep_between = 2
 
     usrnum = 0
