@@ -2,16 +2,22 @@ import asyncio
 from telethon import TelegramClient, events, Button
 from telethon.tl.functions.channels import EditBannedRequest, GetParticipantRequest
 from telethon.tl.types import ChatBannedRights
-from InflexMusic.core.bot import xaos as client
-
+from InflexMusic.core.bot import xaos as client 
 warns = {}  # {(chat_id_user_id): int}
 
 # Adminlik yoxlama funksiyası
 async def is_admin(chat_id, user_id):
+    if not chat_id:
+        return False
     try:
         participant = await client(GetParticipantRequest(channel=chat_id, user_id=user_id))
-        return participant.participant.admin_rights is not None or participant.participant.creator
-    except:
+        p = participant.participant
+        if getattr(p, 'creator', False):
+            return True
+        if hasattr(p, 'admin_rights') and p.admin_rights is not None:
+            return True
+        return False
+    except Exception:
         return False
 
 # İstifadəçi tapma (reply, username, id ilə)
@@ -42,9 +48,13 @@ async def get_user_from_message(event):
             return user.id
     return None
 
-# Səssiz etmək (/mute)
+# /mute əmri
 @client.on(events.NewMessage(pattern='/mute'))
 async def mute_handler(event):
+    if not event.chat_id:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
+
     if not await is_admin(event.chat_id, event.sender_id):
         await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
         return
@@ -73,9 +83,13 @@ async def mute_handler(event):
     except Exception as e:
         await event.reply(f"Xəta: {e}")
 
-# Səssizliyi açmaq (/unmute)
+# /unmute əmri
 @client.on(events.NewMessage(pattern='/unmute'))
 async def unmute_handler(event):
+    if not event.chat_id:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
+
     if not await is_admin(event.chat_id, event.sender_id):
         await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
         return
@@ -104,9 +118,13 @@ async def unmute_handler(event):
     except Exception as e:
         await event.reply(f"Xəta: {e}")
 
-# Qrupdan atmaq (/kick)
+# /kick əmri
 @client.on(events.NewMessage(pattern='/kick'))
 async def kick_handler(event):
+    if not event.chat_id:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
+
     if not await is_admin(event.chat_id, event.sender_id):
         await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
         return
@@ -123,9 +141,12 @@ async def kick_handler(event):
     except Exception as e:
         await event.reply(f"Xəta: {e}")
 
-# İstifadəçi özü çıxa bilər (/kickme)
+# /kickme əmri (özünü qrupdan çıxarmaq)
 @client.on(events.NewMessage(pattern='/kickme'))
 async def kickme_handler(event):
+    if not event.chat_id:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
     try:
         await event.reply("Hə haqlısan! Davay bayıra 👞")
         await client.kick_participant(event.chat_id, event.sender_id)
@@ -133,9 +154,13 @@ async def kickme_handler(event):
     except Exception as e:
         await event.reply(f"Xəta: {e}")
 
-# Xəbərdarlıq etmək (/warn)
+# /warn əmri
 @client.on(events.NewMessage(pattern='/warn'))
 async def warn_handler(event):
+    if not event.chat_id:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
+
     if not await is_admin(event.chat_id, event.sender_id):
         await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
         return
@@ -161,9 +186,13 @@ async def warn_handler(event):
     else:
         await event.reply(f"İstifadəçi xəbərdarlıq aldı❗ Ümumi xəbərdarlıq sayı: {count}/3", buttons=markup)
 
-# Xəbərdarlığı silmək (/unwarn)
+# /unwarn əmri
 @client.on(events.NewMessage(pattern='/unwarn'))
 async def unwarn_handler(event):
+    if not event.chat_id:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
+
     if not await is_admin(event.chat_id, event.sender_id):
         await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
         return
@@ -201,7 +230,7 @@ async def callback_unwarn_handler(event):
         warns[key] -= 1
         await event.answer("Xəbərdarlıq silindi✅")
         try:
-            await event.edit(f"Xəbərdarlıq silindi,İstifadəçinin cari xəbərdarlıq sayı: {warns[key]}/3")
+            await event.edit(f"Xəbərdarlıq silindi, İstifadəçinin cari xəbərdarlıq sayı: {warns[key]}/3")
         except Exception as e:
             await event.answer(f"Mesaj redaktə olunmadı: {e}")
     else:
