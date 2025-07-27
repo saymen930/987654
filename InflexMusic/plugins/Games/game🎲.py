@@ -27,7 +27,7 @@ DATA_FILES = {
 "stats": "Jason/stats.json"
 }
 
-/restart üçün icazə sahibi
+#restart üçün icazə sahibi
 
 #==========================
 
@@ -134,7 +134,7 @@ msg = await client.send_message(chat_id, *args, **kwargs)
 oyun_mesajlar.setdefault(chat_id, []).append(msg.id)
 return msg
 
-/game
+#game
 
 #==========================
 
@@ -205,7 +205,7 @@ if user_id not in users:
 else:  
     await event.answer("Artıq oyundasan!")
 
-/join
+#join
 
 @client.on(events.NewMessage(pattern=r"^/join$"))
 async def join_cmd(event: events.NewMessage.Event):
@@ -227,7 +227,7 @@ if user_id in users:
 users.add(user_id)  
 await client.send_message(chat_id, f"📥 {(await event.get_sender()).first_name} oyuna qoşuldu.")
 
-/unjoin
+#unjoin
 
 @client.on(events.NewMessage(pattern=r"^/unjoin$"))
 async def unjoin_cmd(event: events.NewMessage.Event):
@@ -248,7 +248,7 @@ if user_id in users:
 else:  
     await event.reply("ℹ️ Sən artıq oyunda deyilsən.")
 
-/stop
+#stop
 
 @client.on(events.NewMessage(pattern=r"^/saxla$"))
 async def stop_cmd(event: events.NewMessage.Event):
@@ -267,7 +267,7 @@ else:
     except:  
         pass
 
-/joinup
+#joinup
 
 @client.on(events.NewMessage(pattern=r"^/joinup$"))
 async def joinup_cmd(event: events.NewMessage.Event):
@@ -304,7 +304,7 @@ try:
 except:  
     pass
 
-/gpuan
+#gpuan
 
 @client.on(events.NewMessage(pattern=r"^/gpuan$"))
 async def global_puan(event: events.NewMessage.Event):
@@ -325,7 +325,7 @@ for i, (user_id, xal) in enumerate(sıralama, start=1):
 
 await client.send_message(event.chat_id, mesaj)
 
-/puan
+#puan
 
 @client.on(events.NewMessage(pattern=r"^/puan$"))
 async def show_puan(event: events.NewMessage.Event):
@@ -333,7 +333,7 @@ user_id = str(event.sender_id)
 puan = scores.get(user_id, 0)
 await event.reply(f"⭐ Xalın: {puan}")
 
-/stats
+#stats
 
 @client.on(events.NewMessage(pattern=r"^/stats$"))
 async def user_stats(event: events.NewMessage.Event):
@@ -345,7 +345,7 @@ f"• Oyun sayı: {data.get('oyun',0)}\n"
 f"• Tapılan söz: {data.get('tapilan',0)}"
 )
 
-/soz
+#soz
 
 @client.on(events.NewMessage(pattern=r"^/soz($| )"))
 async def add_word(event: events.NewMessage.Event):
@@ -361,7 +361,7 @@ await event.reply(f"✅ '{soz}' sözü və cavablar əlavə olundu.")
 except Exception as e:
 await event.reply("❌ Format: /soz alma {alma,mal,lam,al}")
 
-/restart (admin)
+#restart (admin)
 
 @client.on(events.NewMessage(pattern=r"^/restart$"))
 async def restart_scores(event: events.NewMessage.Event):
