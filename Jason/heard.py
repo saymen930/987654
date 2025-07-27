@@ -11,3 +11,6 @@ FRAMES = [
     "🧡💛💚 {text} 💜🤎🤍",
     "💙💜❤️ {text} ♥️💙🤍",
 ]
+
+
+HEARD_M = "💆 /heard [Mətin]"
