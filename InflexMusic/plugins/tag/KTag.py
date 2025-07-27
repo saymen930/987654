@@ -2,6 +2,7 @@ import asyncio
 from telethon import events, Button
 from telethon.tl.types import ChannelParticipantsAdmins
 import config
+from InflexMusic.core.bot import xaos as client 
 # Hər qrup üçün aktiv tag prosesi saxlanır
 running_tags = set()
 tag_count = {}
