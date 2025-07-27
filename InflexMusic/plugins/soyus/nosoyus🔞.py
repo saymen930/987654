@@ -4,7 +4,7 @@ from InflexMusic import app
 
 qadağan_sözlər = [
     "sik", "sikdir", "peyser", "peysər", "oğras", "qəhbə", "qehbe", "anavi",
-    "Bacivi", "nin", "sikim", "dalbayov", "blət", "blet", "qələt",
+    "Bacivi", "sikim", "dalbayov", "blət", "blet", "qələt",
     "Pox", "heyvan", "varyox", "doğduğu", "bicbala", "bicok", "ble", "blə", "pesi", "cındır", "cindir", "ogras", "nənəvi"
 ]
 
