@@ -2,9 +2,32 @@ import random
 from telethon import TelegramClient, events, Button
 from telethon.tl.types import PeerChannel
 import asyncio
-
+from InflexMusic.core.bot import xaos as Client 
 # ==== OYUN PARAMETRLƏRİ ====
-WORDS = ["alma", "kitab", "telefon", "qələm", "komputer", "oyun", "məktəb"]
+WORDS = [
+    "alma", "kitab", "telefon", "qələm", "komputer", "oyun", "məktəb", "masa", "stol",
+    "qapı", "pəncərə", "divar", "mətbəx", "otaq", "çarpayı", "çəkmə", "güzgü", "lamp", "saat",
+    "çanta", "qalem", "defter", "rəsm", "kağız", "xəritə", "əyləncə", "kreslo", "yastıq", "yorğan",
+    "açar", "sürət", "ağac", "çiçək", "yarpaq", "bağ", "ev", "binə", "bina", "lift",
+    "pilləkan", "su", "çay", "dəniz", "göl", "çimərlik", "balıq", "qum", "yay", "qış",
+    "yaz", "payız", "hava", "külək", "günəş", "yağış", "qar", "bulud", "şimşək", "göyqurşağı",
+    "qəlb", "ruh", "sevgi", "qorxu", "sevinc", "hüzün", "ağrı", "dost", "ana", "ata",
+    "bacı", "qardaş", "uşaq", "böyük", "nənə", "baba", "insan", "qadın", "kişi", "cavan",
+    "qoca", "tələbə", "müəllim", "həkim", "polis", "işçi", "rəhbər", "dostluq", "həyat", "ölüm",
+    "vaxt", "dəqiqə", "saniyə", "gün", "həftə", "ay", "il", "təqvim", "bayram", "şənbə",
+    "bazar", "iş", "dəftərxana", "tətil", "kitabxana", "musiqi", "rəqs", "mahnı", "film", "serial",
+    "ekran", "kamera", "foto", "video", "internet", "sosial", "şəbəkə", "facebook", "instagram", "youtube",
+    "oyun", "zəka", "təsadüf", "şans", "strategiya", "sual", "cavab", "test", "imkan", "qələbə",
+    "məğlub", "əmr", "komanda", "proqram", "qurğu", "robot", "kod", "server", "baza", "sistem",
+    "mobil", "ağ", "qara", "mavi", "qırmızı", "yaşıl", "sarı", "narıncı", "boz", "çəhrayı",
+    "rəng", "form", "kvadrat", "dairə", "üçbucaq", "xətt", "nöqtə", "dəftər", "rüb", "imtahan",
+    "şagird", "məqalə", "tərcümə", "şeir", "nəsr", "roman", "hekayə", "nağıl", "təxəyyül", "qəhrəman",
+    "canavar", "şir", "pələng", "pişik", "it", "quş", "ayaq", "əl", "baş", "göz",
+    "qulaq", "burun", "ağız", "saç", "diş", "üz", "barmaq", "ürək", "beyin", "bədən",
+    "tər", "qan", "tənəffüs", "göbələk", "qida", "şorba", "plov", "kabab", "çörək", "meyvə",
+    "tərəvəz", "soğan", "pomidor", "xiyar", "kartof", "yerkökü", "çiyələk", "banan", "nar", "üzüm",
+    "ərik", "şaftalı", "alça", "kivi", "ananas", "limon", "portağal", "armud", "gavalı", "heyva"
+]
 game_sessions = {}
 player_scores = {}
 
