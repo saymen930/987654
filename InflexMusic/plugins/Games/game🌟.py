@@ -134,7 +134,7 @@ async def change_word_button(event):
 # ==== Söz dəyişdirmə funksiyası ====
 async def change_word(chat_id, message_event):
     if chat_id not in game_sessions or not game_sessions[chat_id]['active']:
-        return await message_event.reply("<b>🚫 Aktiv oyun yoxdur. /oyun ilə başlayın!</b>")
+        return await message_event.reply("🚫 Aktiv oyun yoxdur. /oyun ilə başlayın!")
 
     word = get_random_word()
     scrambled = scramble_word(word)
@@ -144,8 +144,8 @@ async def change_word(chat_id, message_event):
     buttons = [[Button.inline("🔃 Sözü dəyişmək", b'kec')]]
 
     await message_event.reply(
-        f"<b>⏭️ Söz keçildi!</b>\n\n"
-        f"<b>🔤 Yeni qarışdırılmış söz: {scrambled}</b>\n\n"
-        f"<b>Bu hərflərdən düzgün sözü tapın!</b>",
+        f"⏭️ Söz keçildi!\n\n"
+        f"🔤 Yeni qarışdırılmış söz: {scrambled}\n\n"
+        f"Bu hərflərdən düzgün sözü tapın!",
         buttons=buttons
     )
