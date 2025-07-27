@@ -1,11 +1,9 @@
 import random
 from telethon import TelegramClient, events, Button
-from telethon.tl.types import PeerChannel
-import asyncio
-from InflexMusic.core.bot import xaos as client 
+from InflexMusic.core.bot import xaos as client  # Telethon bot instance
 from Jason.word import WORDS
-# ==== OYUN PARAMETRLƏRİ ====
 
+# ==== OYUN PARAMETRLƏRİ ====
 game_sessions = {}
 player_scores = {}
 
@@ -15,11 +13,11 @@ def get_random_word():
 def scramble_word(word):
     return ''.join(random.sample(word, len(word)))
 
-# ==== /game əmri ====
+# ==== /oyun əmri ====
 @client.on(events.NewMessage(pattern='/oyun'))
 async def start_game(event):
     if not event.is_group:
-        return await event.reply("<b>❗Bu əmr yalnız qruplarda işləyir</b>")
+        return await event.reply("<b>❗ Bu əmr yalnız qruplarda işləyir</b>")
     
     chat_id = event.chat_id
     word = get_random_word()
@@ -36,7 +34,7 @@ async def start_game(event):
         f"<b>🔤 Qarışdırılmış söz: {scrambled}</b>\n\n"
         f"<b>Bu hərflərdən düzgün sözü tapın!</b>\n"
         f"<b>✅ Düzgün cavab: +25 xal</b>\n"
-        f"<b>🛑 Oyunu bitirmək: /bitir və ya /stop</b>\n"
+        f"<b>🛑 Oyunu bitirmək: /bitir və ya /dayan</b>\n"
         f"<b>📊 Xallarınızı görmək: /xallar</b>\n"
         f"<b>⏭️ Keçmək: /kec</b>",
         buttons=buttons
@@ -52,12 +50,12 @@ async def show_scores(event):
     user_id = event.sender_id
 
     if chat_id not in player_scores or user_id not in player_scores[chat_id]:
-        return await event.reply("🎯<b> Hələ heç bir xalınız yoxdur. Oyuna başlamaq üçün /game yazın!</b>")
+        return await event.reply("<b>🎯 Hələ heç bir xalınız yoxdur. Oyuna başlamaq üçün /oyun yazın!</b>")
 
     user_score = player_scores[chat_id][user_id]
     await event.reply(f"<b>📊 {event.sender.first_name}, sizin xalınız: {user_score} xal 🌟</b>")
 
-# ==== /bitir və /stop əmrləri ====
+# ==== /bitir və /dayan əmrləri ====
 @client.on(events.NewMessage(pattern=r'/(dayan|bitir)'))
 async def stop_game(event):
     if not event.is_group:
@@ -82,10 +80,10 @@ async def stop_game(event):
         await event.reply(
             f"<b>🏁 Söz Oyunu Bitdi!</b>\n\n"
             f"<b>🏆 Ən yüksək xal: {top_name} - {top_score} xal</b>\n\n"
-            f"<b>Yeni oyun üçün /game yazın! </b>🎮"
+            f"<b>Yeni oyun üçün /oyun yazın! 🎮</b>"
         )
     else:
-        await event.reply("<b>🏁 Söz Oyunu Bitdi! Yeni oyun üçün /game yazın! 🎮</b>")
+        await event.reply("<b>🏁 Söz Oyunu Bitdi! Yeni oyun üçün /oyun yazın! 🎮</b>")
 
 # ==== Cavab yoxlama ====
 @client.on(events.NewMessage)
@@ -128,13 +126,15 @@ async def skip_word(event):
 # ==== Buttonla dəyişmək ====
 @client.on(events.CallbackQuery(data=b'kec'))
 async def change_word_button(event):
-    await change_word(event.chat_id, event.message)
+    chat_id = event.chat_id
+    message = await event.get_message()
+    await change_word(chat_id, message)
     await event.answer("Yeni söz göndərildi!")
 
 # ==== Söz dəyişdirmə funksiyası ====
 async def change_word(chat_id, message_event):
     if chat_id not in game_sessions or not game_sessions[chat_id]['active']:
-        return await message_event.reply("🚫 Aktiv oyun yoxdur. /game ilə başlayın!")
+        return await message_event.reply("<b>🚫 Aktiv oyun yoxdur. /oyun ilə başlayın!</b>")
 
     word = get_random_word()
     scrambled = scramble_word(word)
