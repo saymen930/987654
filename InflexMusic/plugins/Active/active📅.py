@@ -3,22 +3,24 @@ import csv
 import os
 from datetime import datetime, timedelta
 import pytz
-from telethon import TelegramClient, events
-from InflexMusic.core.bot import xaos as client 
+from telethon import events
+from telethon.tl.types import User
+from InflexMusic.core.bot import xaos as client  # Bot instance
 
-# ---- BOT KONFİQURASİYASI ----
-
+# ---- KONFİQURASİYA ----
 qruplar = set()
 aktivlik = {}
 baku_tz = pytz.timezone("Asia/Baku")
 
 
+# --- MESAJLARI SAYIR ---
 @client.on(events.NewMessage)
 async def handle_messages(event):
-    if event.is_private:
+    if event.is_private:  # şəxsi mesajlarda işləməsin
         return
+
     sender = await event.get_sender()
-    if sender.bot:
+    if isinstance(sender, User) and sender.bot:  # yalnız User və bot yoxlanır
         return
 
     chat_id = event.chat_id
@@ -31,6 +33,7 @@ async def handle_messages(event):
     aktivlik[chat_id][user_id]["count"] += 1
 
 
+# --- CSV FAYLINI YARADIR ---
 def init_csv():
     if not os.path.exists("aktivlik.csv"):
         with open("aktivlik.csv", "w", encoding="utf-8", newline="") as file:
@@ -38,17 +41,20 @@ def init_csv():
             writer.writerow(["Qrup ID", "İstifadəçi", "Mesaj sayı", "Tarix"])
 
 
+# --- GÜNLÜK HESABAT GÖNDƏRİR ---
 async def gunluk_hesabat():
     while True:
-        # Növbəti 01:00 vaxtını hesabla
         indi = datetime.now(baku_tz)
-        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=21, second=0, microsecond=0)
+        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=30, second=0, microsecond=0)
         delta = (sabah - indi).total_seconds()
-        
-        await asyncio.sleep(delta)  # Növbəti 01:00-a qədər yat
 
-        await hesabat_ve_csv()  # Hesabatı göndər
+        print(f"⏳ Növbəti hesabat {sabah.strftime('%Y-%m-%d %H:%M:%S')} vaxtında göndəriləcək ({int(delta)} saniyə sonra)")
 
+        await asyncio.sleep(delta)
+        await hesabat_ve_csv()
+
+
+# --- HESABATI HAZIRLAYIB QƏRƏR GÖNDƏRİR ---
 async def hesabat_ve_csv():
     for chat_id in list(qruplar):
         if chat_id not in aktivlik:
@@ -87,18 +93,8 @@ async def hesabat_ve_csv():
             user["count"] = 0
 
 
-async def main():
+# --- PLUGİN START OLDUQDA ÇAĞIR ---
+def start_plugin():
     init_csv()
-    asyncio.create_task(gunluk_hesabat())
-    
-    
-
-    
-    
-
-
-
-
-
-
-
+    client.loop.create_task(gunluk_hesabat())
+    print("📊 Aktivlik hesabatı sistemi işə düşdü.")
