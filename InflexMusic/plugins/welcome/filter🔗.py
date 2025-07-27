@@ -66,7 +66,7 @@ async def add_filter(event):
     await event.delete()
     await event.reply("❗ Ya media ilə reply et, ya da `/filter söz cavab` formatında yaz.", reply_to=event.message.id)
 
-@bot.on(events.NewMessage(pattern=r'^/(stop|!stop)', func=lambda e: e.is_group))
+@bot.on(events.NewMessage(pattern=r"^[/!.]stop(\s|$)(.*)", func=lambda e: e.is_group))
 async def remove_filter(event):
     if not await is_admin(event):
         # Admin olmayan istifadəçi mesajı silmir, sadəcə xəbərdarlıq edir
