@@ -3,7 +3,7 @@ from telethon import events, Button
 from telethon.tl.types import ChannelParticipantsAdmins
 import config
 from InflexMusic.core.bot import xaos as client 
-from Jason.tag import emoji, sevgi
+from Jason.tag import emoji, soz
 # Hər qrup üçün aktiv tag prosesi saxlanır
 running_tags = set()
 tag_count = {}
@@ -123,7 +123,7 @@ async def cancel_tag(event: events.NewMessage.Event):
 
 
 
-
+# /ttag KOMANDASI /SƏBƏBLİ
 def btn_add_to_group():
     return [[Button.url('➕ QRUPA ƏLAVƏ ET ➕', f'https://t.me/{config.BOT_USERNAME}?startgroup=a')]]
 
@@ -244,7 +244,7 @@ async def cancel_tag(event: events.NewMessage.Event):
 running_tags = set()
 tag_count = {}
 
-# ETAG KOMANDASI
+# ETAG KOMANDASI / SƏBƏBSİZ
 @client.on(events.NewMessage(pattern=r"^[./!]etag$"))
 async def etag_handler(event):
     chat_id = event.chat_id
@@ -322,7 +322,7 @@ tag_count = {}
 
 
 
-# STAGKOMANDASI
+# STAGKOMANDASI / SƏBƏBSİZ
 @client.on(events.NewMessage(pattern=r"^[./!]stag$"))
 async def etag_handler(event):
     chat_id = event.chat_id
@@ -351,7 +351,7 @@ async def etag_handler(event):
 
         rxyzdev_tagTot[chat_id] += 1
         usrnum += 1
-        usrtxt += f"[{random.choice(sevgi)}](tg://user?id={usr.id}) • "
+        usrtxt += f"[{random.choice(soz)}](tg://user?id={usr.id}) • "
 
         if chat_id not in anlik_calisan:
             return
