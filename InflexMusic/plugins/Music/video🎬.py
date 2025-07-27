@@ -87,9 +87,6 @@ async def video_handler(client, message):
         caption = f"""
 🎬 [{title}]({link})
 ⏳ Müddət: {minutes}:{seconds:02d}
-👁 Baxış: {views}
-👤 İstəyən: {message.from_user.mention}
-📡 Kanal: {channel}
 """
 
         # Göndər istifadəçiyə
