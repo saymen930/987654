@@ -2,12 +2,9 @@ import json
 import os
 import random
 from telethon import TelegramClient, events, Button
+from InflexMusic.core.bot import xaos as client
 
-API_ID = 123456  # öz API_ID-ni buraya yaz
-API_HASH = "your_api_hash"  # öz API_HASH-ni buraya yaz
-BOT_TOKEN = "8234671504:AAFUi0nvY5pmcUvCVRlzKCgp--j5XsOCXo8"  # tokenun
-
-GOODBYE_FILE = "goodbye_data.json"
+GOODBYE_FILE = "Jason/goodbye_data.json"
 
 if not os.path.exists(GOODBYE_FILE):
     with open(GOODBYE_FILE, "w") as f:
@@ -21,7 +18,6 @@ def save_goodbye_data(data):
     with open(GOODBYE_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
-client = TelegramClient("goodbye_bot", API_ID, API_HASH).start(bot_token=BOT_TOKEN)
 
 @client.on(events.NewMessage(pattern=r"/goodbye(?:\s+(\w+))?", chats=None))
 async def goodbye_command(event):
@@ -125,5 +121,4 @@ async def member_left_handler(event):
         await client.send_message(event.chat_id, random.choice(goodbye_messages))
 
 
-print("Bot başladı...")
-client.run_until_disconnected()
+
