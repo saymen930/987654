@@ -14,13 +14,20 @@ baku_tz = pytz.timezone("Asia/Baku")
 
 
 # --- MESAJLARI SAYIR ---
+
 @client.on(events.NewMessage)
 async def handle_messages(event):
     if event.is_private:  # şəxsi mesajlarda işləməsin
         return
 
     sender = await event.get_sender()
-    if isinstance(sender, User) and sender.bot:  # yalnız User və bot yoxlanır
+
+    # Əgər göndərən user deyilsə (məsələn, kanal mesajıdır), bu mesajı sayma
+    if not isinstance(sender, User):
+        return
+
+    # Əgər bot mesajıdırsa, onu da sayma
+    if sender.bot:
         return
 
     chat_id = event.chat_id
@@ -31,7 +38,6 @@ async def handle_messages(event):
     aktivlik.setdefault(chat_id, {})
     aktivlik[chat_id].setdefault(user_id, {"name": name, "count": 0})
     aktivlik[chat_id][user_id]["count"] += 1
-
 
 # --- CSV FAYLINI YARADIR ---
 def init_csv():
@@ -45,7 +51,7 @@ def init_csv():
 async def gunluk_hesabat():
     while True:
         indi = datetime.now(baku_tz)
-        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=40, second=0, microsecond=0)
+        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=58, second=0, microsecond=0)
         delta = (sabah - indi).total_seconds()
 
         print(f"⏳ Növbəti hesabat {sabah.strftime('%Y-%m-%d %H:%M:%S')} vaxtında göndəriləcək ({int(delta)} saniyə sonra)")
