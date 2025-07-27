@@ -3,7 +3,7 @@ import json
 import os
 from telethon import TelegramClient, events, types
 
-FILTERS_FILE = "filters.json"
+FILTERS_FILE = "Jason/filters.json"
 
 def load_filters():
     if os.path.exists(FILTERS_FILE):
