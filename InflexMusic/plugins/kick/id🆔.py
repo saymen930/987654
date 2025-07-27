@@ -10,7 +10,7 @@ async def ids(_, message):
 
     if reply and reply.from_user:
         await message.reply_text(
-            f"👤 İstifadəçi: {reply.from_user.first_name}\n🆔 ID: `{reply.from_user.id}`",
+            f"👤 İstifadəçi: {reply.from_user.first_name}\n🆔 ID: {reply.from_user.id}",
             reply_markup=markup,
             quote=True
         )
