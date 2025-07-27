@@ -3,8 +3,6 @@ import json
 import os
 from telethon import TelegramClient, events, Button
 from telethon.tl.functions.users import GetFullUserRequest
-from telethon.tl.functions.channels import GetParticipantRequest
-from telethon.tl.types import ChannelParticipantsAdmins
 
 from InflexMusic.core.bot import xaos as bot 
 
@@ -30,7 +28,6 @@ def parse_welcome(text, user, chat):
         text.replace("{username}", username)
             .replace("{firstname}", firstname)
             .replace("{chatname}", chatname)
-            .replace("{chatname}", id)
     )
 
 # /setwelcome
@@ -41,15 +38,19 @@ async def set_welcome(event):
     chat_id = str(event.chat_id)
     parts = event.raw_text.split("\n", 1)
     if len(parts) < 2 or not parts[1].strip():
-        await event.reply("❗️ Zəhmət olmasa /setwelcome əmrindən sonra mesaj yazın.\n\nNümunə:\n`/setwelcome\nSalam {username}, xoş gəldin {chatname}`", parse_mode="md")
+        await event.reply(
+            "❗️ Zəhmət olmasa /setwelcome əmrindən sonra mesaj yazın.\n\n"
+            "Nümunə:\n`/setwelcome\nSalam {username}, xoş gəldin {chatname}`",
+            parse_mode="md"
+        )
         return
     welcome_text = parts[1].strip()
     welcome_data[chat_id] = {"text": welcome_text}
     welcome_status[chat_id] = True
 
-    with open("welcome.json", "w", encoding="utf-8") as f:
+    with open("Jason/welcome.json", "w", encoding="utf-8") as f:
         json.dump(welcome_data, f, ensure_ascii=False, indent=4)
-    with open("welstatus.json", "w", encoding="utf-8") as f:
+    with open("Jason/welstatus.json", "w", encoding="utf-8") as f:
         json.dump(welcome_status, f, ensure_ascii=False, indent=4)
 
     await event.reply("✅ Xoş gəldin mesajı uğurla yadda saxlanıldı.")
@@ -63,14 +64,14 @@ async def reset_welcome(event):
     welcome_data.pop(chat_id, None)
     welcome_status[chat_id] = False
 
-    with open("welcome.json", "w", encoding="utf-8") as f:
+    with open("Jason/welcome.json", "w", encoding="utf-8") as f:
         json.dump(welcome_data, f, ensure_ascii=False, indent=4)
-    with open("welstatus.json", "w", encoding="utf-8") as f:
+    with open("Jason/welstatus.json", "w", encoding="utf-8") as f:
         json.dump(welcome_status, f, ensure_ascii=False, indent=4)
 
     await event.reply("♻️ Xoş gəldin mesajı silindi və deaktiv edildi.")
 
-# /welcome (mövcud mesajı göstər və idarə et buttonları ilə)
+# /welcome
 @bot.on(events.NewMessage(pattern="/welcome"))
 async def show_welcome(event):
     if not event.is_group:
@@ -78,8 +79,7 @@ async def show_welcome(event):
     chat_id = str(event.chat_id)
     text = welcome_data.get(chat_id, {}).get("text")
     if not text:
-        await event.reply("❌ Qrup üçün heç bir xoş gəldin mesajı təyin olunmayıb.")
-        return
+        text = "Salam {username} və {chatname}'a xoş gəlmisiniz! necesen?"
 
     status = welcome_status.get(chat_id, False)
     status_text = "✅ Aktivdir" if status else "❌ Deaktivdir"
@@ -102,14 +102,14 @@ async def callback_handler(event):
     if data.startswith("welon:"):
         chat_id = data.split(":")[1]
         welcome_status[chat_id] = True
-        with open("welstatus.json", "w", encoding="utf-8") as f:
+        with open("Jason/welstatus.json", "w", encoding="utf-8") as f:
             json.dump(welcome_status, f, ensure_ascii=False, indent=4)
         await event.edit("✅ Xoş gəldin mesajı aktiv edildi.")
 
     elif data.startswith("weloff:"):
         chat_id = data.split(":")[1]
         welcome_status[chat_id] = False
-        with open("welstatus.json", "w", encoding="utf-8") as f:
+        with open("Jason/welstatus.json", "w", encoding="utf-8") as f:
             json.dump(welcome_status, f, ensure_ascii=False, indent=4)
         await event.edit("❌ Xoş gəldin mesajı deaktiv edildi.")
 
@@ -122,8 +122,12 @@ async def welcome_user(event):
     if not event.user_joined and not event.user_added:
         return
     chat_id = str(event.chat_id)
-    if not welcome_status.get(chat_id) or chat_id not in welcome_data:
+    if not welcome_status.get(chat_id):
         return
+
+    welcome_text = welcome_data.get(chat_id, {}).get("text")
+    if not welcome_text:
+        welcome_text = "Salam {username} və {chatname}'a xoş gəlmisiniz! necesen?"
 
     try:
         user = await bot(GetFullUserRequest(event.user_id))
@@ -131,15 +135,5 @@ async def welcome_user(event):
     except Exception:
         user_info = event.user
 
-    text = parse_welcome(welcome_data[chat_id].get("text", ""), user_info, event.chat)
+    text = parse_welcome(welcome_text, user_info, event.chat)
     await event.reply(text)
-
-
-
-
-
-
-
-
-
-
