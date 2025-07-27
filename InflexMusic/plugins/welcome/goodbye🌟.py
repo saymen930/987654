@@ -7,24 +7,25 @@ from InflexMusic import app  # bot instance
 @app.on_message(filters.left_chat_member & filters.group)
 async def goodbye_member(client: Client, message: Message):
     user = message.left_chat_member
-    # Bot özüdürsə, heç nə etmə
+
+    # Əgər botun özü çıxıbsa, heç nə etmə
     if user.id == (await client.get_me()).id:
         return
 
-    username = f"@{user.username}" if user.username else user.first_name
+    name = user.first_name  # Təkcə ad göstəriləcək
 
     goodbye_messages = [
-        f"{username} çıxdı, canımız qurtardı 😂",
-        f"{username} bezdi getdi 😒",
-        f"{username} getdi... darıxmayacağıq 🫡",
-        f"{username} artıq yoxdu, rahat nəfəs ala bilərik 🧘",
-        f"{username} çıxdı, qapını ört get 🙃",
-        f"{username} çıxıb... bəlkə də geri dönər? yox eee dönməsin 😌",
-        f"{username} çıxan kimi qrup işıqlanmağa başladı 🔆",
-        f"{username} sağ ol ki, getdin bro ✌️",
-        f"{username} sənsiz daha sakit oldu 💤",
-        f"{username} çıxdı, indi daha az drama var 🫣",
-        f"{username} əfsanə getdi... yox eee, sıradan biri idi 😅",
+        f"{name} çıxdı, canımız qurtardı 😂",
+        f"{name} bezdi getdi 😒",
+        f"{name} getdi... darıxmayacağıq 🫡",
+        f"{name} artıq yoxdu, rahat nəfəs ala bilərik 🧘",
+        f"{name} çıxdı, qapını ört get 🙃",
+        f"{name} çıxıb... bəlkə də geri dönər? yox eee dönməsin 😌",
+        f"{name} çıxan kimi qrup işıqlanmağa başladı 🔆",
+        f"{name} sağ ol ki, getdin bro ✌️",
+        f"{name} sənsiz daha sakit oldu 💤",
+        f"{name} çıxdı, indi daha az drama var 🫣",
+        f"{name} əfsanə getdi... yox eee, sıradan biri idi 😅",
     ]
 
     await message.reply(random.choice(goodbye_messages))
