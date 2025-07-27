@@ -245,7 +245,7 @@ running_tags = set()
 tag_count = {}
 
 # ETAG KOMANDASI / SƏBƏBSİZ
-@client.on(events.NewMessage(pattern=r"^[./!]etag$"))
+@client.on(events.NewMessage(pattern=r"^[./!]etag(?:\s+(.+))?$"))
 async def etag_handler(event):
     chat_id = event.chat_id
     rxyzdev_tagTot[chat_id] = 0
@@ -323,7 +323,7 @@ tag_count = {}
 
 
 # STAGKOMANDASI / SƏBƏBSİZ
-@client.on(events.NewMessage(pattern=r"^[./!]stag$"))
+@client.on(events.NewMessage(pattern=r"^[./!]stag(?:\s+(.+))?$"))
 async def etag_handler(event):
     chat_id = event.chat_id
     rxyzdev_tagTot[chat_id] = 0
