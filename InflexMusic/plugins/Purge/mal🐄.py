@@ -3,7 +3,7 @@ import random
 from telethon import events
 from telethon.tl.types import User
 import config  # Məsələn: OWNER_IDS = [123456789, 987654321]
-from your_project import client  # Öz client obyektinizi import edin
+  # Öz client obyektinizi import edin
 from InflexMusic import xaos as client
 
 
