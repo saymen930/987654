@@ -45,7 +45,7 @@ def init_csv():
 async def gunluk_hesabat():
     while True:
         indi = datetime.now(baku_tz)
-        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=30, second=0, microsecond=0)
+        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=40, second=0, microsecond=0)
         delta = (sabah - indi).total_seconds()
 
         print(f"⏳ Növbəti hesabat {sabah.strftime('%Y-%m-%d %H:%M:%S')} vaxtında göndəriləcək ({int(delta)} saniyə sonra)")
