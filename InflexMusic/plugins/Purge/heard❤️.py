@@ -1,14 +1,16 @@
 import asyncio
 from telethon import events
-from Jason.heard import FRAMES
+from Jason.heard import FRAMES, HEARD_M
 from InflexMusic.core.bot import xaos as client 
+
+
 
 @client.on(events.NewMessage(pattern=r'^/heard(?:\s+(.*))?$'))
 async def hearts_anim(event):
     text = event.pattern_match.group(1)
 
     if not text or text.strip() == "":
-        await event.reply("💆 Zəhmət olmasa `/heard` yazdıqdan sonra bir mətin yazın.")
+        await event.reply(HEARD_M)
         return
 
     # İlk mesaj
