@@ -4,8 +4,8 @@ from telethon import events
 from telethon.tl.types import User
 import config  # Məsələn: OWNER_IDS = [123456789, 987654321]
   # Öz client obyektinizi import edin
-from InflexMusic import xaos as client
-
+from InflexMusic.core.bot import xaos as client 
+ 
 
 @client.on(events.NewMessage(pattern=r'^[!/\.]mal$'))
 async def mal_varligi_olcme(event: events.NewMessage.Event):
