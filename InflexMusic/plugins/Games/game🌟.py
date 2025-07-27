@@ -30,13 +30,13 @@ async def start_game(event):
     buttons = [[Button.inline("🔃 Sözü dəyişmək", b'kec')]]
 
     await event.reply(
-        f"<b>🎮 Söz Oyunu Başladı!</b>\n\n"
-        f"<b>🔤 Qarışdırılmış söz: {scrambled}</b>\n\n"
-        f"<b>Bu hərflərdən düzgün sözü tapın!</b>\n"
-        f"<b>✅ Düzgün cavab: +25 xal</b>\n"
-        f"<b>🛑 Oyunu bitirmək: /bitir və ya /dayan</b>\n"
-        f"<b>📊 Xallarınızı görmək: /xallar</b>\n"
-        f"<b>⏭️ Keçmək: /kec</b>",
+        f"🎮 Söz Oyunu Başladı!\n\n"
+        f"🔤 Qarışdırılmış söz: {scrambled}\n\n"
+        f"Bu hərflərdən düzgün sözü tapın!\n"
+        f"✅ Düzgün cavab: +25 xal\n"
+        f"🛑 Oyunu bitirmək: /bitir və ya /dayan\n"
+        f"📊 Xallarınızı görmək: /xallar\n"
+        f"⏭️ Keçmək: /kec",
         buttons=buttons
     )
 
@@ -50,10 +50,10 @@ async def show_scores(event):
     user_id = event.sender_id
 
     if chat_id not in player_scores or user_id not in player_scores[chat_id]:
-        return await event.reply("<b>🎯 Hələ heç bir xalınız yoxdur. Oyuna başlamaq üçün /oyun yazın!</b>")
+        return await event.reply("🎯 Hələ heç bir xalınız yoxdur. Oyuna başlamaq üçün /oyun yazın!")
 
     user_score = player_scores[chat_id][user_id]
-    await event.reply(f"<b>📊 {event.sender.first_name}, sizin xalınız: {user_score} xal 🌟</b>")
+    await event.reply(f"📊 {event.sender.first_name}, sizin xalınız: {user_score} xal 🌟")
 
 # ==== /bitir və /dayan əmrləri ====
 @client.on(events.NewMessage(pattern=r'/(dayan|bitir)'))
@@ -64,7 +64,7 @@ async def stop_game(event):
     chat_id = event.chat_id
 
     if chat_id not in game_sessions or not game_sessions[chat_id]['active']:
-        return await event.reply("<b>🚫 Aktiv oyun yoxdur.</b>")
+        return await event.reply("🚫 Aktiv oyun yoxdur")
 
     game_sessions[chat_id]['active'] = False
 
@@ -78,12 +78,12 @@ async def stop_game(event):
             top_name = "Naməlum"
 
         await event.reply(
-            f"<b>🏁 Söz Oyunu Bitdi!</b>\n\n"
-            f"<b>🏆 Ən yüksək xal: {top_name} - {top_score} xal</b>\n\n"
-            f"<b>Yeni oyun üçün /oyun yazın! 🎮</b>"
+            f"🏁 Söz Oyunu Bitdi!\n\n"
+            f"🏆 Ən yüksək xal: {top_name} - {top_score} xal\n\n"
+            f"Yeni oyun üçün /oyun yazın! 🎮"
         )
     else:
-        await event.reply("<b>🏁 Söz Oyunu Bitdi! Yeni oyun üçün /oyun yazın! 🎮</b>")
+        await event.reply("🏁 Söz Oyunu Bitdi! Yeni oyun üçün /oyun yazın! 🎮")
 
 # ==== Cavab yoxlama ====
 @client.on(events.NewMessage)
@@ -112,9 +112,9 @@ async def check_answer(event):
         buttons = [[Button.inline("🔃 Sözü dəyişmək", b'kec')]]
 
         await event.reply(
-            f"<b>🎉 Təbriklər, {event.sender.first_name}!</b>\n"
-            f"<b>✅ Düzgün cavab verdiniz və 25 xal qazandınız!</b>\n\n"
-            f"<b>🔤 Yeni söz: {scrambled}</b>",
+            f"🎉 Təbriklər, {event.sender.first_name}!\n"
+            f"✅ Düzgün cavab verdiniz və 25 xal qazandınız!\n\n"
+            f"🔤 Yeni söz: {scrambled}",
             buttons=buttons
         )
 
