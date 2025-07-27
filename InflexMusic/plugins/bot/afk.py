@@ -235,7 +235,7 @@ async def chat_watcher_func(_, message):
                             f"**{replied_first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\n"
                         )
                     if afktype == "text_reason":
-                        msg += f"**{replied_first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n"
+                        msg += f"**{replied_first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n"
                     if afktype == "animation":
                         if str(reasonafk) == "None":
                             send = await message.reply_animation(
@@ -256,7 +256,7 @@ async def chat_watcher_func(_, message):
                         else:
                             send = await message.reply_photo(
                                 photo=f"downloads/{replied_user_id}.jpg",
-                                caption=f"**{replied_first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n",
+                                caption=f"**{replied_first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n",
                             )
                 except Exception:
                     msg += f"**{replied_first_name}** AFK vəziyyətindədir.\n\n"
@@ -291,7 +291,7 @@ async def chat_watcher_func(_, message):
                                 f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\n"
                             )
                         if afktype == "text_reason":
-                            msg += f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n"
+                            msg += f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n"
                         if afktype == "animation":
                             if str(reasonafk) == "None":
                                 send = await message.reply_animation(
@@ -301,7 +301,7 @@ async def chat_watcher_func(_, message):
                             else:
                                 send = await message.reply_animation(
                                     data,
-                                    caption=f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n",
+                                    caption=f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n",
                                 )
                         if afktype == "photo":
                             if str(reasonafk) == "None":
@@ -312,7 +312,7 @@ async def chat_watcher_func(_, message):
                             else:
                                 send = await message.reply_photo(
                                     photo=f"downloads/{user.id}.jpg",
-                                    caption=f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n",
+                                    caption=f"**{user.first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n",
                                 )
                     except:
                         msg += f"**{user.first_name[:25]}** AFK vəziyyətindədir.\n\n"
@@ -337,7 +337,7 @@ async def chat_watcher_func(_, message):
                         if afktype == "text":
                             msg += f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\n"
                         if afktype == "text_reason":
-                            msg += f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n"
+                            msg += f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n"
                         if afktype == "animation":
                             if str(reasonafk) == "None":
                                 send = await message.reply_animation(
@@ -347,7 +347,7 @@ async def chat_watcher_func(_, message):
                             else:
                                 send = await message.reply_animation(
                                     data,
-                                    caption=f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n",
+                                    caption=f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n",
                                 )
                         if afktype == "photo":
                             if str(reasonafk) == "None":
@@ -358,7 +358,7 @@ async def chat_watcher_func(_, message):
                             else:
                                 send = await message.reply_photo(
                                     photo=f"downloads/{user_id}.jpg",
-                                    caption=f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: `{reasonafk}`\n\n",
+                                    caption=f"**{first_name[:25]}** AFK vəziyyətindədir, {seenago} müddətdir.\n\nSəbəb: <b>{reasonafk}</b>\n\n",
                                 )
                     except:
                         msg += f"**{first_name[:25]}** AFK vəziyyətindədir.\n\n"
