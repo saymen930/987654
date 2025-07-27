@@ -6,14 +6,14 @@ from InflexMusic import app  # Öz bot modulunun adı ilə əvəz et (əgər fə
 async def me_command(client, message: Message):
     user = message.from_user
 
-    text = f"**👤 İstifadəçi Məlumatı:**\n\n"
-    text += f"• 🆔 ID: `{user.id}`\n"
-    text += f"• 👤 Ad: `{user.first_name}`\n"
+    text = f"<b>👤 İstifadəçi Məlumatı:</b>\n\n"
+    text += f"<b>• 🆔 ID: {user.id}</b>\n"
+    text += f"<b>• 👤 Ad: {user.first_name}</b>\n"
     
     if user.last_name:
-        text += f"• 👤 Soyad: `{user.last_name}`\n"
+        text += f"<b>• 👤 Soyad: {user.last_name}</b>\n"
 
-    text += f"• 🌐 Dil: `{user.language_code}`\n"
+    text += f"<b>• 🌐 Dil: {user.language_code}</b>\n"
     text += f"• 💎 Premium: {'✅' if user.is_premium else '❌'}\n"
     text += f"• 🤖 Bot: {'✅' if user.is_bot else '❌'}\n"
 
