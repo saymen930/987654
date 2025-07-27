@@ -6,12 +6,7 @@ from telethon.tl.functions.users import GetFullUserRequest
 from telethon.tl.functions.channels import GetParticipantRequest
 from telethon.tl.types import ChannelParticipantsAdmins
 
-API_ID = 23470912
-API_HASH = "33ac02b7891c5396e6b305802d56cf4f"
-BOT_TOKEN = "8234671504:AAFUi0nvY5pmcUvCVRlzKCgp--j5XsOCXo8"
-
-bot = TelegramClient('welcomeBot', API_ID, API_HASH).start(bot_token=BOT_TOKEN)
-
+from InflexMusic.core.bot import xaos as client 
 # Faylları oxu və ya boş obyektlər yarat
 if os.path.exists("welcome.json"):
     with open("welcome.json", "r", encoding="utf-8") as f:
