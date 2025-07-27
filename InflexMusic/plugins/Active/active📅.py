@@ -42,10 +42,9 @@ async def gunluk_hesabat():
     while True:
         # Növbəti 01:00 vaxtını hesabla
         indi = datetime.now(baku_tz)
-        sabah = (indi + timedelta(days=1)).replace(hour=1, minute=0, second=0, microsecond=0)
+        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=18, second=0, microsecond=0)
         delta = (sabah - indi).total_seconds()
-        print(f"⏳ Növbəti hesabat {sabah.strftime('%Y-%m-%d %H:%M:%S')} vaxtında göndəriləcək ({int(delta)} saniyə sonra)")
-
+        
         await asyncio.sleep(delta)  # Növbəti 01:00-a qədər yat
 
         await hesabat_ve_csv()  # Hesabatı göndər
