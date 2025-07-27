@@ -2,6 +2,7 @@ import asyncio
 import json
 import os
 from telethon import TelegramClient, events, types
+from InflexMusic.core.bot import xaos as bot
 
 FILTERS_FILE = "Jason/filters.json"
 
