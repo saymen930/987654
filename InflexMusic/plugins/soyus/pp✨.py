@@ -1,7 +1,7 @@
 from telethon import TelegramClient, events
 import random
 import asyncio
-from InflexMusic.core.bot import xaos as bot
+from InflexMusic.core.bot import xaos as client
 import config
 from Jason.pp import photolist, E_M, A_A, C_S, B_A, D_S
 
