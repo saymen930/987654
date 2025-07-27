@@ -27,7 +27,7 @@ async def is_admin(event):
     except Exception:
         return False
 
-@bot.on(events.NewMessage(pattern=r'^/filter', func=lambda e: e.is_group))
+@bot.on(events.NewMessage(pattern=r"^[/!.]filter(\s|$)(.*)", func=lambda e: e.is_group))
 async def add_filter(event):
     if not await is_admin(event):
         # Admin olmayan istifadəçi mesajı silmir, sadəcə xəbərdarlıq edir
@@ -89,7 +89,7 @@ async def remove_filter(event):
         await event.delete()
         return await event.reply("🚫 Belə bir filter tapılmadı.", reply_to=event.message.id)
 
-@bot.on(events.NewMessage(pattern=r'^/filters$', func=lambda e: e.is_group))
+@bot.on(events.NewMessage(pattern=r"^[/!.]filters(\s|$)(.*)", func=lambda e: e.is_group))
 async def list_filters(event):
     if not await is_admin(event):
         # Admin olmayan istifadəçi mesajı silmir, sadəcə xəbərdarlıq edir
