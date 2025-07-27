@@ -44,10 +44,8 @@ async def song(client, message):
         duration = result.get("duration", "0:00")
         channel = result.get("channel", "Bilinmir")
 
-        # Fayl adı üçün təhlükəsiz variant
         safe_title = re.sub(r'[\\/*?:"<>|]', "", title)
 
-        # Thumbnail
         thumbnail_url = result.get("thumbnails", [None])[0]
         if thumbnail_url:
             thumb_name = f"thumb_{config.BOT_USERNAME}.jpg"
@@ -70,7 +68,6 @@ async def song(client, message):
 
         await m.edit("🎧 Mahnı yüklənir...")
 
-        # YouTube-dan yükləmə
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             info = ydl.extract_info(link, download=True)
             audio_file = ydl.prepare_filename(info)
@@ -78,7 +75,6 @@ async def song(client, message):
         dur = time_to_seconds(duration)
         caption = f"🎧 [{title}]({link})\n⏰ {duration}"
 
-        # İstifadəçiyə göndər
         await message.reply_audio(
             audio=audio_file,
             caption=caption,
@@ -86,10 +82,10 @@ async def song(client, message):
             duration=dur,
             performer=channel,
             thumb=thumb_name if thumb_name else None,
-            reply_markup=buttons["markup_for_private"]
+            reply_markup=buttons["markup_for_private"],
+            parse_mode="md"
         )
 
-        # Kanalda paylaş
         await app.send_audio(
             chat_id=config.PLAYLIST_ID,
             audio=audio_file,
@@ -98,18 +94,21 @@ async def song(client, message):
             duration=dur,
             performer=channel,
             thumb=thumb_name if thumb_name else None,
-            reply_markup=buttons["add_to_group"]
+            reply_markup=buttons["add_to_group"],
+            parse_mode="md"
         )
 
         await m.delete()
 
     except Exception as e:
-        if m:
-            await m.edit(f"⚠️ Xəta baş verdi:\n`{type(e).__name__}: {str(e)}`")
+        try:
+            if m:
+                await m.edit(f"⚠️ Xəta baş verdi:\n`{type(e).__name__}: {str(e)}`")
+        except:
+            pass
         print("❌ Xəta:", type(e).__name__, e)
 
     finally:
-        # Faylları təmizlə
         try:
             if audio_file and os.path.exists(audio_file):
                 os.remove(audio_file)
