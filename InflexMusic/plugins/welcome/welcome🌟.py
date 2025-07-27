@@ -34,6 +34,7 @@ def parse_welcome(text, user, chat):
         text.replace("{username}", username)
             .replace("{firstname}", firstname)
             .replace("{chatname}", chatname)
+            .replace("{chatname}", id)
     )
 
 # /setwelcome
