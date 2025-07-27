@@ -171,7 +171,7 @@ async def handler_atag(event):
             admins.append(u)
     await tag_users(event, "🔔 Admin tag!", admins)
 
-@bot.on(events.NewMessage(pattern="/dayan|/cancel"))
+@bot.on(events.NewMessage(pattern="/dayan", "/cancel"))
 async def stop_tagging(event):
     active_tags[event.chat_id] = False
     await event.reply("Tag Prosesi dayandırıldı 🛑", buttons=support_buttons)
