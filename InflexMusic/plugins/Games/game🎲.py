@@ -14,7 +14,7 @@ from telethon.tl.types import PeerChannel, PeerChat
 # ==========================
 # KONFİQURASİYA
 # ==========================
-JOIN_COUNTDOWN = 15       # Oyuna qoşulma gerisayımı (saniyə)
+JOIN_COUNTDOWN = 20      # Oyuna qoşulma gerisayımı (saniyə)
 ROUND_TIME = 50           # Hər söz üçün vaxt (saniyə)
 GAME_IDLE_TIMEOUT = 40    # Heç kim oynamırsa oyunu dayandır (saniyə)
 
@@ -146,7 +146,7 @@ async def game_start(event: events.NewMessage.Event):
     oyun_mesajlar[chat_id].extend([event.id, countdown_msg.id])
 
     async def countdown_and_start():
-        checkpoints = {JOIN_COUNTDOWN, 12, 9, 6, 4, 1}
+        checkpoints = {JOIN_COUNTDOWN, 20, 17, 14, 9, 4, 1}
         for sec in range(JOIN_COUNTDOWN, 0, -1):
             if sec in checkpoints:
                 try:
