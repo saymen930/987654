@@ -2,7 +2,7 @@ import json
 import os
 import random
 from telethon import TelegramClient, events, Button
-from InflexMusic.core.bot import xaos as client
+from InflexMusic.core.bot import xaos as client  # Sənin bot instance
 
 GOODBYE_FILE = "Jason/goodbye_data.json"
 
@@ -18,10 +18,11 @@ def save_goodbye_data(data):
     with open(GOODBYE_FILE, "w") as f:
         json.dump(data, f, indent=2)
 
+# Son unban edilmiş istifadəçiləri saxlayan set
+recently_unbanned_users = set()
 
 @client.on(events.NewMessage(pattern=r"/goodbye(?:\s+(\w+))?", chats=None))
 async def goodbye_command(event):
-    # Yalnız qrupda işləsin
     if not event.is_group:
         await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
         return
@@ -29,10 +30,8 @@ async def goodbye_command(event):
     data = load_goodbye_data()
     chat_id = str(event.chat_id)
 
-    # Admin yoxlaması
     sender = await event.get_sender()
-    chat = await event.get_chat()
-    member = await client.get_permissions(chat, sender.id)
+    member = await client.get_permissions(event.chat_id, sender.id)
     if not (member.is_admin or member.is_creator):
         await event.reply("❗ Bu əmri yalnız qrup adminləri istifadə edə bilər.")
         return
@@ -65,7 +64,6 @@ async def callback_handler(event):
     chat_id = str(event.chat_id)
     user_id = event.sender_id
 
-    # Admin yoxlaması
     member = await client.get_permissions(event.chat_id, user_id)
     if not (member.is_admin or member.is_creator):
         await event.answer("❗Bu əmri yalnız adminlər istifadə edə bilər.", alert=True)
@@ -87,21 +85,63 @@ async def callback_handler(event):
         await event.delete()
         await event.answer("Mesaj bağlandı.")
 
+# Unban əmri (sadə nümunə)
+@client.on(events.NewMessage(pattern=r"/unban(?:\s+(\S+))?"))
+async def unban_command(event):
+    if not event.is_group:
+        await event.reply("Bu əmri yalnız qruplarda istifadə edə bilərsiniz.")
+        return
+
+    sender = await event.get_sender()
+    member = await client.get_permissions(event.chat_id, sender.id)
+    if not (member.is_admin or member.is_creator):
+        await event.reply("❗ Bu əmri yalnız qrup adminləri istifadə edə bilər.")
+        return
+
+    args = event.message.text.split()
+    if len(args) < 2:
+        await event.reply("❗ İstifadəçi ID və ya username daxil edin.")
+        return
+
+    target = args[1]
+
+    try:
+        if target.startswith("@"):
+            target_entity = await client.get_entity(target)
+        else:
+            target_entity = await client.get_entity(int(target))
+    except Exception:
+        await event.reply("❗ İstifadəçi tapılmadı.")
+        return
+
+    try:
+        await client.edit_permissions(event.chat_id, target_entity.id, view_messages=True)
+        # Unban olunan istifadəçini yadda saxla
+        recently_unbanned_users.add((event.chat_id, target_entity.id))
+        await event.reply(f"✅ {target} qadağa götürüldü.")
+    except Exception as e:
+        await event.reply(f"❗ Xəta baş verdi: {e}")
+
 @client.on(events.ChatAction())
 async def member_left_handler(event):
-    # User qrupdan çıxanda
     if event.user_left or event.user_kicked:
         data = load_goodbye_data()
-        chat_id = str(event.chat_id)
-        if not data.get(chat_id, False):
-            return  # Goodbye deaktivdirsə mesaj atma
+        chat_id = event.chat_id
+        user_id = event.user_id
+
+        if not data.get(str(chat_id), False):
+            return
+
+        bot_self = await client.get_me()
+        if user_id == bot_self.id:
+            return
+
+        # Əgər istifadəçi unban olunmuş istifadəçilər siyahısındadırsa goodbye mesajı göndərmə
+        if (chat_id, user_id) in recently_unbanned_users:
+            recently_unbanned_users.remove((chat_id, user_id))
+            return
 
         left_user = await event.get_user()
-        bot_self = await client.get_me()
-
-        if left_user.id == bot_self.id:
-            return  # Bot çıxanda mesaj atma
-
         name = left_user.first_name or "İstifadəçi"
 
         goodbye_messages = [
@@ -119,6 +159,3 @@ async def member_left_handler(event):
         ]
 
         await client.send_message(event.chat_id, random.choice(goodbye_messages))
-
-
-
