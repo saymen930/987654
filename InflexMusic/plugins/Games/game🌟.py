@@ -2,7 +2,7 @@ import random
 from telethon import TelegramClient, events, Button
 from telethon.tl.types import PeerChannel
 import asyncio
-from InflexMusic.core.bot import xaos as Client 
+from InflexMusic.core.bot import xaos as client 
 from Jason.word import WORDS
 # ==== OYUN PARAMETRLƏRİ ====
 
