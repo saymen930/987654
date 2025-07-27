@@ -121,7 +121,7 @@ async def send_and_collect(chat_id: int, *args, **kwargs):
 
 # /game
 # ==========================
-@client.on(events.NewMessage(pattern="^[/.!]games?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]games(\s|$)(.*)"))
 async def game_start(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
@@ -189,7 +189,7 @@ async def handle_join_game(event: events.CallbackQuery.Event):
         await event.answer("Artıq oyundasan!")
 
 # /join
-@client.on(events.NewMessage(pattern="^[/!.]join?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]join(\s|$)(.*)"))
 async def join_cmd(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
@@ -210,7 +210,7 @@ async def join_cmd(event: events.NewMessage.Event):
     await client.send_message(chat_id, f"📥 {(await event.get_sender()).first_name} oyuna qoşuldu.")
 
 # /unjoin
-@client.on(events.NewMessage(pattern="^[/.!]unjoin?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]unjoin(\s|$)(.*)"))
 async def unjoin_cmd(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
@@ -230,7 +230,7 @@ async def unjoin_cmd(event: events.NewMessage.Event):
         await event.reply("ℹ️ Sən artıq oyunda deyilsən.")
 
 # /stop
-@client.on(events.NewMessage(pattern="^[/.!]saxla?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]saxla(\s|$)(.*)"))
 async def stop_cmd(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
@@ -248,7 +248,7 @@ async def stop_cmd(event: events.NewMessage.Event):
             pass
 
 # /joinup
-@client.on(events.NewMessage(pattern="^[/!.]joinup?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]joinup(\s|$)(.*)"))
 async def joinup_cmd(event: events.NewMessage.Event):
     if not is_group(event):
         await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
@@ -284,7 +284,7 @@ async def joinup_cmd(event: events.NewMessage.Event):
         pass
 
 # /gpuan
-@client.on(events.NewMessage(pattern="^[/!.]gpuan?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]gpuan(\s|$)(.*)"))
 async def global_puan(event: events.NewMessage.Event):
     if not scores:
         await event.reply("📊 Hələ heç kim xal qazanmayıb.")
@@ -304,14 +304,14 @@ async def global_puan(event: events.NewMessage.Event):
     await client.send_message(event.chat_id, mesaj)
 
 # /puan
-@client.on(events.NewMessage(pattern="^[/.!]puan?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]puan(\s|$)(.*)"))
 async def show_puan(event: events.NewMessage.Event):
     user_id = str(event.sender_id)
     puan = scores.get(user_id, 0)
     await event.reply(f"⭐ Xalın: {puan}")
 
 # /stats
-@client.on(events.NewMessage(pattern="^[/!.]stats?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]stats(\s|$)(.*)"))
 async def user_stats(event: events.NewMessage.Event):
     user_id = str(event.sender_id)
     data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
@@ -322,7 +322,7 @@ async def user_stats(event: events.NewMessage.Event):
     )
 
 # /soz
-@client.on(events.NewMessage(pattern="^[/!.]soz?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]soz(\s|$)(.*)"))
 async def add_word(event: events.NewMessage.Event):
     if len(event.raw_text.split(" ", 2)) < 3:
         await event.reply("❌ Format: /soz alma {alma,mal,lam,al}")
@@ -338,7 +338,7 @@ async def add_word(event: events.NewMessage.Event):
 
 # /restart (admin)
 # /restart (admin)
-@client.on(events.NewMessage(pattern="^[/.!]restart?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]restart(\s|$)(.*)"))
 async def restart_scores(event: events.NewMessage.Event):
     if event.sender_id not in config.OWNER_IDS:  # Siyahıda varmı yoxlanır
         await event.reply("⛔ Bu əmri yalnız bot sahib istifadə edə bilər!")
