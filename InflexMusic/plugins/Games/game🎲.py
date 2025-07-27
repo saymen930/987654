@@ -498,6 +498,3 @@ async def check_word(event: events.NewMessage.Event):
 # ==========================
 # START
 # ==========================
-if __name__ == "__main__":
-    print("Bot Başladı ✓")
-    client.run_until_disconnected()
