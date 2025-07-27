@@ -2,12 +2,10 @@ import asyncio
 from datetime import datetime, timedelta
 from collections import defaultdict
 from telethon import TelegramClient, events
-from telethon.tl.types import ChatPermissions
-from telethon.tl.functions.channels import EditBannedRequest, EditAdminRequest
+from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.functions.messages import DeleteMessagesRequest
 from telethon.tl.types import ChatBannedRights
 from InflexMusic.core.bot import xaos as bot
-
 
 # Flood konfiqurasiya və loglar
 flood_settings = defaultdict(lambda: {
@@ -21,8 +19,11 @@ message_log = defaultdict(lambda: defaultdict(list))  # chat_id -> user_id -> [t
 
 
 async def is_admin(chat, user_id):
-    participant = await bot.get_participant(chat, user_id)
-    return participant.participant.__class__.__name__ in ["ChannelParticipantAdmin", "ChannelParticipantCreator"]
+    try:
+        participant = await bot.get_participant(chat, user_id)
+        return participant.participant.__class__.__name__ in ["ChannelParticipantAdmin", "ChannelParticipantCreator"]
+    except Exception:
+        return False
 
 
 @bot.on(events.NewMessage)
@@ -67,21 +68,24 @@ async def punish_user(event, config):
     rights = ChatBannedRights(until_date=None, send_messages=True)
     until = None
 
-    if action == "kick":
-        await bot.kick_participant(chat_id, user_id)
-        await bot.invite_to_channel(chat_id, [user_id])
-    elif action == "ban":
-        await bot(EditBannedRequest(chat_id, user_id, rights))
-    elif action == "tban":
-        until = datetime.utcnow() + duration
-        await bot(EditBannedRequest(chat_id, user_id, ChatBannedRights(until_date=until, send_messages=True)))
-    elif action == "mute":
-        await bot(EditBannedRequest(chat_id, user_id, ChatBannedRights(until_date=None, send_messages=True)))
-    elif action == "tmute":
-        until = datetime.utcnow() + duration
-        await bot(EditBannedRequest(chat_id, user_id, ChatBannedRights(until_date=until, send_messages=True)))
+    try:
+        if action == "kick":
+            await bot.kick_participant(chat_id, user_id)
+            await bot.invite_to_channel(chat_id, [user_id])
+        elif action == "ban":
+            await bot(EditBannedRequest(chat_id, user_id, rights))
+        elif action == "tban":
+            until = datetime.utcnow() + duration
+            await bot(EditBannedRequest(chat_id, user_id, ChatBannedRights(until_date=until, send_messages=True)))
+        elif action == "mute":
+            await bot(EditBannedRequest(chat_id, user_id, rights))
+        elif action == "tmute":
+            until = datetime.utcnow() + duration
+            await bot(EditBannedRequest(chat_id, user_id, ChatBannedRights(until_date=until, send_messages=True)))
 
-    await event.reply(f"⚠️ Flood aşkarlandı və istifadəçiyə `{action}` tədbiri tətbiq olundu.")
+        await event.reply(f"⚠️ Flood aşkarlandı və istifadəçiyə `{action}` tədbiri tətbiq olundu.")
+    except Exception as e:
+        await event.reply(f"🚫 Tədbir tətbiq edilə bilmədi: `{str(e)}`")
 
 
 async def delete_user_msgs(event, user_id):
