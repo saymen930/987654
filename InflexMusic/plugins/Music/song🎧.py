@@ -1,7 +1,6 @@
 from InflexMusic import app
 from pyrogram import filters
 import os, requests, yt_dlp, re
-from youtube_search import YoutubeSearch
 import config
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -33,20 +32,19 @@ async def song(client, message):
         query = " ".join(message.command[1:])
         m = await message.reply(f"🔍 Axtarılır: {query}")
 
-        results = YoutubeSearch(query, max_results=1).to_dict()
+        await m.edit("🔍 YouTube axtarışı edilir...")
 
-        if not results or not isinstance(results, list) or not results[0].get("url_suffix", "").startswith("/watch"):
-            return await m.edit("❌ Mahnı tapılmadı və ya düzgün məlumat alınmadı.")
+        with yt_dlp.YoutubeDL({'quiet': True}) as ydl:
+            info = ydl.extract_info(f"ytsearch1:{query}", download=False)['entries'][0]
 
-        result = results[0]
-        link = f"https://youtube.com{result.get('url_suffix', '')}"
-        title = result.get("title", "Adsız Mahnı")[:100]
-        duration = result.get("duration", "0:00")
-        channel = result.get("channel", "Bilinmir")
+        link = f"https://youtube.com/watch?v={info.get('id')}"
+        title = info.get("title", "Adsız Mahnı")[:100]
+        duration = info.get("duration", 0)
+        channel = info.get("uploader", "Bilinmir")
 
         safe_title = re.sub(r'[\\/*?:"<>|]', "", title)
 
-        thumbnail_url = result.get("thumbnails", [None])[0]
+        thumbnail_url = info.get("thumbnail")
         if thumbnail_url:
             thumb_name = f"thumb_{config.BOT_USERNAME}.jpg"
             try:
@@ -60,7 +58,7 @@ async def song(client, message):
             "format": "bestaudio[ext=m4a]",
             "outtmpl": f"{safe_title}.m4a",
             "noplaylist": True,
-            "extractor_args": {'youtubetab': {'skip': 'authcheck'}},
+            "quiet": True
         }
 
         if os.path.exists("cookies/cookies(7).txt"):
@@ -69,17 +67,16 @@ async def song(client, message):
         await m.edit("🎧 Mahnı yüklənir...")
 
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            info = ydl.extract_info(link, download=True)
+            ydl.download([link])
             audio_file = ydl.prepare_filename(info)
 
-        dur = time_to_seconds(duration)
-        caption = f"🎧 [{title}]({link})\n⏰ {duration}"
+        caption = f"🎧 [{title}]({link})\n⏰ {duration//60}:{duration%60:02d}"
 
         await message.reply_audio(
             audio=audio_file,
             caption=caption,
             title=title,
-            duration=dur,
+            duration=duration,
             performer=channel,
             thumb=thumb_name if thumb_name else None,
             reply_markup=buttons["markup_for_private"],
@@ -91,7 +88,7 @@ async def song(client, message):
             audio=audio_file,
             caption=caption,
             title=title,
-            duration=dur,
+            duration=duration,
             performer=channel,
             thumb=thumb_name if thumb_name else None,
             reply_markup=buttons["add_to_group"],
