@@ -11,11 +11,11 @@ from dotenv import load_dotenv
 from telethon import TelegramClient, events, Button
 from telethon.tl.types import PeerChannel, PeerChat
 
-==========================
+#==========================
 
 KONFİQURASİYA
 
-==========================
+#==========================
 
 JOIN_COUNTDOWN = 15       # Oyuna qoşulma gerisayımı (saniyə)
 ROUND_TIME = 50           # Hər söz üçün vaxt (saniyə)
@@ -29,11 +29,11 @@ DATA_FILES = {
 
 /restart üçün icazə sahibi
 
-==========================
+#==========================
 
 YARDIMÇI FUNKSİYALAR
 
-==========================
+#==========================
 
 def load_json(path: str):
 if not os.path.exists(path):
@@ -49,11 +49,11 @@ json.dump(data, f, ensure_ascii=False, indent=2)
 def is_group(event) -> bool:
 return isinstance(event.chat_id, int) and (event.is_group or event.is_channel and event.is_group)
 
-==========================
+#==========================
 
 STATE STRUKTURU
 
-==========================
+#==========================
 
 @dataclass
 class GameState:
@@ -63,11 +63,11 @@ tapilan: List[str] = field(default_factory=list)
 used: Set[str] = field(default_factory=set)  # bu qrupda istifadə olunan ana sözlər
 last_activity: float = field(default_factory=time.time)
 
-==========================
+#==========================
 
 QLOBAL STATE
 
-==========================
+#==========================
 
 active_games: Dict[int, GameState] = {}   # chat_id -> GameState
 joined_users: Dict[int, Set[int]] = {}    # chat_id -> {user_id, ...}
@@ -80,19 +80,19 @@ custom_words = load_json(DATA_FILES["custom_words"])
 scores = load_json(DATA_FILES["scores"])
 stats = load_json(DATA_FILES["stats"])
 
-==========================
+#==========================
 
 ENV & BOT
 
-==========================
+#==========================
 
 load_dotenv()
 
-==========================
+#==========================
 
 KÖMƏKÇİLƏR
 
-==========================
+#==========================
 
 def get_joined(chat_id: int) -> Set[int]:
 return joined_users.setdefault(chat_id, set())
@@ -136,7 +136,7 @@ return msg
 
 /game
 
-==========================
+#==========================
 
 @client.on(events.NewMessage(pattern=r"^games$"))
 async def game_start(event: events.NewMessage.Event):
@@ -383,11 +383,11 @@ Private-da qrup əmrlərini blokla
 #if event.is_private:
 #await event.reply("🛡️ Əmr yalnız qruplar üçün nəzərdə tutulub 🙎")
 
-==========================
+#==========================
 
 OYUN FUNKSİYALARI
 
-==========================
+#==========================
 
 async def start_game(chat_id: int):
 users = get_joined(chat_id)
@@ -467,11 +467,11 @@ await client.send_message(chat_id, "⏰ Növbəti sözə keçid edildi...")
 await start_game(chat_id)
 break
 
-==========================
+#==========================
 
 Sözləri yoxlayan handler
 
-==========================
+#==========================
 
 @client.on(events.NewMessage())
 async def check_word(event: events.NewMessage.Event):
@@ -528,11 +528,11 @@ if user_input in game.cavablar:
         await client.send_message(chat_id, "🏆 Sözlər tapıldı. Yeni söz:")  
         await start_game(chat_id)
 
-==========================
+#==========================
 
 START
 
-==========================
+#==========================
 
 if name == "main":
 print("Bot Başladı ✓")
