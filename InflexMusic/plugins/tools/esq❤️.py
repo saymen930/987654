@@ -1,35 +1,42 @@
-from pyrogram import Client, filters
-from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import random
-from InflexMusic import app
- 
+from telethon import events
+from InflexMusic.core.bot import xaos as client  # səndə necədirsə onu istifadə et
 
-ESQ_FAIZ = ["17","18","20","22","24","25","27","29","30","31","33","35","36","39","40","42","43","45","47","49","50","55","56","57","58","60","62","64","65","66","68","70","72","74","75","77","79","80","82","84","85","87","89","90","92","93","95","97","98","99","100"]
+ESQ_FAIZ = [
+    "17","18","20","22","24","25","27","29","30","31","33","35","36","39","40",
+    "42","43","45","47","49","50","55","56","57","58","60","62","64","65","66",
+    "68","70","72","74","75","77","79","80","82","84","85","87","89","90","92",
+    "93","95","97","98","99","100"
+]
 
+def mention(user):
+    name = (user.first_name or "User").replace("[", "").replace("]", "")
+    return f"[{name}](tg://user?id={user.id})"
 
-
-@app.on_message(filters.command(["esq", "eşq"], [".", "!", "@", "/"]))
-async def get_id(client, message):
+# .esq / !esq @esq /eşq və s. – hamısını qəbul edir
+@client.on(events.NewMessage(pattern=r"^[./!@]?(?:esq|eşq)$"))
+async def esq_handler(event: events.NewMessage.Event):
     try:
- 
-        if (not message.reply_to_message) and (message.chat):
-            await message.reply(f"✔ Bu Əmri Hər Hansı Bir Nəfərin Mesajına Yanıt Verərək İsdifadə Edin.")
-          
-        elif not message.reply_to_message:
-            await message.reply(f"⚠️ **__XƏTA__**") 
- 
-        elif message.reply_to_message.forward_from_chat:
-            await message.reply(f"**__⚠️XƏTA__**\n🚫 Bu Əmr Kanal Üzrə Keçərli Deyil")
- 
-        elif message.reply_to_message.forward_from:
-            await message.reply(f"⚠️ **__XƏTA__**")
- 
-        elif message.reply_to_message.forward_sender_name:
-            await message.reply("**__⚠️ XƏTA__**")
- 
-        else:
-            await message.reply(f"Eşq Faizi Hesablandı\n\n{message.reply_to_message.from_user.mention} + {message.from_user.mention} = ❤\nEşq Faizi:-  {random.choice(ESQ_FAIZ)}")
- 
+        # Cavablanmış mesaja tələb var
+        if not event.is_reply:
+            return await event.reply("✔ Bu əmri birinin mesajına yanıt verərək istifadə edin.")
+
+        reply = await event.get_reply_message()
+
+        # Forward olunmuş mesaja icazə vermirik
+        if getattr(reply, "fwd_from", None):
+            return await event.reply("⚠️ **XƏTA**\n🚫 Bu əmri forward olunmuş mesajlara qarşı istifadə etmək olmaz.")
+
+        u1 = await event.get_sender()
+        u2 = await reply.get_sender()
+
+        percent = random.choice(ESQ_FAIZ)
+        text = (
+            "Eşq Faizi Hesablandı\n\n"
+            f"{mention(u2)} + {mention(u1)} = ❤\n"
+            f"Eşq Faizi: **{percent}%**"
+        )
+        await event.reply(text, parse_mode="md")
+
     except Exception:
-            await message.reply("⚠️  **__XƏTA__**")
- 
+        await event.reply("⚠️ **XƏTA**")
