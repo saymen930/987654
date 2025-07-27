@@ -1,15 +1,12 @@
-from telethon import TelegramClient, events
+from telethon import TelegramClient, events, Button
 import random
 import asyncio
 from InflexMusic.core.bot import xaos as client
 import config
 from Jason.pp import photolist, E_M, A_A, C_S, B_A, D_S
 
-# ==== BÜTÜN ŞƏKİL LİNKLƏRİ ====
-
-
 # ==== PP ƏMRİ ====
-# ==== PP ƏMRİ ====
+
 @client.on(events.NewMessage(pattern="/pp"))
 async def pp_handler(event):
     photo = random.choice(photolist)
@@ -22,8 +19,8 @@ async def pp_handler(event):
     msg = await client.send_file(event.chat_id, photo, caption=caption, buttons=buttons)
     await event.delete()
 
-
 # ==== CALLBACK HANDLER ====
+
 @client.on(events.CallbackQuery(pattern=b"change_pp"))
 async def change_pp_handler(event):
     await event.answer()
@@ -42,6 +39,7 @@ async def change_pp_handler(event):
 
     # Media + caption + düymələri yeniləyirik
     await event.edit(file=new_photo, text=new_caption, buttons=new_buttons)
+
 @client.on(events.CallbackQuery(pattern=b"close_pp"))
 async def close_pp_handler(event):
     await event.answer()
@@ -49,5 +47,3 @@ async def close_pp_handler(event):
         await event.delete()
     except:
         pass
-
-
