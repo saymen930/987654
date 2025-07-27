@@ -8,14 +8,14 @@ from telethon.tl.types import ChannelParticipantsAdmins
 
 from InflexMusic.core.bot import xaos as client 
 # Faylları oxu və ya boş obyektlər yarat
-if os.path.exists("welcome.json"):
-    with open("welcome.json", "r", encoding="utf-8") as f:
+if os.path.exists("Jason/welcome.json"):
+    with open("Jason/welcome.json", "r", encoding="utf-8") as f:
         welcome_data = json.load(f)
 else:
     welcome_data = {}
 
-if os.path.exists("welstatus.json"):
-    with open("welstatus.json", "r", encoding="utf-8") as f:
+if os.path.exists("Jason/welstatus.json"):
+    with open("Jason/welstatus.json", "r", encoding="utf-8") as f:
         welcome_status = json.load(f)
 else:
     welcome_status = {}
