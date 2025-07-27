@@ -16,8 +16,8 @@ API_HASH = getenv("API_HASH", "33ac02b7891c5396e6b305802d56cf4f")
 BOT_TOKEN = getenv("BOT_TOKEN", "7924372740:AAHKGwqBBUZ-wZDfjzb4rLjFvyjvivnjt3g")
 
 #KANAL
-PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "XAOS_PlayAudiolist")
-BOT_USERNAME = os.environ.get("BOT_USERNAME", "XAOS_Tagbot")
+PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "PersionalPlaylist")
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "PersionalMultiBot")
 PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
 
 # Bura Soz oynunun ovner idlerini yaz
@@ -26,6 +26,8 @@ OWNER_IDS = [5663585448, 7774444894]  # Buraya əlavə owner ID-lər yaz
 
 # Bot_name
 BOT_NAME = os.environ.get("BOT_NAME", "𝐏𝐄𝐑𝐒𝐈𝐎𝐍𝐀𝐋 𝐌𝐔𝐋𝐓𝐈 🇦🇿")
+#Bot username
+
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
