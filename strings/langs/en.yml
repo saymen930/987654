@@ -187,6 +187,7 @@ S_B_7: "🧑🏻‍🔧 Bot Dəstəyi"
 S_B_8: "🎙️ YouTube"
 S_B_9: "🧑🏻‍🔧 Bot Dəstəyi"
 S_B_10: "🇦🇿 Rəsmi Kanal"
+S_B_11: "©️ Bot haqqında "
 
 H_B_1: "Musiqi"
 H_B_2: "Nəzarət"
@@ -322,6 +323,7 @@ telegraphs: "<b>Telegraph funksiyasının əmrləri aşağıdakılardır🔗</b>
 afks: "<b>Afk funksiyasının əmrləri aşağıdakılardır🛜</b>\n\n<b>/afk [səbəb] - Sizi tağ edən və yaxud sizə reply atan şəxsə afk olduğunuzu bildirər</b>"
 songmatas: "<b>SangMata funksiyasının əmrləri aşağıdakılardır❓</b>\n\n<b>/kim - istifadəçinin köhnə adlarını göstərir</b>"
 downloads: "<b>Download funksiyasının əmrləri aşağıdakılardır📁</b>\n\n<b>YouTube atılan linki yükləyib sizə atar</b>\n<b>Beta Version</b>"
+haqqindas: "<b>Bu bir musiqi botudur</b>
 
 H_B_1: "Musiqi"
 H_B_2: "Nəzarət"
