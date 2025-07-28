@@ -41,6 +41,6 @@ def private_panel(_):
         [
             InlineKeyboardButton(
                     text=_["S_B_11"],
-                    callback_data="help_callback hb17"
+                    callback_data="help_callback hb17"),
     ]
     return buttons
