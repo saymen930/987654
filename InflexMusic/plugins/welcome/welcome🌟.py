@@ -72,15 +72,13 @@ async def set_welcome(event):
     sender = await event.get_sender()
     chat_id = str(event.chat_id)
 
-    # admin yoxlaması
     try:
         p = await client(GetParticipantRequest(int(chat_id), sender.id))
         if not isinstance(p.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
             return await event.reply("⛔ Bu əmri yalnız adminlər istifadə edə bilər.")
-    except Exception as e:
-        return await event.reply("⚠️ Admin yoxlanması mümkün olmadı")
+    except:
+        return
 
-    # mesaj təyin etmə
     if event.is_reply:
         reply_msg = await event.get_reply_message()
         new_msg = reply_msg.text
@@ -105,11 +103,11 @@ async def reset_welcome(event):
         if not isinstance(p.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
             return await event.reply("⛔ Bu əmri yalnız adminlər istifadə edə bilər.")
     except:
-        return await event.reply("⚠️ Admin yoxlanması mümkün olmadı.")
+        return
 
     welcome_data.pop(chat_id, None)
     save_json(WELCOME_FILE, welcome_data)
-    await event.reply("♻️ Qarşılama mesajı sıfırlandı default welcome mesajı istifadə olunacaq✅")
+    await event.reply("♻️ Qarşılama mesajı sıfırlandı. Default welcome mesajı istifadə olunacaq✅")
 
 # ✅ /welcome — cari mesajı göstər və buttonlar
 @client.on(events.NewMessage(pattern=r'^/welcome$'))
@@ -128,26 +126,22 @@ async def show_welcome(event):
         ]
     )
 
-# ✅ Düymələrin idarəsi
+# ✅ Inline düymələrin idarəsi (tam düzəlişli)
 @client.on(events.CallbackQuery)
 async def callback_handler(event):
     data = event.data.decode('utf-8')
     sender = await event.get_sender()
     message = await event.get_message()
-
-    chat_id = message.chat_id or getattr(message.peer_id, 'channel_id', None)
-    if not chat_id:
-        return await event.answer("⚠️ Chat ID tapılmadı.", alert=True)
-
-    chat_id = str(chat_id)
+    chat = await event.get_chat()
+    chat_id = str(chat.id)
 
     try:
         p = await client(GetParticipantRequest(int(chat_id), sender.id))
         is_admin = isinstance(p.participant, (ChannelParticipantAdmin, ChannelParticipantCreator))
         if not is_admin:
-            return await event.answer("⛔ Bu düyməni yalnız adminlər istifadə edə bilər.", alert=True)
-    except Exception as e:
-        return await event.answer("⚠️ Admin yoxlanması mümkün olmadı.", alert=True)
+            return  # Admin deyilsə, cavab vermə
+    except:
+        return  # Yoxlama mümkün deyilsə, cavab vermə
 
     if data.startswith("enable:"):
         welcome_status[chat_id] = True
