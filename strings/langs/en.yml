@@ -323,7 +323,7 @@ telegraphs: "<b>Telegraph funksiyasının əmrləri aşağıdakılardır🔗</b>
 afks: "<b>Afk funksiyasının əmrləri aşağıdakılardır🛜</b>\n\n<b>/afk [səbəb] - Sizi tağ edən və yaxud sizə reply atan şəxsə afk olduğunuzu bildirər</b>"
 songmatas: "<b>SangMata funksiyasının əmrləri aşağıdakılardır❓</b>\n\n<b>/kim - istifadəçinin köhnə adlarını göstərir</b>"
 downloads: "<b>Download funksiyasının əmrləri aşağıdakılardır📁</b>\n\n<b>YouTube atılan linki yükləyib sizə atar</b>\n<b>Beta Version</b>"
-haqqindas: "<b>Salam, Mən Çox özəlliklərdən ibarət olan Multi🇦🇿 botam</b>\n<b>Mənim əmrlərimi görmək üçün geri qayıtmaq buttonuna toxunun🕺</b>"
+haqqindas: "<b>Salam, Mən Çox özəlliklərdən ibarət olan Multi🇦🇿 botam</b>\n<b>Mənim əmrlərimi görmək üçün geri qayıtmaq buttonuna toxunun🕺</b>\n<b>Botda xəta gördüyünüz zaman /report <mesaj> yazaraq bizə bildirməyi unutmayın!</b>"
 
 H_B_1: "Musiqi"
 H_B_2: "Nəzarət"
