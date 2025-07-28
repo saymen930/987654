@@ -4,7 +4,7 @@ from datetime import datetime
 from telethon import TelegramClient, events, Button
 from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 from telethon.tl.functions.channels import GetParticipantRequest
-from InflexMusic.core.bot xaos as client
+from InflexMusic.core.bot import xaos as client
 
 WELCOME_FILE = 'Jason/welcome.json'
 STATUS_FILE = 'Jason/status.json'
