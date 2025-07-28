@@ -87,7 +87,7 @@ start_4: "<b>Super Qrup Tələb Olunur</b>\n\nZəhmət olmasa <b>qrupunuzu</b> <
 start_5: "<b>↝ Bloklanmış Söhbət ↜</b>\n\nBu söhbət {0} verilənlər bazasında bloklanıb.\nSöhbətinizin blokdan çıxarılması üçün <a href={1}>sudo istifadəçisinə</a> və ya <a href={2}>dəstək söhbətinə</a> müraciət edin."
 start_6: "<b>🎵 Mahnı Məlumatı</b>\n\n<b>🎙️ Başlıq :</b> {0}\n\n<b>⌛ Müddət :</b> {1} dəqiqə\n<b>👁️ Baxış sayı :</b> <code>{2}</code>\n<b>📅 Yayımlanma Tarixi :</b> {3}\n<b>📤 Kanal :</b> <a href={4}>{5}</a>\n\n<u><b>🔍 Axtarışı Dəstəkləyən Mühərrik</b></u> {6}"
 
-help_1: "<b>Əmrləri və təlimatları görmək üçün aşağıdakı düymələrdən istifadə edin.</b>\n\n<b>Qrup üzvləri yalnız istifadəçi əmrlərinə baxmalıdır, qrup administratorları isə admin əmrlərinə nəzarət etməlidir.</b>\n\n<b>Yardım üçün <a href={0}>dəstəyə</a> yaza bilərsiniz.</b>"
+help_1: "<b>Əmrləri və təlimatları görmək üçün aşağıdakı düymələrdən istifadə edin.</b>\n\n<b>Qrup üzvləri yalnız istifadəçi əmrlərinə baxmalıdır, qrup administratorları isə admin əmrlərinə nəzarət etməlidir.</b>\n\n<b>Yardım üçün <a href={0}>dəstəyə</a> yaza bilərsiniz</b>\n<b> və yaxud /report <mesaj> ilə bizə xətanı bildirə bilərsiniz!</b>"
 help_2: "<b>Xüsusi yardım menyusunu almaq üçün zəhmət olmasa aşağıdakı düyməyə klikləyin</b>\n<b>Xəta ilə qarşılaşığınız zaman /report <mesaj> yazmağla bizə bildirməyi unutmayın!</b>"
 
 lang_1: "<b>Bir dil seçin:</b>"
