@@ -56,3 +56,13 @@ def LanguageStart(mystic):
         return await mystic(_, message, language)
 
     return wrapper
+
+
+
+
+
+
+
+
+#Bot kodu @CwaX7 tərəfindən yaranib!!!
+#botu satan semyasini fikirləssin😈
