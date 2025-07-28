@@ -5,7 +5,7 @@ from InflexMusic import app
 qadağan_sözlər = [
     "sik", "sikdir", "peyser", "peysər", "oğras", "qəhbə", "qehbe", "anavi",
     "Bacivi", "sikim", "dalbayov", "blət", "blet", "qələt",
-    "Pox", "heyvan", "varyox", "doğduğu", "bicbala", "bicok", "ble", "blə", "pesi", "cındır", "cindir", "ogras", "nənəvi"
+    "Pox", "heyvan", "varyox", "doğduğu", "bicbala", "bicok", "ble", "blə", "pesi", "cındır", "cindir", "ogras", "nənəvi", "seks", "sikis"
 ]
 
 @app.on_message(filters.text & filters.group)
