@@ -22,12 +22,12 @@ async def warn_handler(event):
         msg = f"🤵 Ad - {user_mention}\n🛑 Tag - @{username}\n👁️‍🗨️ ID - {sender.id}\n\n💬 İrad və ya təklif:\n⭕ {reason}"
 
         # Kanala və sahiblərə göndər
-        await bot.send_message(config.C_WARN, msg)
+        await bot.send_message(config.C_REPORT_ID, msg)
         for owner_id in config.OWNER_IDS:
             await bot.send_message(PeerUser(owner_id), f"📬 Yeni xəbərdarlıq gəldi:\n\n{msg}")
 
         # Cavab mesajı
-        reply = await event.reply("✅ Mesajınız kanala və sahiblərə göndərildi. Təşəkkürlər 🥰.")
+        reply = await event.reply(f"✅ Mesajınız [kanala](https://t.me/{config.C_REPORT}) və ownerlərə göndərildi. Təşəkkürlər 🥰.")
 
         # 5 saniyə gözlə və hər iki mesajı sil
         await asyncio.sleep(5)
