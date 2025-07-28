@@ -77,7 +77,7 @@ async def set_welcome(event):
         if not isinstance(p.participant, (ChannelParticipantAdmin, ChannelParticipantCreator)):
             return await event.reply("⛔ Bu əmri yalnız adminlər istifadə edə bilər.")
     except Exception as e:
-        return await event.reply("⚠️ Admin yoxlanması mümkün olmadı.")
+        return await event.reply("⚠️ Admin yoxlanması mümkün olmadı")
 
     # mesaj təyin etmə
     if event.is_reply:
@@ -86,7 +86,7 @@ async def set_welcome(event):
     else:
         parts = event.raw_text.split('\n', 1)
         if len(parts) < 2:
-            return await event.reply("Zəhmət olmasa mesajı belə yaz:\n\n/setwelcome\nSalam {username}, xoş gəldin!")
+            return await event.reply("Welcome mesajını təyin etmək üçün\n\n/setwelcome <mesaj> və yaxud hər hansısa mesaja reply atıb cəhd edin✅")
         new_msg = parts[1]
 
     welcome_data[chat_id] = new_msg
@@ -108,7 +108,7 @@ async def reset_welcome(event):
 
     welcome_data.pop(chat_id, None)
     save_json(WELCOME_FILE, welcome_data)
-    await event.reply("♻️ Qarşılama mesajı sıfırlandı (default istifadə olunacaq).")
+    await event.reply("♻️ Qarşılama mesajı sıfırlandı default welcome mesajı istifadə olunacaq✅")
 
 # ✅ /welcome — cari mesajı göstər və buttonlar
 @client.on(events.NewMessage(pattern=r'^/welcome$'))
