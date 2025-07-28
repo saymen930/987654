@@ -1,106 +1,84 @@
 import asyncio
-import csv
-import os
-from datetime import datetime, timedelta
+from telethon import TelegramClient, events, Button
+from datetime import datetime
+from collections import defaultdict
 import pytz
-from telethon import events
-from telethon.tl.types import User
-from InflexMusic.core.bot import xaos as client  # Bot instance
+from InflexMusic.core.bot import xaos as client  # Telethon bot instance
+import config
 
-# ---- KONFİQURASİYA ----
-qruplar = set()
-aktivlik = {}
+# 🧠 Qrup statistikası
+group_stats = defaultdict(lambda: defaultdict(lambda: {'name': '', 'count': 0}))
+
+# 🕓 Bakı saat qurşağı
 baku_tz = pytz.timezone("Asia/Baku")
 
-
-# --- MESAJLARI SAYIR ---
-
+# 📨 Mesaj izləmə
 @client.on(events.NewMessage)
-async def handle_messages(event):
-    if event.is_private:  # şəxsi mesajlarda işləməsin
-        return
+async def handler(event):
+    if event.is_group:
+        if event.sender_id and not event.sender.bot:
+            group_id = event.chat_id
+            sender = await event.get_sender()
+            full_name = sender.first_name or ""
+            if sender.last_name:
+                full_name += f" {sender.last_name}"
+            user_id = sender.id
+            group_stats[group_id][user_id]['name'] = full_name
+            group_stats[group_id][user_id]['count'] += 1
 
-    sender = await event.get_sender()
-
-    # Əgər göndərən user deyilsə (məsələn, kanal mesajıdır), bu mesajı sayma
-    if not isinstance(sender, User):
-        return
-
-    # Əgər bot mesajıdırsa, onu da sayma
-    if sender.bot:
-        return
-
-    chat_id = event.chat_id
-    user_id = sender.id
-    name = sender.first_name or "Naməlum"
-
-    qruplar.add(chat_id)
-    aktivlik.setdefault(chat_id, {})
-    aktivlik[chat_id].setdefault(user_id, {"name": name, "count": 0})
-    aktivlik[chat_id][user_id]["count"] += 1
-
-# --- CSV FAYLINI YARADIR ---
-def init_csv():
-    if not os.path.exists("aktivlik.csv"):
-        with open("aktivlik.csv", "w", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["Qrup ID", "İstifadəçi", "Mesaj sayı", "Tarix"])
-
-
-# --- GÜNLÜK HESABAT GÖNDƏRİR ---
-async def gunluk_hesabat():
+# 🕔 Gündəlik aktive saati üçün yoxlayıcı funksiya
+async def daily_stats_sender():
     while True:
-        indi = datetime.now(baku_tz)
-        sabah = (indi + timedelta(days=1)).replace(hour=23, minute=58, second=0, microsecond=0)
-        delta = (sabah - indi).total_seconds()
+        now = datetime.now(baku_tz)
+        if now.hour == 19 and now.minute == 14:
+            for group_id, user_data in group_stats.items():
+                if not user_data:
+                    continue
 
-        print(f"⏳ Növbəti hesabat {sabah.strftime('%Y-%m-%d %H:%M:%S')} vaxtında göndəriləcək ({int(delta)} saniyə sonra)")
+                total_messages = sum(info['count'] for info in user_data.values())
+                active_users = len(user_data)
+                top_users = sorted(user_data.items(), key=lambda x: x[1]['count'], reverse=True)[:15]
 
-        await asyncio.sleep(delta)
-        await hesabat_ve_csv()
+                # 📆 Tarix və Qrup Adı
+                date_str = now.strftime("%d/%m/%Y")
+                try:
+                    chat = await client.get_entity(group_id)
+                    group_name = chat.title or "Qrup"
+                except:
+                    group_name = "Qrup"
 
+                msg = f"📊 <b>{group_name} üçün ən aktiv 15 istifadəçi:</b>\n\nİstifadəçi --> Mesaj\n"
+                for idx, (user_id, info) in enumerate(top_users, start=1):
+                    name = info['name']
+                    count = info['count']
+                    profile_link = f'<a href="tg://user?id={user_id}">{name}</a>'
+                    msg += f"{idx}. {profile_link} : {count}\n"
 
-# --- HESABATI HAZIRLAYIB QƏRƏR GÖNDƏRİR ---
-async def hesabat_ve_csv():
-    for chat_id in list(qruplar):
-        if chat_id not in aktivlik:
-            continue
+                msg += (
+                    f"\n📊 <i>Bu sıralama {date_str} tarixi üçündür.</i>\n"
+                    f"├ Toplam aktiv istifadəçi: {active_users}\n"
+                    f"└ Toplam mesaj: {total_messages}"
+                )
 
-        istifadeciler = sorted(
-            aktivlik[chat_id].items(),
-            key=lambda item: item[1]["count"],
-            reverse=True
-        )
+                buttons = [
+                    [Button.url("🔮 Yeniliklər", f"{config.SPORT_K}"),
+                     Button.url("🔗 Qrupa Əlavə Et", f"https://t.me/{config.BOT_USERNAME}?startgroup=new")]
+                ]
 
-        toplam_mesaj = sum(info["count"] for _, info in istifadeciler)
-        toplam_istifadeci = sum(1 for _, info in istifadeciler if info["count"] > 0)
+                try:
+                    await client.send_message(group_id, msg, parse_mode='html', buttons=buttons)
+                except Exception as e:
+                    print(f"Mesaj göndərilə bilmədi ({group_id}): {e}")
 
-        if toplam_istifadeci == 0:
-            report = "📊 Bu gün heç kim mesaj yazmadı."
-        else:
-            report = "📊 Günlük ən aktiv 15 istifadəçi:\n\n"
-            for i, (user_id, info) in enumerate(istifadeciler[:15], start=1):
-                report += f"{i}. {info['name']} : {info['count']}\n"
-            report += f"\nToplam aktiv istifadəçi: {toplam_istifadeci}\nToplam mesaj: {toplam_mesaj}"
+            group_stats.clear()
+            await asyncio.sleep(60)
+        await asyncio.sleep(5)
 
-        try:
-            await client.send_message(chat_id, report)
-        except Exception as e:
-            print(f"Mesaj göndərilə bilmədi: {e}")
+# 🚀 Botu başladın
+async def main():
+    print("✅ Bot Bakı vaxtı ilə 17:05 üçün hazırdır.")
+    await daily_stats_sender()
 
-        tarix = datetime.now(baku_tz).strftime("%Y-%m-%d %H:%M:%S")
-        with open("aktivlik.csv", "a", encoding="utf-8", newline="") as file:
-            writer = csv.writer(file)
-            for _, info in istifadeciler:
-                writer.writerow([chat_id, info["name"], info["count"], tarix])
-
-        # Hesabdan sonra sıfırlanır
-        for user in aktivlik[chat_id].values():
-            user["count"] = 0
-
-
-# --- PLUGİN START OLDUQDA ÇAĞIR ---
-def start_plugin():
-    init_csv()
-    client.loop.create_task(gunluk_hesabat())
-    print("📊 Aktivlik hesabatı sistemi işə düşdü.")
+with client:
+    client.loop.create_task(main())
+    client.run_until_disconnected()
