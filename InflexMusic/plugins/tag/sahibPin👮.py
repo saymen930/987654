@@ -11,7 +11,7 @@ from InflexMusic.core.bot import xaos as client
 def is_owner(user_id: int) -> bool:
     return user_id in config.OWNER_IDS
 
-@client.on(events.NewMessage(pattern=r"^[/.!]pins ?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]pins(\s|$)(.*)"))
 async def pin(event):
     if not is_owner(event.sender_id):
         return await event.reply(f"Sən {config.BOT_NAME} bota sahib deyilsən!\n⛔ Pinləməyə çalışma.")
@@ -22,7 +22,7 @@ async def pin(event):
     await event.client.pin_message(event.chat_id, event.reply_to_msg_id, notify=True)
     await event.reply("📌 Mesaj pinləndi!")
 
-@client.on(events.NewMessage(pattern=r"^[/.!]unpins ?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]unpins(\s|$)(.*)"))
 async def unpin(event):
     if not is_owner(event.sender_id):
         return await event.reply(f"Sən {config.BOT_NAME} bota sahib deyilsən!\n⛔ Unpinləməyə çalışmayın.")
