@@ -1,199 +1,157 @@
-import asyncio
-from telethon import TelegramClient, events, Button
-from telethon.tl.functions.channels import EditBannedRequest, GetParticipantRequest
-from telethon.tl.types import ChatBannedRights, ChannelParticipantAdmin, ChannelParticipantCreator
-from InflexMusic.core.bot import xaos as client 
+import telebot
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+from datetime import datetime, timedelta
+from InflexMusic.core.bot import xaos as bot
+# ⚠️ Warn məlumatları
+warns = {}  # {(chat_id, user_id): warn_count}
 
-warns = {}  # {(chat_id_user_id): int}
-
-# ✅ Adminlik yoxlama funksiyası (Tam işlək)
-async def is_admin(chat_id, user_id):
+# ✅ Admin yoxlaması
+def is_admin(chat_id, user_id):
     try:
-        participant = await client(GetParticipantRequest(channel=chat_id, user_id=user_id))
-        p = participant.participant
-        return isinstance(p, (ChannelParticipantAdmin, ChannelParticipantCreator))
-    except Exception as e:
-        print(f"[Admin Yoxlaması Xətası] {e}")
+        member = bot.get_chat_member(chat_id, user_id)
+        return member.status in ['administrator', 'creator']
+    except:
         return False
 
-# 🔍 İstifadəçi tapma (reply, username, id ilə)
-async def get_user_from_message(event):
-    if event.is_reply:
-        reply_msg = await event.get_reply_message()
-        if reply_msg.from_id:
-            return reply_msg.from_id.user_id
-        return None
-
-    args = event.raw_text.split()
-    if len(args) < 2:
-        return None
-
-    identifier = args[1]
-    if identifier.isdigit():
-        return int(identifier)
-
-    if identifier.startswith('@'):
-        username = identifier[1:]
-    else:
-        username = identifier
-
-    async for user in client.iter_participants(event.chat_id, search=username):
-        if user.username and user.username.lower() == username.lower():
-            return user.id
+# 🔍 İstifadəçini tap
+def extract_user_id(message):
+    if message.reply_to_message:
+        return message.reply_to_message.from_user.id
+    parts = message.text.split()
+    if len(parts) >= 2:
+        try:
+            return int(parts[1])
+        except:
+            pass
     return None
 
 # 🚫 /mute
-@client.on(events.NewMessage(pattern='/mute'))
-async def mute_handler(event):
-    if not await is_admin(event.chat_id, event.sender_id):
-        await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
-        return
+@bot.message_handler(commands=['mute'])
+def mute_user(message):
+    if not is_admin(message.chat.id, message.from_user.id):
+        return bot.reply_to(message, "⛔ Yalnız adminlər istifadə edə bilər")
 
-    user_id = await get_user_from_message(event)
+    user_id = extract_user_id(message)
     if not user_id:
-        await event.reply("İstifadəçi tapılmadı. Reply edin və ya /mute @username / user_id ilə istifadə edin.")
-        return
+        return bot.reply_to(message, "Reply ilə və ya user_id ilə istifadə et.")
 
+    until_date = datetime.now() + timedelta(days=365)
     try:
-        await client(EditBannedRequest(
-            channel=event.chat_id,
-            participant=user_id,
-            banned_rights=ChatBannedRights(
-                until_date=None,
-                send_messages=True,
-                send_media=True,
-                send_stickers=True,
-                send_gifs=True,
-                send_games=True,
-                send_inline=True,
-                embed_links=True
-            )
-        ))
-        await event.reply("İstifadəçi səssiz edildi✅")
+        bot.restrict_chat_member(
+            chat_id=message.chat.id,
+            user_id=user_id,
+            permissions=telebot.types.ChatPermissions(can_send_messages=False),
+            until_date=until_date
+        )
+        bot.reply_to(message, "✅ İstifadəçi səssiz edildi")
     except Exception as e:
-        await event.reply(f"Xəta: {e}")
+        bot.reply_to(message, f"Xəta: {e}")
 
 # 🔊 /unmute
-@client.on(events.NewMessage(pattern='/unmute'))
-async def unmute_handler(event):
-    if not await is_admin(event.chat_id, event.sender_id):
-        await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
-        return
+@bot.message_handler(commands=['unmute'])
+def unmute_user(message):
+    if not is_admin(message.chat.id, message.from_user.id):
+        return bot.reply_to(message, "⛔ Yalnız adminlər istifadə edə bilər")
 
-    user_id = await get_user_from_message(event)
+    user_id = extract_user_id(message)
     if not user_id:
-        await event.reply("İstifadəçi tapılmadı. Reply edin və ya /unmute @username / user_id ilə istifadə edin.")
-        return
+        return bot.reply_to(message, "Reply ilə və ya user_id ilə istifadə et.")
 
     try:
-        await client(EditBannedRequest(
-            channel=event.chat_id,
-            participant=user_id,
-            banned_rights=ChatBannedRights()
-        ))
-        await event.reply("İstifadəçinin səssizliyi açıldı✅")
+        bot.restrict_chat_member(
+            chat_id=message.chat.id,
+            user_id=user_id,
+            permissions=telebot.types.ChatPermissions(can_send_messages=True)
+        )
+        bot.reply_to(message, "✅ Səssizlik ləğv edildi")
     except Exception as e:
-        await event.reply(f"Xəta: {e}")
+        bot.reply_to(message, f"Xəta: {e}")
 
 # 🦶 /kick
-@client.on(events.NewMessage(pattern='/kick'))
-async def kick_handler(event):
-    if not await is_admin(event.chat_id, event.sender_id):
-        await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
-        return
+@bot.message_handler(commands=['kick'])
+def kick_user(message):
+    if not is_admin(message.chat.id, message.from_user.id):
+        return bot.reply_to(message, "⛔ Yalnız adminlər istifadə edə bilər")
 
-    user_id = await get_user_from_message(event)
+    user_id = extract_user_id(message)
     if not user_id:
-        await event.reply("İstifadəçi tapılmadı. Reply edin və ya /kick @username / user_id ilə istifadə edin.")
-        return
+        return bot.reply_to(message, "Reply ilə və ya user_id ilə istifadə et.")
 
     try:
-        await client.kick_participant(event.chat_id, user_id)
-        await client.unban_participant(event.chat_id, user_id)
-        await event.reply("İstifadəçi qrupdan atıldı.")
+        bot.ban_chat_member(message.chat.id, user_id)
+        bot.unban_chat_member(message.chat.id, user_id)
+        bot.reply_to(message, "🚪 İstifadəçi qovuldu")
     except Exception as e:
-        await event.reply(f"Xəta: {e}")
-
-# 🙋 /kickme
-@client.on(events.NewMessage(pattern='/kickme'))
-async def kickme_handler(event):
-    try:
-        await event.reply("Hə haqlısan! Davay bayıra 👞")
-        await client.kick_participant(event.chat_id, event.sender_id)
-        await client.unban_participant(event.chat_id, event.sender_id)
-    except Exception as e:
-        await event.reply(f"Xəta: {e}")
+        bot.reply_to(message, f"Xəta: {e}")
 
 # ⚠️ /warn
-@client.on(events.NewMessage(pattern='/warn'))
-async def warn_handler(event):
-    if not await is_admin(event.chat_id, event.sender_id):
-        await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
-        return
+@bot.message_handler(commands=['warn'])
+def warn_user(message):
+    if not is_admin(message.chat.id, message.from_user.id):
+        return bot.reply_to(message, "⛔ Yalnız adminlər istifadə edə bilər")
 
-    user_id = await get_user_from_message(event)
+    user_id = extract_user_id(message)
     if not user_id:
-        await event.reply("İstifadəçi tapılmadı. Reply edin və ya /warn @username / user_id ilə istifadə edin.")
-        return
+        return bot.reply_to(message, "Reply ilə və ya user_id ilə istifadə et.")
 
-    key = f"{event.chat_id}_{user_id}"
+    key = (message.chat.id, user_id)
     warns[key] = warns.get(key, 0) + 1
     count = warns[key]
 
-    markup = [Button.inline("❌ Xəbərdarlığı sil", data=f"unwarn_{event.chat_id}_{user_id}")]
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton("❌ Warn sil", callback_data=f"unwarn:{user_id}"))
 
     if count >= 3:
         try:
-            await client.kick_participant(event.chat_id, user_id)
+            bot.ban_chat_member(message.chat.id, user_id)
             warns[key] = 0
-            await event.reply(f"İstifadəçi 3 dəfə xəbərdarlıq aldı və qrupdan atıldı❗", buttons=markup)
+            bot.send_message(message.chat.id, f"⚠️ 3 xəbərdarlıq aldı və qovuldu!", reply_markup=markup)
         except Exception as e:
-            await event.reply(f"Xəta: {e}")
+            bot.send_message(message.chat.id, f"Xəta: {e}")
     else:
-        await event.reply(f"İstifadəçi xəbərdarlıq aldı❗ Ümumi xəbərdarlıq sayı: {count}/3", buttons=markup)
+        bot.send_message(message.chat.id, f"❗ Xəbərdarlıq verildi ({count}/3)", reply_markup=markup)
 
-# ✅ /unwarn
-@client.on(events.NewMessage(pattern='/unwarn'))
-async def unwarn_handler(event):
-    if not await is_admin(event.chat_id, event.sender_id):
-        await event.reply("Bu əmri yalnız adminlər istifadə edə bilər⛔")
-        return
+# 🧹 /unwarn
+@bot.message_handler(commands=['unwarn'])
+def unwarn_user(message):
+    if not is_admin(message.chat.id, message.from_user.id):
+        return bot.reply_to(message, "⛔ Yalnız adminlər istifadə edə bilər")
 
-    user_id = await get_user_from_message(event)
+    user_id = extract_user_id(message)
     if not user_id:
-        await event.reply("İstifadəçi tapılmadı. Reply edin və ya /unwarn @username / user_id ilə istifadə edin.")
-        return
+        return bot.reply_to(message, "Reply ilə və ya user_id ilə istifadə et.")
 
-    key = f"{event.chat_id}_{user_id}"
+    key = (message.chat.id, user_id)
     if warns.get(key, 0) > 0:
         warns[key] -= 1
-        await event.reply(f"Xəbərdarlıq silindi, Cari xəbərdarlıq sayı: {warns[key]}/3")
+        bot.reply_to(message, f"✅ Warn silindi ({warns[key]}/3)")
     else:
-        await event.reply("Bu istifadəçinin xəbərdarlığı yoxdur✅")
+        bot.reply_to(message, "Bu istifadəçidə xəbərdarlıq yoxdur.")
 
-# 🔘 Inline button ilə /unwarn
-@client.on(events.CallbackQuery(pattern=b'unwarn_.*'))
-async def callback_unwarn_handler(event):
-    data = event.data.decode('utf-8').split('_')
-    if len(data) != 3:
-        await event.answer("Xəta")
-        return
+# 🔘 Button warn sil
+@bot.callback_query_handler(func=lambda call: call.data.startswith("unwarn:"))
+def handle_unwarn_button(call):
+    user_id = int(call.data.split(":")[1])
+    chat_id = call.message.chat.id
+    if not is_admin(chat_id, call.from_user.id):
+        return bot.answer_callback_query(call.id, "⛔ Yalnız adminlər")
 
-    chat_id = int(data[1])
-    user_id = int(data[2])
-    caller_id = event.sender_id
-
-    if not await is_admin(chat_id, caller_id):
-        await event.answer("Yalnız adminlər istifadə edə bilər⛔")
-        return
-
-    key = f"{chat_id}_{user_id}"
+    key = (chat_id, user_id)
     if warns.get(key, 0) > 0:
         warns[key] -= 1
-        await event.answer("Xəbərdarlıq silindi✅")
-        try:
-            await event.edit(f"Xəbərdarlıq silindi, İstifadəçinin cari xəbərdarlıq sayı: {warns[key]}/3")
-        except Exception as e:
-            await event.answer(f"Mesaj redaktə olunmadı: {e}")
+        bot.edit_message_text(f"✅ Warn silindi ({warns[key]}/3)", chat_id, call.message.message_id)
+        bot.answer_callback_query(call.id, "Warn silindi")
     else:
-        await event.answer("Bu istifadəçinin xəbərdarlığı yoxdur✅")
+        bot.answer_callback_query(call.id, "Warn yoxdur")
+
+# 🤪 /kickme
+@bot.message_handler(commands=['kickme'])
+def kick_me(message):
+    if is_admin(message.chat.id, message.from_user.id):
+        return bot.reply_to(message, "Axı səni atmaram balam, sən bir adminsən🫂")
+    try:
+        bot.ban_chat_member(message.chat.id, message.from_user.id)
+        bot.unban_chat_member(message.chat.id, message.from_user.id)
+        bot.reply_to(message, "😅 Özünü qovdun!")
+    except Exception as e:
+        bot.reply_to(message, f"Xəta: {e}")
