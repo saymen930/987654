@@ -1,18 +1,23 @@
+from InflexMusic.core.bot import xaos as client  
 import os
 import requests
-from pyrogram import filters
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from InflexMusic import app
+import asyncio
+from telethon import TelegramClient, events, Button
+from telethon.tl.types import MessageMediaPhoto
+from PIL import Image, ImageDraw, ImageFont
+import textwrap
 
-# Faylı catbox.moe saytına yükləmək funksiyası
+
+
+# 📤 Faylı catbox.moe saytına yükləmək funksiyası
 def upload_file(file_path):
     url = "https://catbox.moe/user/api.php"
     data = {"reqtype": "fileupload", "json": "true"}
-    files = {"fileToUpload": open(file_path, "rb")}
-    response = requests.post(url, data=data, files=files)
+    with open(file_path, "rb") as f:
+        files = {"fileToUpload": f}
+        response = requests.post(url, data=data, files=files)
 
-    if response.status_code == 200 and "url" in response.text:
-        # JSON cavab varsa, linki düzəldək
+    if response.status_code == 200:
         try:
             json_data = response.json()
             return True, json_data["url"]
@@ -21,69 +26,122 @@ def upload_file(file_path):
     else:
         return False, f"Xəta baş verdi: {response.status_code} - {response.text}"
 
-# Əmr işləyicisi - Qruplarda işləməsi üçün
-@app.on_message(filters.command(["tgm", "tgt", "telegraph", "tl"]) & filters.group)
-async def get_link_group(client, message):
-    if not message.reply_to_message:
-        return await message.reply_text(
-            "📌 Zəhmət olmasa, bu əmrdən istifadə etmək üçün bir media faylına cavab verin✅"
-        )
+# 📥 Əmr işləyicisi
+@client.on(events.NewMessage(pattern=r'^/(tgm|tgt|telegraph|tl)$'))
+async def handler(event):
+    if not event.is_group:
+        await event.reply("📌 Bu əmrdən yalnız qruplarda istifadə edilə bilər.")
+        return
 
-    media = message.reply_to_message
+    if not event.reply_to_msg_id:
+        await event.reply("📌 Zəhmət olmasa, bu əmrdən istifadə etmək üçün bir media faylına cavab verin.")
+        return
+
+    replied = await event.get_reply_message()
+    media = replied.media
+
+    if not media:
+        await event.reply("⚠️ Yalnız şəkil, video və sənədlər dəstəklənir.")
+        return
+
     file_size = 0
 
     try:
-        if media.photo:
-            file_size = media.photo.file_size
-        elif media.video:
-            file_size = media.video.file_size
-        elif media.document:
-            file_size = media.document.file_size
+        if isinstance(media, MessageMediaPhoto):
+            if replied.photo and replied.photo.sizes:
+                file_size = max([s.size for s in replied.photo.sizes if hasattr(s, 'size')])
+        elif hasattr(replied, 'document') and replied.document:
+            file_size = replied.document.size
         else:
-            return await message.reply_text("⚠️ Yalnız şəkil, video və sənədlər dəstəklənir.")
+            await event.reply("⚠️ Bu media tipi dəstəklənmir.")
+            return
     except Exception:
-        return await message.reply_text("❌ Media məlumatı oxunmadı.")
+        await event.reply("⚠️ Media ölçüsünü təyin etmək mümkün olmadı.")
+        return
 
-    if file_size > 200 * 1024 * 1024:
-        return await message.reply_text("⚠️ Zəhmət olmasa, 200MB-dan kiçik bir media faylı istifadə edin.")
+    if file_size and file_size > 200 * 1024 * 1024:
+        await event.reply("⚠️ Zəhmət olmasa, 200MB-dan kiçik bir media faylı istifadə edin.")
+        return
+
+    status = await event.reply("⏳ Yüklənir...")
 
     try:
-        status = await message.reply("⏳ Yüklənir...")
+        file_path = await replied.download_media(progress_callback=lambda d, t: asyncio.create_task(
+            status.edit(f"📥 Endirilir... {d * 100 / t:.1f}%")
+        ))
 
-        async def progress(current, total):
-            try:
-                faiz = current * 100 / total
-                await status.edit_text(f"📥 Endirilir... {faiz:.1f}%")
-            except Exception:
-                pass
+        await status.edit("📤 Fayl Telegraph'a yüklənir...")
+
+        success, result = upload_file(file_path)
+
+        if success:
+            await status.edit(
+                "✅ Fayl uğurla yükləndi!",
+                buttons=[[Button.url("📥 Toxun və Bax", result)]]
+            )
+        else:
+            await status.edit(f"❌ Yükləmə zamanı xəta baş verdi:\n\n{result}")
 
         try:
-            local_path = await media.download(progress=progress)
-            await status.edit_text("📤 Fayl Telegraph'a yüklənir...")
+            os.remove(file_path)
+        except Exception:
+            pass
 
-            success, result = upload_file(local_path)
-
-            if success:
-                await status.edit_text(
-                    f"✅ Fayl uğurla yükləndi: [Bağlantı]({result})",
-                    reply_markup=InlineKeyboardMarkup(
-                        [[InlineKeyboardButton("📁 Faylı aç", url=result)]]
-                    ),
-                    disable_web_page_preview=True
-                )
-            else:
-                await status.edit_text(f"❌ Yükləmə zamanı xəta baş verdi:\n\n{result}")
-
-            try:
-                os.remove(local_path)
-            except Exception:
-                pass
-
-        except Exception as e:
-            await status.edit_text(f"❌ Fayl yükləmə alınmadı\n\n<i>Səbəb: {e}</i>")
-            try:
-                os.remove(local_path)
-            except Exception:
-                pass
     except Exception as e:
-        await message.reply_text(f"❌ Gözlənilməz xəta: {e}")
+        await status.edit(f"❌ Gözlənilməz xəta: `{e}`")
+
+
+
+def make_simple_image(code: str, output_file="carbon.png"):
+    font_path = "/system/fonts/DroidSansMono.ttf"  # Pydroid3-də ola biləcək font
+    try:
+        font = ImageFont.truetype(font_path, 20)
+    except:
+        font = ImageFont.load_default()
+
+    lines = textwrap.wrap(code, width=60)
+    width = 800
+    height = 20 * len(lines) + 20
+
+    image = Image.new("RGB", (width, height), color=(40, 44, 52))  # Tünd fon (Monokai tərzi)
+    draw = ImageDraw.Draw(image)
+    y_text = 10
+
+    for line in lines:
+        draw.text((10, y_text), line, font=font, fill=(248, 248, 242))  # Açıq mətn rəngi
+        y_text += 20
+
+    image.save(output_file)
+    return output_file
+
+@client.on(events.NewMessage(pattern="/carbon(?:\s+(.+))?"))
+async def carbon_handler(event):
+    code = event.pattern_match.group(1)
+    if not code:
+        reply = await event.get_reply_message()
+        if reply and reply.text:
+            code = reply.text
+        else:
+            await event.reply("❌ Zəhmət olmasa kod göndərin və ya mesaja reply edin.")
+            return
+
+    await event.reply("🖼️ Carbon hazırlanır...")
+
+    try:
+        img_path = make_simple_image(code)
+        await client.send_file(event.chat_id, img_path, caption="✅ Hazırdır!")
+        os.remove(img_path)
+    except Exception as e:
+        await event.reply(f"❌ Xəta baş verdi:\n{e}")
+        
+# 🔄 Botu işə sal
+#client.start()
+#print("🤖 Bot işə düşdü!")
+#client.run_until_disconnected()
+
+
+
+
+
+
+
