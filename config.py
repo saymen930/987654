@@ -25,6 +25,9 @@ PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
 # Birdən çox owner ID
 OWNER_IDS = [5663585448, 7774444894]  # Buraya əlavə owner ID-lər yaz
 
+# REPORT KANAL
+C_WARN = int(os.environ.get("C_WARN", "-1002006893748"))
+
 # Bot_name
 BOT_NAME = os.environ.get("BOT_NAME", "𝐏𝐄𝐑𝐒𝐈𝐎𝐍𝐀𝐋 𝐌𝐔𝐋𝐓𝐈 🇦🇿")
 #Bot username
