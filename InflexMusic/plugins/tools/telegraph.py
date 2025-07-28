@@ -11,31 +11,41 @@ def upload_file(file_path):
     files = {"fileToUpload": open(file_path, "rb")}
     response = requests.post(url, data=data, files=files)
 
-    if response.status_code == 200:
-        return True, response.text.strip()
+    if response.status_code == 200 and "url" in response.text:
+        # JSON cavab varsa, linki düzəldək
+        try:
+            json_data = response.json()
+            return True, json_data["url"]
+        except Exception:
+            return True, response.text.strip()
     else:
         return False, f"Xəta baş verdi: {response.status_code} - {response.text}"
 
-# Əmr işləyicisi
+# Əmr işləyicisi - Qruplarda işləməsi üçün
 @app.on_message(filters.command(["tgm", "tgt", "telegraph", "tl"]) & filters.group)
 async def get_link_group(client, message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "📌 Zəhmət olmasa, bu əmrdən istifadə etmək üçün bir **media faylına cavab verin.**"
+            "📌 Zəhmət olmasa, bu əmrdən istifadə etmək üçün bir media faylına cavab verin✅"
         )
 
     media = message.reply_to_message
     file_size = 0
 
-    if media.photo:
-        file_size = media.photo.file_size
-    elif media.video:
-        file_size = media.video.file_size
-    elif media.document:
-        file_size = media.document.file_size
+    try:
+        if media.photo:
+            file_size = media.photo.file_size
+        elif media.video:
+            file_size = media.video.file_size
+        elif media.document:
+            file_size = media.document.file_size
+        else:
+            return await message.reply_text("⚠️ Yalnız şəkil, video və sənədlər dəstəklənir.")
+    except Exception:
+        return await message.reply_text("❌ Media məlumatı oxunmadı.")
 
     if file_size > 200 * 1024 * 1024:
-        return await message.reply_text("⚠️ Zəhmət olmasa, **200MB-dan kiçik** bir media faylı istifadə edin.")
+        return await message.reply_text("⚠️ Zəhmət olmasa, 200MB-dan kiçik bir media faylı istifadə edin.")
 
     try:
         status = await message.reply("⏳ Yüklənir...")
@@ -59,6 +69,7 @@ async def get_link_group(client, message):
                     reply_markup=InlineKeyboardMarkup(
                         [[InlineKeyboardButton("📁 Faylı aç", url=result)]]
                     ),
+                    disable_web_page_preview=True
                 )
             else:
                 await status.edit_text(f"❌ Yükləmə zamanı xəta baş verdi:\n\n{result}")
@@ -74,24 +85,5 @@ async def get_link_group(client, message):
                 os.remove(local_path)
             except Exception:
                 pass
-            return
-    except Exception:
-        pass
-
-
-# Kömək bölməsi
-__HELP__ = """
-**📤 Telegraph Yükləmə Bot Komandaları**
-
-Bu əmrlərlə cavab verdiyiniz media fayllarını Telegraph (catbox.moe) üzərinə yükləyə bilərsiniz:
-
-➤ `/tgm`, `/tgt`, `/telegraph`, `/tl` — Media faylı cavablayın və bu əmrlərdən birini yazın.
-
-📝 **Misal:**
-Bir şəklə və ya videoya cavab yazaraq `/tgm` yazın.
-
-📌 **Qeyd:** 
-Əmr işləməsi üçün bir media faylına cavab verməlisiniz.
-"""
-
-__MODULE__ = "Telegraph"
+    except Exception as e:
+        await message.reply_text(f"❌ Gözlənilməz xəta: {e}")
