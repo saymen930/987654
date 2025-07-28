@@ -19,9 +19,6 @@ def start_panel(_):
     return buttons
 
 
-#
-
-
 def private_panel(_):
     buttons = [
         [
@@ -40,7 +37,9 @@ def private_panel(_):
         ],
         [
             InlineKeyboardButton(
-                    text=_["S_B_11"],
-                    callback_data="help_callback hb17"),
+                text=_["S_B_11"],
+                callback_data="help_callback hb17"
+            )
+        ],
     ]
     return buttons
