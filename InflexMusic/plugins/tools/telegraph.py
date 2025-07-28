@@ -1,10 +1,10 @@
 import os
+import requests
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from InflexMusic import app
-import requests
 
-
+# Faylı catbox.moe saytına yükləmək funksiyası
 def upload_file(file_path):
     url = "https://catbox.moe/user/api.php"
     data = {"reqtype": "fileupload", "json": "true"}
@@ -14,18 +14,19 @@ def upload_file(file_path):
     if response.status_code == 200:
         return True, response.text.strip()
     else:
-        return False, f"ᴇʀʀᴏʀ: {response.status_code} - {response.text}"
+        return False, f"Xəta baş verdi: {response.status_code} - {response.text}"
 
-
-@app.on_message(filters.command(["tgm", "tgt", "telegraph", "tl"]))
+# Əmr işləyicisi
+@app.on_message(filters.command(["tgm", "tgt", "telegraph", "tl"]) & filters.group)
 async def get_link_group(client, message):
     if not message.reply_to_message:
         return await message.reply_text(
-            "Pʟᴇᴀsᴇ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇᴅɪᴀ ᴛᴏ ᴜᴘʟᴏᴀᴅ ᴏɴ Tᴇʟᴇɢʀᴀᴘʜ"
+            "📌 Zəhmət olmasa, bu əmrdən istifadə etmək üçün bir **media faylına cavab verin.**"
         )
 
     media = message.reply_to_message
     file_size = 0
+
     if media.photo:
         file_size = media.photo.file_size
     elif media.video:
@@ -34,41 +35,33 @@ async def get_link_group(client, message):
         file_size = media.document.file_size
 
     if file_size > 200 * 1024 * 1024:
-        return await message.reply_text("Pʟᴇᴀsᴇ ᴘʀᴏᴠɪᴅᴇ ᴀ ᴍᴇᴅɪᴀ ғɪʟᴇ ᴜɴᴅᴇʀ 200MB.")
+        return await message.reply_text("⚠️ Zəhmət olmasa, **200MB-dan kiçik** bir media faylı istifadə edin.")
 
     try:
-        text = await message.reply("Pʀᴏᴄᴇssɪɴɢ...")
+        status = await message.reply("⏳ Yüklənir...")
 
         async def progress(current, total):
             try:
-                await text.edit_text(f"📥 Dᴏᴡɴʟᴏᴀᴅɪɴɢ... {current * 100 / total:.1f}%")
+                faiz = current * 100 / total
+                await status.edit_text(f"📥 Endirilir... {faiz:.1f}%")
             except Exception:
                 pass
 
         try:
             local_path = await media.download(progress=progress)
-            await text.edit_text("📤 Uᴘʟᴏᴀᴅɪɴɢ ᴛᴏ ᴛᴇʟᴇɢʀᴀᴘʜ...")
+            await status.edit_text("📤 Fayl Telegraph'a yüklənir...")
 
-            success, upload_path = upload_file(local_path)
+            success, result = upload_file(local_path)
 
             if success:
-                await text.edit_text(
-                    f"🌐 | [ᴜᴘʟᴏᴀᴅᴇᴅ ʟɪɴᴋ]({upload_path})",
+                await status.edit_text(
+                    f"✅ Fayl uğurla yükləndi: [Bağlantı]({result})",
                     reply_markup=InlineKeyboardMarkup(
-                        [
-                            [
-                                InlineKeyboardButton(
-                                    "ᴜᴘʟᴏᴀᴅᴇᴅ ғɪʟᴇ",
-                                    url=upload_path,
-                                )
-                            ]
-                        ]
+                        [[InlineKeyboardButton("📁 Faylı aç", url=result)]]
                     ),
                 )
             else:
-                await text.edit_text(
-                    f"ᴀɴ ᴇʀʀᴏʀ ᴏᴄᴄᴜʀʀᴇᴅ ᴡʜɪʟᴇ ᴜᴘʟᴏᴀᴅɪɴɢ ʏᴏᴜʀ ғɪʟᴇ\n{upload_path}"
-                )
+                await status.edit_text(f"❌ Yükləmə zamanı xəta baş verdi:\n\n{result}")
 
             try:
                 os.remove(local_path)
@@ -76,7 +69,7 @@ async def get_link_group(client, message):
                 pass
 
         except Exception as e:
-            await text.edit_text(f"❌ Fɪʟᴇ ᴜᴘʟᴏᴀᴅ ғᴀɪʟᴇᴅ\n\n<i>Rᴇᴀsᴏɴ: {e}</i>")
+            await status.edit_text(f"❌ Fayl yükləmə alınmadı\n\n<i>Səbəb: {e}</i>")
             try:
                 os.remove(local_path)
             except Exception:
@@ -86,21 +79,19 @@ async def get_link_group(client, message):
         pass
 
 
+# Kömək bölməsi
 __HELP__ = """
-**ᴛᴇʟᴇɢʀᴀᴘʜ ᴜᴘʟᴏᴀᴅ ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs**
+**📤 Telegraph Yükləmə Bot Komandaları**
 
-ᴜsᴇ ᴛʜᴇsᴇ ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ ᴜᴘʟᴏᴀᴅ ᴍᴇᴅɪᴀ ᴛᴏ ᴛᴇʟᴇɢʀᴀᴘʜ:
+Bu əmrlərlə cavab verdiyiniz media fayllarını Telegraph (catbox.moe) üzərinə yükləyə bilərsiniz:
 
-- `/tgm`: ᴜᴘʟᴏᴀᴅ ʀᴇᴘʟɪᴇᴅ ᴍᴇᴅɪᴀ ᴛᴏ ᴛᴇʟᴇɢʀᴀᴘʜ.
-- `/tgt`: sᴀᴍᴇ ᴀs `/tgm`.
-- `/telegraph`: sᴀᴍᴇ ᴀs `/tgm`.
-- `/tl`: sᴀᴍᴇ ᴀs `/tgm`.
+➤ `/tgm`, `/tgt`, `/telegraph`, `/tl` — Media faylı cavablayın və bu əmrlərdən birini yazın.
 
-**ᴇxᴀᴍᴘʟᴇ:**
-- ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴘʜᴏᴛᴏ ᴏʀ ᴠɪᴅᴇᴏ ᴡɪᴛʜ `/tgm` ᴛᴏ ᴜᴘʟᴏᴀᴅ ɪᴛ.
+📝 **Misal:**
+Bir şəklə və ya videoya cavab yazaraq `/tgm` yazın.
 
-**ɴᴏᴛᴇ:**
-ʏᴏᴜ ᴍᴜsᴛ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴍᴇᴅɪᴀ ғɪʟᴇ ғᴏʀ ᴛʜᴇ ᴜᴘʟᴏᴀᴅ ᴛᴏ ᴡᴏʀᴋ.
+📌 **Qeyd:** 
+Əmr işləməsi üçün bir media faylına cavab verməlisiniz.
 """
 
-__MODULE__ = "Tᴇʟᴇɢʀᴀᴘʜ"
+__MODULE__ = "Telegraph"
