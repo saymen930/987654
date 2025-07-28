@@ -1,36 +1,35 @@
 import asyncio
-from telethon import TelegramClient, events, Button
+from telethon import events, Button
 from datetime import datetime
 from collections import defaultdict
 import pytz
-from InflexMusic.core.bot import xaos as client  # Telethon bot instance
-import config
+from InflexMusic.core.bot import xaos as client  # Əvvəlcədən yaradılmış client
 
-# Qrup/Kanal statistikası
+# 🧠 Qrup statistikası
 group_stats = defaultdict(lambda: defaultdict(lambda: {'name': '', 'count': 0}))
 
-# Bakı saat qurşağı
+# 🕓 Bakı saat qurşağı
 baku_tz = pytz.timezone("Asia/Baku")
 
-# Mesaj izləmə
+# 📨 Mesaj izləmə
 @client.on(events.NewMessage)
 async def handler(event):
-    if event.is_group or event.is_channel:
-        sender = await event.get_sender()
-        if sender and not getattr(sender, 'bot', False):  # bot deyilsə
+    if event.is_group:
+        if event.sender_id and not event.sender.bot:
             group_id = event.chat_id
-            full_name = sender.first_name or sender.title or "Ad Yoxdur"
-            if hasattr(sender, 'last_name') and sender.last_name:
+            sender = await event.get_sender()
+            full_name = sender.first_name or ""
+            if sender.last_name:
                 full_name += f" {sender.last_name}"
             user_id = sender.id
             group_stats[group_id][user_id]['name'] = full_name
             group_stats[group_id][user_id]['count'] += 1
 
-# Gündəlik stat göndərən
+# 🕔 Gündəlik saat 17:05 üçün yoxlayıcı funksiya
 async def daily_stats_sender():
     while True:
         now = datetime.now(baku_tz)
-        if now.hour == 19 and now.minute == 30:
+        if now.hour == 19 and now.minute == 55:
             for group_id, user_data in group_stats.items():
                 if not user_data:
                     continue
@@ -60,23 +59,20 @@ async def daily_stats_sender():
                 )
 
                 buttons = [
-                    [Button.url("🔮 Yeniliklər", f"{config.SPORT_K}"),
-                     Button.url("➕ Qrupa Əlavə Et", f"https://t.me/{config.BOT_USERNAME}?startgroup=new")]
+                    [Button.url("🔮 Yeniliklər", "https://t.me/PersionalSupport"),
+                     Button.url("🔗 Qrupa Əlavə Et", "https://t.me/PersionalMultiBot?startgroup=new")]
                 ]
 
                 try:
                     await client.send_message(group_id, msg, parse_mode='html', buttons=buttons)
                 except Exception as e:
-                    print(f"❌ Mesaj göndərilə bilmədi ({group_id}): {e}")
+                    print(f"Mesaj göndərilə bilmədi ({group_id}): {e}")
 
             group_stats.clear()
             await asyncio.sleep(60)
         await asyncio.sleep(5)
 
-# Botu işə sal
-async def main():
+# 🔁 Bot prosesini başlat
+async def start_bot():
     print("✅ Bot Bakı vaxtı ilə 17:05 üçün hazırdır.")
-    await client.start()
-    await daily_stats_sender()
-
-asyncio.run(main())
+    asyncio.create_task(daily_stats_sender())
