@@ -16,7 +16,7 @@ async def is_admin(event):
         return False
 
 
-@client.on(events.NewMessage(pattern="^[/.!]pin ?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]pins(\s|$)(.*)"))
 async def pin(event):
     if event.is_private:  # Private-da işləməsin
         return await event.reply("⛔ Bu əmr yalnız qruplarda istifadə edilə bilər!")
@@ -31,7 +31,7 @@ async def pin(event):
     await event.reply("📌 Mesaj uğurla pinləndi!")
 
 
-@client.on(events.NewMessage(pattern="^[/!.]unpin ?(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]unpin(\s|$)(.*)"))
 async def unpin(event):
     if event.is_private:  # Private-da işləməsin
         return await event.reply("⛔ Bu əmr yalnız qruplarda istifadə edilə bilər!")
