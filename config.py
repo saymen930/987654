@@ -17,6 +17,7 @@ BOT_TOKEN = getenv("BOT_TOKEN", "7924372740:AAHKGwqBBUZ-wZDfjzb4rLjFvyjvivnjt3g"
 
 #KANAL
 PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "PersionalPlaylist")
+SPORT_K = os.environ.get("SPORT_K", "PersionalSupport") # Sport kanali
 BOT_USERNAME = os.environ.get("BOT_USERNAME", "PersionalMultiBot")
 PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
 
