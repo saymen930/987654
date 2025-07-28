@@ -4,7 +4,7 @@ import asyncio
 from datetime import datetime, timedelta
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
-
+from InflexMusic.core.bot import xaos as client
 
 # 📁 Mesaj sayını saxlamaq üçün fayl
 MESSAGE_COUNT_FILE = "Jason/message_counts.json"
