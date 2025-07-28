@@ -11,12 +11,16 @@ MESSAGE_COUNT_FILE = "Jason/message_counts.json"
 
 # 📌 Mərhələlər
 milestones = {
-    200: "{username} gəlməyinlə qrupu qızışdırdı bravooo🫂",
-    500: "Partlayışın ən böyük səbəbiii😲\n{username} tam olaraq 500 mesaj yazıb 🤩",
-    1000: "Axirət dönəmi baş vurur🫢 {username} 1000 mesaj ilə qrupu dağıdır 😍",
-    1300: "Ola bilməzzz😮 Qrupunun legendi 1300 mesaj yazdı🥴",
-    1500: "Göründüyü kimi dağıdıcı qüvvə gəlir 🚀 {username} qrupu partladır 🫨",
-    2000: "Kilometr fərqinə baxmayaraq amperajdan kəllə vuran {username} 2000 mesaj yazmağı bacardı😱"
+    100: "İlk alov {username}-dən gəldi 🔥 100 mesaj ilə yeri titrətdi!",
+    250: "{username} 250 mesajla oyunu qızışdırdı! Bu hələ başlanğıcdır 😏",
+    400: "Möhtəşəm ritm! 🥁 {username} 400 mesajla səhnəni ələ aldı!",
+    700: "Qrupun super qəhrəmanı {username} 700 mesajla yüksəldi 🦸",
+    900: "Narahat olun! {username} 900 mesajla partlayışa hazırdır 💣",
+    1100: "Ağılalmaz bir sürət! {username} artıq 1100 mesaj yazıb 🚗💨",
+    1400: "1400 mesaj? Bu artıq sənət əsəridir 🎨 {username} sən bir dahisən!",
+    1700: "Qrupun təməl daşlarından biri {username} 1700 mesaj ilə zirvədə 🏔️",
+    2200: "Bu nə sürətdir?! ⚡ {username} 2200 mesajla qrupun enerjisini artırdı!",
+    3000: "Tarix yazıldı! 📜 {username} 3000 mesajla əfsanəyə çevrildi 🔥"
 }
 
 # 🔄 Fayl idarəsi
