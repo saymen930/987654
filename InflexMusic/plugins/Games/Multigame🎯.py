@@ -133,9 +133,9 @@ async def ask_puan(event: events.NewMessage.Event):
         return
     
     buttons = [
-        [Button.inline("🚀 AZBUL", data="az_puan"),
-         Button.inline("🚀 SÓZ", data="soz_puan")],
-        [Button.inline("❌ Bağla", data="cancel_game_msg")]
+        [Button.inline("🇦🇿 AZBUL", data="az_puan"),
+         Button.inline("📚 SÖZ", data="soz_puan")],
+        [Button.inline("🗑️ Bağla", data="cancel_game_msg")]
     ]
     msg = await event.reply("Puan Üçün Oyun Növünü Seçin.", buttons=buttons)
     oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)    
@@ -147,11 +147,11 @@ async def ask_puan(event: events.NewMessage.Event):
 @client.on(events.CallbackQuery(data=b"b_b"))
 async def handle_az_puan(event: events.CallbackQuery.Event):
     buttons = [
-        [Button.inline("🚀 AZBUL", data="az_puan"),
-         Button.inline("🚀 SÖZ", data="soz_puan")],
-        [Button.inline("❌ Bağla", data="cancel_game_msg")]
+        [Button.inline("🇦🇿 AZBUL", data="az_puan"),
+         Button.inline("📚 SÖZ", data="soz_puan")],
+        [Button.inline("🗑️ Bağla", data="cancel_game_msg")]
     ]
-    msg = await event.edit("💁 Puan Üçün Oyun Növünü Seçın.", buttons=buttons)
+    msg = await event.edit("\n💁 Puan Taboru Üçün Oyun Növünü Seçın.", buttons=buttons)
 
     if msg:
         oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)      
@@ -164,9 +164,9 @@ async def handle_az_puan(event: events.CallbackQuery.Event):
         [Button.inline("🌐 Global", data="g_p"),
          Button.inline("💁 Özəl", data="o_p")],
         [Button.inline("🔙 Geri", data="b_b"),
-        Button.inline("❌ Bağla", data="cancel_game_msg")]
+        Button.inline("🗑️ Bağla", data="cancel_game_msg")]
     ]
-    msg = await event.edit("🌐 Puan Üçün Oyun Növünü Seçin", buttons=buttons)
+    msg = await event.edit("🇦🇿 AZBUL Puan Taboru Üçün Oyun Növünü Seçin", buttons=buttons)
 
     if msg:
         oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)    
@@ -192,7 +192,7 @@ async def handle_soz_puan(event: events.CallbackQuery.Event):
     user_id = event.sender_id
 
     if chat_id not in player_scores or user_id not in player_scores[chat_id]:
-        return await event.edit("🎯 Hələ heç bir xalınız yoxdur. Oyuna başlamaq üçün /oyun yazın!", buttons=button)
+        return await event.edit("🎯 Hələ heç bir xalınız yoxdur. Oyuna başlamaq üçün /game yazın!", buttons=button)
 
     user_score = player_scores[chat_id][user_id]
     await event.edit(
@@ -238,8 +238,23 @@ async def handle_g_puan(event: events.CallbackQuery.Event):
 async def handle_o_p(event: events.CallbackQuery.Event):    
     user_id = str(event.sender_id)
     puan = scores.get(user_id, 0)
-    await event.edit(f"⭐ Xalın: {puan}", buttons=buttons)
+    await event.edit(f"💁Özəl Puan Taboru\n\n⭐ Xalın: {puan}", buttons=buttons)
 
+
+
+
+
+    
+# /stats
+@client.on(events.NewMessage(pattern=r"^[/!.]stats(\s|$)(.*)"))
+async def user_stats(event: events.NewMessage.Event):
+    user_id = str(event.sender_id)
+    data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
+    await event.reply(
+        "📈 Statistikaların:\n"
+        f"• Oyun sayı: {data.get('oyun',0)}\n"
+        f"• Tapılan söz: {data.get('tapilan',0)}"
+    )
 
 
 @client.on(events.NewMessage(pattern=r"^[/!.]game(\s|$)(.*)"))
@@ -249,9 +264,9 @@ async def ask_game_start(event: events.NewMessage.Event):
         return
 
     buttons = [
-        [Button.inline("🚀 AZBUL", data="start_real_game"),
-         Button.inline("🚀 SÓZ", data="soz_real_game")],
-        [Button.inline("❌ Bağla", data="cancel_game_msg")]
+        [Button.inline("🇦🇿 AZBUL", data="start_real_game"),
+         Button.inline("📚 SÓZ", data="soz_real_game")],
+        [Button.inline("🗑️ Bağla", data="cancel_game_msg")]
     ]
     
     msg = await event.reply("🎮 Oyun növünü seçin.", buttons=buttons)
@@ -451,18 +466,6 @@ async def joinup_cmd(event: events.NewMessage.Event):
 
 
 
-    
-# /stats
-@client.on(events.NewMessage(pattern=r"^[/!.]stats(\s|$)(.*)"))
-async def user_stats(event: events.NewMessage.Event):
-    user_id = str(event.sender_id)
-    data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
-    await event.reply(
-        "📈 Statistikaların:\n"
-        f"• Oyun sayı: {data.get('oyun',0)}\n"
-        f"• Tapılan söz: {data.get('tapilan',0)}"
-    )
-
 # /soz
 @client.on(events.NewMessage(pattern=r"^[/!.]soz(\s|$)(.*)"))
 async def add_word(event: events.NewMessage.Event):
@@ -492,7 +495,7 @@ async def restart_scores(event: events.NewMessage.Event):
     save_json(DATA_FILES["scores"], scores)
     save_json(DATA_FILES["stats"], stats)
 
-    await event.reply("♻️ **Bütün şəxsi və qlobal puanlar sıfırlandı!**")
+    await event.reply("♻️ **Bütün şəxsi və qlobal puanlar sıfırlandı!")
     
 
 async def start_game(chat_id: int):
@@ -523,7 +526,7 @@ async def start_game(chat_id: int):
         ana_soz = random.choice(keys)
         cavablar = custom_words.get(ana_soz, [])
         if not cavablar:
-            await client.send_message(chat_id, f"⚠️ `{ana_soz}` üçün cavablar tapılmadı.")
+            await client.send_message(chat_id, f"⚠️ {ana_soz} üçün cavablar tapılmadı.")
             await stop_game(chat_id)
             return
         state = GameState(ana_soz=ana_soz, cavablar=cavablar)
@@ -540,7 +543,7 @@ async def start_game(chat_id: int):
         ana_soz = random.choice(available)
         cavablar = custom_words.get(ana_soz, [])
         if not cavablar:
-            await client.send_message(chat_id, f"⚠️ `{ana_soz}` üçün cavablar tapılmadı.")
+            await client.send_message(chat_id, f"⚠️ {ana_soz} üçün cavablar tapılmadı.")
             await stop_game(chat_id)
             return
         state.ana_soz = ana_soz
@@ -622,7 +625,7 @@ async def check_word(event: events.NewMessage.Event):
         sender = await event.get_sender()
         await event.reply(
             f"✅ {sender.first_name} Cavab Doğrudur!\n"
-            f"📊 {xal} xal qazandınız.\n\n⭐ '{game.ana_soz}'"
+            f"📊 {xal} xal qazandınız.\n\n⭐ {game.ana_soz}"
         )
 
         if len(game.tapilan) == len(game.cavablar):
@@ -666,8 +669,8 @@ async def handle_soz_real_game_start(event: events.CallbackQuery.Event):
     buttons = [[Button.inline("🔃 Sözü dəyişmək", b'kec')]]
 
     await event.reply(
-        f"🎮 <b>Söz Oyunu Başladı!</b>\n\n"
-        f"🔤 Qarışdırılmış söz: <code>{scrambled}</code>\n\n"
+        f"🎮 Söz Oyunu Başladı!\n\n"
+        f"🔤 Qarışdırılmış söz: {scrambled}\n\n"
         f"Bu hərflərdən düzgün sözü tapın!\n"
         f"✅ Düzgün cavab: +25 xal\n"
         f"🛑 Bitirmək: /bitir və ya /dayan\n"
