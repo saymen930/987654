@@ -17,3 +17,5 @@ logging.getLogger("pytgcalls").setLevel(logging.ERROR)
 
 def LOGGER(name: str) -> logging.Logger:
     return logging.getLogger(name)
+
+#repo icazesiz goturme
