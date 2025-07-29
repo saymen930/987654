@@ -13,7 +13,7 @@ API_ID = int(getenv("API_ID", "23470912"))
 API_HASH = getenv("API_HASH", "33ac02b7891c5396e6b305802d56cf4f")
 
 # Get your token from @BotFather on Telegram.
-BOT_TOKEN = getenv("BOT_TOKEN", "7924372740:AAHKGwqBBUZ-wZDfjzb4rLjFvyjvivnjt3g")
+BOT_TOKEN = getenv("BOT_TOKEN", "7756181021:AAH8mPBjMb0SRB9LUAdZDdJxt5ZZaY6Oa4k")
 
 #KANAL
 PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "PersionalPlaylist")
