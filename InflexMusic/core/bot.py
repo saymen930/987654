@@ -114,7 +114,7 @@ class Inflex(Client):
                 BotCommand("link_close", "link silmə✅"),
                 BotCommand("song", "musiqi yükləmə✅"),
                 BotCommand("video", "video yükləmə✅"),
-                BotCommand("tt", "tiktok video yükləmə"🚀),
+                BotCommand("tt", "tiktok video yükləmə🚀"),
                 BotCommand("info", "istifadəçi haqqında məlumatℹ️"),
                 BotCommand("id", "id nömrəsi göstərir🆔"),
                 BotCommand("me", "sənin haqqında məlumat verirℹ️"),
