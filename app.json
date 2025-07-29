@@ -1,5 +1,5 @@
 {
-    "name": "Inflex Music Bot",
+    "name": "InflexMusicBot",
     "description": "A Telegram Music Player Bot, written in Python with Pyrogram and Py-Tgcalls.",
     "logo": "https://telegra.ph/file/e91e886dd50ffdae88c99.jpg",
     "keywords": [
