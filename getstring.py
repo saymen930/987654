@@ -2,8 +2,8 @@ import asyncio
 
 from pyrogram import Client as c
 
-API_ID = "24357907"
-API_HASH = "e8bbafbec8541225f8e2c5a94af3d040"
+API_ID = ""
+API_HASH = ""
 
 print("\n\n Enter Phone number when asked.\n\n")
 
@@ -21,3 +21,4 @@ async def main():
 
 
 asyncio.run(main())
+#repo icazesiz goturme
