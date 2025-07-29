@@ -174,3 +174,6 @@ class TeleAPI:
             return False
         config.lyrical.pop(mystic.id)
         return True
+
+
+#repo icazesiz goturme
