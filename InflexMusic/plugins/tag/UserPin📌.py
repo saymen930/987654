@@ -16,7 +16,7 @@ async def is_admin(event):
         return False
 
 
-@client.on(events.NewMessage(pattern=r"^[/!.]pins(\s|$)(.*)"))
+@client.on(events.NewMessage(pattern=r"^[/!.]pin(\s|$)(.*)"))
 async def pin(event):
     if event.is_private:  # Private-da işləməsin
         return await event.reply("⛔ Bu əmr yalnız qruplarda istifadə edilə bilər!")
