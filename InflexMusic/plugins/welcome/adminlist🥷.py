@@ -48,7 +48,7 @@ async def admin_commands_handler(event):
             msg_link = f"https://t.me/c/{str(chat_id)[4:]}/{msg_id}"
 
         warning_text = (
-            f"{sender_username} {chat.title} Qrupunda sizə ehtiyac durur❗\n\n"
+            f"{sender_username} {chat.title} Qrupunda sizə ehtiyac duyur❗\n\n"
             f"Mesaj: {msg_text}\n"
             f"Saat: {msg_date}\n"
             f"Link: {msg_link}\n"
