@@ -86,19 +86,6 @@ async def tag_handler(event: events.NewMessage.Event):
 
 
 
-# --- /cancel KOMANDASI ---
-@client.on(events.NewMessage(pattern=r"^[./!]cancel$"))
-async def cancel_handler(event):
-    chat_id = event.chat_id
-    if chat_id in running_tags:
-        running_tags.remove(chat_id)
-    if chat_id in anlik_calisan:
-        anlik_calisan.remove(chat_id)
-    count = rxyzdev_tagTot.get(chat_id, 0)
-    await event.respond(
-        f"🛑 **Tag prosesi dayandırıldı!**\n📊 Tag edilənlər: `{count}`",
-        buttons=btn_add_to_group()
-    )
 
 
 # --- /ttag KOMANDASI (1-li) ---
@@ -203,20 +190,7 @@ async def etag_handler(event):
 
 
 
-# --- /cancel KOMANDASI ---
-@client.on(events.NewMessage(pattern=r"^[./!]cancel$"))
-async def cancel_handler(event):
-    chat_id = event.chat_id
-    if chat_id in running_tags:
-        running_tags.remove(chat_id)
-    if chat_id in anlik_calisan:
-        anlik_calisan.remove(chat_id)
-    count = rxyzdev_tagTot.get(chat_id, 0)
-    await event.respond(
-        f"🛑 **Tag prosesi dayandırıldı!**\n📊 Tag edilənlər: `{count}`",
-        buttons=btn_add_to_group()
-    )
-
+# --- /cancel KOMANDASI --
 
 
 # --- /stag KOMANDASI (sözlə) ---
