@@ -1,4 +1,6 @@
 import config
+from telethon import Button
+
 
 O_MSG = "⚠️ Bu əmri yalnız qruplarda istifadə edə bilər və ya asistanta daxil olaraq .music yazılmalıdır."
 
