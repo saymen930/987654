@@ -12,14 +12,7 @@ def time_to_seconds(time):
 def safe_filename(name):
     return re.sub(r'[^a-zA-Z0-9_\-() ]', '', name)
 
-buttons = {
-    "markup_for_private": InlineKeyboardMarkup([
-        [InlineKeyboardButton('Playlist 🎧', url=f'https://t.me/{config.PLAYLIST_NAME}')]
-    ]),
-    "add_to_group": InlineKeyboardMarkup([
-        [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{config.BOT_USERNAME}?startgroup=true')]
-    ])
-}
+
 
 @app.on_message(filters.command("song", ["/", "!", ".", "@"]))
 def song(client, message):
@@ -69,8 +62,18 @@ def song(client, message):
 
         dur = time_to_seconds(duration)
 
-        caption = f"🎧 [{title}]({link})\n⏰ {duration}"
+        caption = f"🎧 Ad: {title}\n⏰ Vaxt: {duration}"
 
+
+        buttons = {
+    "markup_for_private": InlineKeyboardMarkup([
+        [InlineKeyboardButton('Playlist 🎧', url=f'https://t.me/{Config.PLAYLIST_NAME}')]
+    ]),
+    "add_to_group": InlineKeyboardMarkup([
+        [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{Config.BOT_USERNAME}?startgroup=true')],
+        [InlineKeyboardButton('️✨️ YouTube Linki ✨️', url=f'{link}')]
+    ])
+        }
         message.reply_audio(
             audio=audio_file,
             caption=caption,
