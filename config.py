@@ -20,6 +20,7 @@ PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "PersionalPlaylist")
 SPORT_K = os.environ.get("SPORT_K", "PersionalSupport") # Sport kanali
 BOT_USERNAME = os.environ.get("BOT_USERNAME", "PersionalMultiBot")
 PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
+music_channel = int(os.environ.get("music_channel", "-1002802790454"))
 
 # Bura Soz oynunun ovner idlerini yaz
 # Birdən çox owner ID
