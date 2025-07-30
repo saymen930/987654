@@ -28,6 +28,12 @@ bot_token = config.BOT_TOKEN
 xaos = TelegramClient('client', api_id, api_hash).start(bot_token=bot_token)
 
 
+api_id = config.API_ID
+api_hash = config.API_HASH
+string_session = config.string_session
+str = TelegramClient(StringSession(string_session), api_id, api_hash)
+
+
 
 pls = Client(
     'persional',
