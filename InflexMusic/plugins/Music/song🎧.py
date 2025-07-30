@@ -67,7 +67,7 @@ def song(client, message):
         dur = time_to_seconds(duration)
 
         caption = f"""
-🎧 [{title}]({link})"
+🎧 [{title}]({link})
 ⏰ {duration}
 """
 
