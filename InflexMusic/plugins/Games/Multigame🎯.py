@@ -133,9 +133,10 @@ async def ask_puan(event: events.NewMessage.Event):
         return
     
     buttons = [
-        [Button.inline("🇦🇿 AZBUL", data="az_puan"),
-         Button.inline("📚 SÖZ", data="soz_puan")],
-        [Button.inline("🗑️ Bağla", data="cancel_game_msg")]
+        [Button.inline("🇦🇿 𝙰𝚉𝙱𝚄𝙻", data="az_puan"),
+         Button.inline("📚  𝚂Ö𝚉 ", data="soz_puan")],
+        [Button.inline("📊 𝚂𝚃𝙰𝚃İ𝚂𝙺𝙰", data="s_puan"),
+         Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
     msg = await event.reply("Puan Üçün Oyun Növünü Seçin.", buttons=buttons)
     oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)    
@@ -147,9 +148,10 @@ async def ask_puan(event: events.NewMessage.Event):
 @client.on(events.CallbackQuery(data=b"b_b"))
 async def handle_az_puan(event: events.CallbackQuery.Event):
     buttons = [
-        [Button.inline("🇦🇿 AZBUL", data="az_puan"),
-         Button.inline("📚 SÖZ", data="soz_puan")],
-        [Button.inline("🗑️ Bağla", data="cancel_game_msg")]
+        [Button.inline("🇦🇿 𝙰𝚉𝙱𝚄𝙻", data="az_puan"),
+         Button.inline("📚 𝚂Ö𝚉", data="soz_puan")],
+        [Button.inline("📊 𝚂𝚃𝙰𝚃İ𝚂𝙺𝙰", data="s_puan"),
+         Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
     msg = await event.edit("\n💁 Puan Taboru Üçün Oyun Növünü Seçın.", buttons=buttons)
 
@@ -161,10 +163,10 @@ async def handle_az_puan(event: events.CallbackQuery.Event):
 @client.on(events.CallbackQuery(data=b"az_puan"))
 async def handle_az_puan(event: events.CallbackQuery.Event):
     buttons = [
-        [Button.inline("🌐 Global", data="g_p"),
-         Button.inline("💁 Özəl", data="o_p")],
-        [Button.inline("🔙 Geri", data="b_b"),
-        Button.inline("🗑️ Bağla", data="cancel_game_msg")]
+        [Button.inline("🌐 𝙶𝙻𝙾𝙱𝙰𝙻", data="g_p"),
+         Button.inline("💁 Ö𝚉Ə𝙻", data="o_p")],
+        [Button.inline("🔙 𝙶𝙴𝚁İ", data="b_b"),
+        Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
     msg = await event.edit("🇦🇿 AZBUL Puan Taboru Üçün Oyun Növünü Seçin", buttons=buttons)
 
@@ -173,11 +175,20 @@ async def handle_az_puan(event: events.CallbackQuery.Event):
     
        
         
-button = [[Button.inline("🔙 Geri", data="b_b")]]
+#button = [[Button.inline("🔙 Geri", data="b_b")]]
           
 
-buttons = [[Button.inline("🔙 Geri", data="az_puan")]]
+#buttons = [[Button.inline("🔙 Geri", data="az_puan")]]
+button = [
+    [Button.inline("🔙 𝙶𝙴𝚁İ", data="b_b"),
+     Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]]
+    
+          
 
+buttons = [
+    [Button.inline("🔙 𝙶𝙴𝚁İ", data="az_puan"),
+     Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]]
+    
 
 
 #@client.on(events.NewMessage(pattern='/xallar'))
@@ -243,18 +254,26 @@ async def handle_o_p(event: events.CallbackQuery.Event):
 
 
 
-
-    
-# /stats
-@client.on(events.NewMessage(pattern=r"^[/!.]stats(\s|$)(.*)"))
-async def user_stats(event: events.NewMessage.Event):
+@client.on(events.CallbackQuery(data=b"s_puan"))
+async def handle_az_puan(event: events.CallbackQuery.Event):    
     user_id = str(event.sender_id)
     data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
     await event.reply(
-        "📈 Statistikaların:\n"
+        "📈 AZBUL Oyunu Üçün Statiska:\n\n"
         f"• Oyun sayı: {data.get('oyun',0)}\n"
-        f"• Tapılan söz: {data.get('tapilan',0)}"
+        f"• Tapılan söz: {data.get('tapilan',0)}", buttons=button
     )
+    
+# /stats
+#@client.on(events.NewMessage(pattern=r"^[/!.]stats(\s|$)(.*)"))
+#async def user_stats(event: events.NewMessage.Event):
+    #user_id = str(event.sender_id)
+    #data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
+    #await event.reply(
+        #"📈 Statistikaların:\n"
+        #f"• Oyun sayı: {data.get('oyun',0)}\n"
+        #f"• Tapılan söz: {data.get('tapilan',0)}"
+    #)
 
 
 @client.on(events.NewMessage(pattern=r"^[/!.]game(\s|$)(.*)"))
@@ -264,9 +283,9 @@ async def ask_game_start(event: events.NewMessage.Event):
         return
 
     buttons = [
-        [Button.inline("🇦🇿 AZBUL", data="start_real_game"),
-         Button.inline("📚 SÓZ", data="soz_real_game")],
-        [Button.inline("🗑️ Bağla", data="cancel_game_msg")]
+        [Button.inline("🇦🇿 𝙰𝚉𝙱𝚄𝙻", data="start_real_game"),
+         Button.inline("📚 𝚂Ö𝚉 ", data="soz_real_game")],
+        [Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
     
     msg = await event.reply("🎮 Oyun növünü seçin.", buttons=buttons)
@@ -672,9 +691,9 @@ async def handle_soz_real_game_start(event: events.CallbackQuery.Event):
         f"🎮 Söz Oyunu Başladı!\n\n"
         f"🔤 Qarışdırılmış söz: {scrambled}\n\n"
         f"Bu hərflərdən düzgün sözü tapın!\n"
-        f"✅ Düzgün cavab: +25 xal\n"
-        f"🛑 Bitirmək: /bitir və ya /dayan\n"
-        f"📊 Xallar: /xallar\n"
+        f"✅ Düzgün cavab: +5 xal\n"
+        f"🛑 Bitirmək: /bitir\n"
+        f"📊 Xallar: /puan\n"
         f"⏭️ Keçmək: /kec",
         buttons=buttons
     )
@@ -698,7 +717,7 @@ async def check_answer(event):
     if text == correct_word:
         if user_id not in player_scores[chat_id]:
             player_scores[chat_id][user_id] = 0
-        player_scores[chat_id][user_id] += 25
+        player_scores[chat_id][user_id] += 5
 
         new_word = get_random_word()
         scrambled = scramble_word(new_word)
@@ -709,7 +728,7 @@ async def check_answer(event):
 
         await event.reply(
             f"🎉 Təbriklər, {event.sender.first_name}!\n"
-            f"✅ Düzgün cavab verdiniz və 25 xal qazandınız!\n\n"
+            f"✅ Düzgün cavab verdiniz və 5 xal qazandınız!\n\n"
             f"🔤 Yeni söz: {scrambled}",
             buttons=buttons
         )
