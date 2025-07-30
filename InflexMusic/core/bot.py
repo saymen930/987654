@@ -11,6 +11,17 @@ import config
 
 from ..logging import LOGGER
 
+
+
+from telethon import TelegramClient, events
+from telethon.tl.types import MessageMediaDocument
+from telethon.tl.functions.messages import GetHistoryRequest
+from telethon.sessions import StringSession
+from telethon.errors import ChatWriteForbiddenError
+# Əlavə et
+
+
+
 import random, os, logging, asyncio
 from telethon import TelegramClient, events
 from telethon.sessions import StringSession
