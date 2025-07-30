@@ -1,12 +1,16 @@
 from InflexMusic import app
 from pyrogram import filters
-import os, requests, yt_dlp
+import os, requests, yt_dlp, re
 from youtube_search import YoutubeSearch
 import config
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 def time_to_seconds(time):
     return sum(int(x) * 60 ** i for i, x in enumerate(reversed(str(time).split(":"))))
+
+# Qadağan olunmuş simvolları təmizləyən funksiya
+def safe_filename(name):
+    return re.sub(r'[^a-zA-Z0-9_\-() ]', '', name)
 
 buttons = {
     "markup_for_private": InlineKeyboardMarkup([
@@ -19,8 +23,8 @@ buttons = {
 
 @app.on_message(filters.command("song", ["/", "!", ".", "@"]))
 def song(client, message):
-    audio_file = None  # Əvvəlcədən müəyyən et
-    thumb_name = None  # Əvvəlcədən müəyyən et
+    audio_file = None
+    thumb_name = None
     try:
         if len(message.command) < 2:
             message.reply("📌 İstifadə: /song Mahnının adı", quote=True)
@@ -37,6 +41,7 @@ def song(client, message):
         result = results[0]
         link = f"https://youtube.com{result['url_suffix']}"
         title = result["title"][:100]
+        safe_title = safe_filename(title)
         duration = result["duration"]
         views = result["views"]
         channel = result["channel"]
@@ -48,12 +53,11 @@ def song(client, message):
 
         ydl_opts = {
             "format": "bestaudio[ext=m4a]",
-            "outtmpl": f"{title}.m4a",
+            "outtmpl": f"{safe_title}.m4a",
             "noplaylist": True,
             "extractor_args": {'youtubetab': {'skip': 'authcheck'}},
         }
 
-        # Cookie faylı varsa əlavə et
         if os.path.exists("cookies/cookies(7).txt"):
             ydl_opts["cookiefile"] = "cookies/cookies(7).txt"
 
@@ -63,15 +67,10 @@ def song(client, message):
             info = ydl.extract_info(link, download=True)
             audio_file = ydl.prepare_filename(info)
 
-        # Müddəti saniyəyə çevir
         dur = time_to_seconds(duration)
 
-        caption = f"""
-🎧 [{title}]({link})
-⏰ {duration}
-"""
+        caption = f"🎧 [{title}]({link})\n⏰ {duration}"
 
-        # İstifadəçiyə göndər
         message.reply_audio(
             audio=audio_file,
             caption=caption,
@@ -82,7 +81,6 @@ def song(client, message):
             reply_markup=buttons["markup_for_private"]
         )
 
-        # Kanalda paylaş
         app.send_audio(
             chat_id=config.PLAYLIST_ID,
             audio=audio_file,
@@ -99,12 +97,41 @@ def song(client, message):
         print("❌ Xəta:", type(e).__name__, e)
 
     finally:
-        # Faylları təmizlə
         try:
-            if audio_file and os.path.exists(audio_file):  # Yoxla
+            if audio_file and os.path.exists(audio_file):
                 os.remove(audio_file)
-            if thumb_name and os.path.exists(thumb_name):  # Yoxla
+            if thumb_name and os.path.exists(thumb_name):
                 os.remove(thumb_name)
         except Exception as e:
             print("🧹 Təmizlik xətası", e)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
