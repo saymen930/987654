@@ -32,6 +32,9 @@ C_REPORT = os.environ.get("C_REPORT", "persionalreport")
 BOT_NAME = os.environ.get("BOT_NAME", "𝐏𝐄𝐑𝐒𝐈𝐎𝐍𝐀𝐋 𝐌𝐔𝐋𝐓𝐈 🇦🇿")
 #Bot username
 
+#musiqi asistant
+userbot_username = os.environ.get("userbot_username", "Yu8987uio")
+
 # Get your mongo url from cloud.mongodb.com
 MONGO_DB_URI = getenv("MONGO_DB_URI", "mongodb+srv://TEAMBABY01:UTTAMRATHORE09@cluster0.vmjl9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
