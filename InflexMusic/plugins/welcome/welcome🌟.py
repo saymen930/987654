@@ -6,12 +6,14 @@ from telethon.tl.types import ChannelParticipantAdmin, ChannelParticipantCreator
 from telethon.tl.functions.channels import GetParticipantRequest
 from InflexMusic.core.bot import xaos as client
 
+# Fayl yolları
 WELCOME_FILE = 'Jason/welcome.json'
 STATUS_FILE = 'Jason/status.json'
 
+# Default mesaj
 default_welcome = "Salam {username} 🫂 {chatname} qrupuna xoş gəldin! Necəsən?❤️‍🔥"
 
-# JSON faylları
+# JSON yükləmə və saxlama funksiyaları
 def load_json(path):
     if os.path.exists(path):
         with open(path, 'r') as f:
@@ -22,10 +24,11 @@ def save_json(path, data):
     with open(path, 'w') as f:
         json.dump(data, f)
 
+# Yaddaşdan dataları yüklə
 welcome_data = load_json(WELCOME_FILE)
 welcome_status = load_json(STATUS_FILE)
 
-# ✅ Welcome mesajı (təkrar göndərməni əngəllə)
+# ✅ Qarşılama mesajı (təkrar göndərməni əngəlləyir)
 sent_users = set()
 
 @client.on(events.ChatAction)
@@ -85,7 +88,7 @@ async def set_welcome(event):
     else:
         parts = event.raw_text.split('\n', 1)
         if len(parts) < 2:
-            return await event.reply("Welcome mesajını təyin etmək üçün\n\n/setwelcome <mesaj> və yaxud hər hansısa mesaja reply atıb cəhd edin✅")
+            return await event.reply("Welcome mesajını təyin etmək üçün\n\n/setwelcome <mesaj> və ya hər hansı mesaja reply atın✅")
         new_msg = parts[1]
 
     welcome_data[chat_id] = new_msg
@@ -107,7 +110,7 @@ async def reset_welcome(event):
 
     welcome_data.pop(chat_id, None)
     save_json(WELCOME_FILE, welcome_data)
-    await event.reply("♻️ Qarşılama mesajı sıfırlandı. Default welcome mesajı istifadə olunacaq✅")
+    await event.reply("♻️ Qarşılama mesajı sıfırlandı. Default mesaj istifadə olunacaq.")
 
 # ✅ /welcome — cari mesajı göstər və buttonlar
 @client.on(events.NewMessage(pattern=r'^/welcome$'))
@@ -126,30 +129,35 @@ async def show_welcome(event):
         ]
     )
 
-# ✅ Inline düymələrin idarəsi (tam düzəlişli)
+# ✅ Inline düymələrin idarəsi (admin yoxlamalı)
 @client.on(events.CallbackQuery)
 async def callback_handler(event):
     data = event.data.decode('utf-8')
     sender = await event.get_sender()
     message = await event.get_message()
-    chat = await event.get_chat()
-    chat_id = str(chat.id)
 
-    try:
-        p = await client(GetParticipantRequest(int(chat_id), sender.id))
-        is_admin = isinstance(p.participant, (ChannelParticipantAdmin, ChannelParticipantCreator))
-        if not is_admin:
-            return  # Admin deyilsə, cavab vermə
-    except:
-        return  # Yoxlama mümkün deyilsə, cavab vermə
+    # enable:disable:<chat_id>
+    if data.startswith("enable:") or data.startswith("disable:"):
+        action, cid = data.split(":")
 
-    if data.startswith("enable:"):
-        welcome_status[chat_id] = True
+        # Admin yoxlaması
+        try:
+            p = await client(GetParticipantRequest(int(cid), sender.id))
+            is_admin = isinstance(p.participant, (ChannelParticipantAdmin, ChannelParticipantCreator))
+            if not is_admin:
+                return await event.answer("⛔ Bu əmri yalnız adminlər istifadə edə bilər.", alert=True)
+        except:
+            return await event.answer("❗ Admin yoxlaması mümkün olmadı.", alert=True)
+
+        # Status dəyiş və yaz
+        if action == "enable":
+            welcome_status[cid] = True
+            await event.edit("✅ Qarşılama mesajı **aktiv** edildi.")
+        elif action == "disable":
+            welcome_status[cid] = False
+            await event.edit("❌ Qarşılama mesajı **deaktiv** edildi.")
+
         save_json(STATUS_FILE, welcome_status)
-        await event.edit("✅ Qarşılama mesajı **aktiv** edildi.")
-    elif data.startswith("disable:"):
-        welcome_status[chat_id] = False
-        save_json(STATUS_FILE, welcome_status)
-        await event.edit("❌ Qarşılama mesajı **deaktiv** edildi.")
+
     elif data == "close":
         await event.delete()
