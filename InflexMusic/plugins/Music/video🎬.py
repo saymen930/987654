@@ -42,7 +42,7 @@ async def video_handler(client, message):
             else:
                 return  # Sadə, amma uyğun olmayan mesaj – heç nə etmə
 
-        m = await message.reply("🔍 Videoya baxılır...")
+        m = await message.reply("🔍 Videoya Yüklənir....")
 
         ydl_opts = {
             "format": "best",
@@ -82,7 +82,7 @@ async def video_handler(client, message):
 ⏳ Müddət: {duration}
 👁 Baxış: {views}
 📡 Kanal: {channel}
-
+"""
 
 
         buttons = {
@@ -92,6 +92,7 @@ async def video_handler(client, message):
     "add_to_group": InlineKeyboardMarkup([
         [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{Config.BOT_USERNAME}?startgroup=true')],
         [InlineKeyboardButton('️✨️ YouTube Linki ✨️', url=f'{link}')]
+    
     ])
         }
         # Göndər istifadəçiyə
