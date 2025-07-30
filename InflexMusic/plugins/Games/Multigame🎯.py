@@ -138,7 +138,7 @@ async def ask_puan(event: events.NewMessage.Event):
         [Button.inline("📊 𝚂𝚃𝙰𝚃İ𝚂𝙺𝙰", data="s_puan"),
          Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
-    msg = await event.reply("Puan Üçün Oyun Növünü Seçin.", buttons=buttons)
+    msg = await event.reply("\n💁 Puan Taboru Üçün Oyun Növünü Seçın.", buttons=buttons)
     oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)    
    
     
@@ -168,7 +168,7 @@ async def handle_az_puan(event: events.CallbackQuery.Event):
         [Button.inline("🔙 𝙶𝙴𝚁İ", data="b_b"),
         Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
-    msg = await event.edit("🇦🇿 AZBUL Puan Taboru Üçün Oyun Növünü Seçin", buttons=buttons)
+    msg = await event.edit("🇦🇿 𝙰𝚉𝙱𝚄𝙻 Puan Taboru Üçün Oyun Növünü Seçin", buttons=buttons)
 
     if msg:
         oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)    
@@ -226,7 +226,7 @@ async def handle_g_puan(event: events.CallbackQuery.Event):
         return
 
     sıralama = sorted(scores.items(), key=lambda x: x[1], reverse=True)[:15]
-    mesaj = "🌍 Global Liderlər (TOP 15):\n\n"
+    mesaj = "🌍 𝙶𝙻𝙾𝙱𝙰𝙻 Liderlər (TOP 15):\n\n"
     for i, (user_id, xal) in enumerate(sıralama, start=1):
         try:
             user = await client.get_entity(int(user_id))
@@ -249,7 +249,7 @@ async def handle_g_puan(event: events.CallbackQuery.Event):
 async def handle_o_p(event: events.CallbackQuery.Event):    
     user_id = str(event.sender_id)
     puan = scores.get(user_id, 0)
-    await event.edit(f"💁Özəl Puan Taboru\n\n⭐ Xalın: {puan}", buttons=buttons)
+    await event.edit(f"💁 Ö𝚉Ə𝙻 Puan Taboru\n\n⭐ Xalın: {puan}", buttons=buttons)
 
 
 
@@ -259,7 +259,7 @@ async def handle_az_puan(event: events.CallbackQuery.Event):
     user_id = str(event.sender_id)
     data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
     await event.reply(
-        "📈 AZBUL Oyunu Üçün Statiska:\n\n"
+        "🇦🇿 𝙰𝚉𝙱𝚄𝙻 Oyunu Üçün Statiska:\n\n"
         f"• Oyun sayı: {data.get('oyun',0)}\n"
         f"• Tapılan söz: {data.get('tapilan',0)}", buttons=button
     )
