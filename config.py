@@ -20,7 +20,6 @@ PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "PersionalPlaylist")
 SPORT_K = os.environ.get("SPORT_K", "PersionalSupport") # Sport kanali
 BOT_USERNAME = os.environ.get("BOT_USERNAME", "PersionalMultiBot")
 PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
-music_channel = int(os.environ.get("music_channel", "-1002802790454"))
 
 # Bura Soz oynunun ovner idlerini yaz
 # Birdən çox owner ID
@@ -33,9 +32,6 @@ C_REPORT = os.environ.get("C_REPORT", "persionalreport")
 BOT_NAME = os.environ.get("BOT_NAME", "𝐏𝐄𝐑𝐒𝐈𝐎𝐍𝐀𝐋 𝐌𝐔𝐋𝐓𝐈 🇦🇿")
 #Bot username
 
-#musiqi asistant
-userbot_username = os.environ.get("userbot_username", "PersionalMusic")
-string_session = getenv("string_session", "1ApWapzMBuxtcs3bv8n4QhnSJWiWx6d-8GutngYDwiJpEpMnBkvu7RxtZ5BnuoOi2WOXBaZBJcwQJQRUnkSwefUflCzX0yTVrhm0Admy97ZsFofO9OwHGcnEj6_MVFHsRjk_dccD7snwDbPL6SONVIEC62dAj4IP1E_uBOyMkXrh7WvxLSxcrSr5cp8HgJck7bhmKaWhvTxsLS0vPDQ_QZW-Utu7gHRW5jsur5V5t6ajKg3fiXBudG__N8CjvWoinkrTb6SjO88OE3cJYEjGqys6mE8IFo9GUnKcLfj2xQ2UDUvw7egKqMX0znyHdmwStEv1ibhrv2X5othrp59lEsOWOu84JA_w=")
 
 
 
