@@ -78,9 +78,10 @@ async def video_handler(client, message):
         # Caption
         minutes, seconds = divmod(duration, 60)
         caption = f"""
-🎬 Ad: {title}
-⏳ Vaxt: {minutes}:{seconds:02d}
-"""
+🎬 Adı: {title}
+⏳ Müddət: {duration}
+👁 Baxış: {views}
+📡 Kanal: {channel}
 
 
 
