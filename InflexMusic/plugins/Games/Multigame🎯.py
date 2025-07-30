@@ -258,7 +258,7 @@ async def handle_o_p(event: events.CallbackQuery.Event):
 async def handle_az_puan(event: events.CallbackQuery.Event):    
     user_id = str(event.sender_id)
     data = stats.get(user_id, {"oyun": 0, "tapilan": 0})
-    await event.reply(
+    await event.edit(
         "🇦🇿 𝙰𝚉𝙱𝚄𝙻 Oyunu Üçün Statiska:\n\n"
         f"• Oyun sayı: {data.get('oyun',0)}\n"
         f"• Tapılan söz: {data.get('tapilan',0)}", buttons=button
