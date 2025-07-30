@@ -8,14 +8,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 def time_to_seconds(time):
     return sum(int(x) * 60 ** i for i, x in enumerate(reversed(str(time).split(":"))))
 
-buttons = {
-    "markup_for_private": InlineKeyboardMarkup([
-        [InlineKeyboardButton('Videolist 🎬', url=f'https://t.me/{config.PLAYLIST_NAME}')]
-    ]),
-    "add_to_group": InlineKeyboardMarkup([
-        [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{config.BOT_USERNAME}?startgroup=true')]
-    ])
-}
+
 
 def extract_youtube_link(text):
     yt_pattern = r"(https?://)?(www\.)?(youtube\.com/watch\?v=[\w\-]+|youtu\.be/[\w\-]+)"
@@ -85,10 +78,21 @@ async def video_handler(client, message):
         # Caption
         minutes, seconds = divmod(duration, 60)
         caption = f"""
-🎬 [{title}]({link})
-⏳ Müddət: {minutes}:{seconds:02d}
+🎬 Ad: {title}
+⏳ Vaxt: {minutes}:{seconds:02d}
 """
 
+
+
+        buttons = {
+    "markup_for_private": InlineKeyboardMarkup([
+        [InlineKeyboardButton('Playlist 🎧', url=f'https://t.me/{Config.PLAYLIST_NAME}')]
+    ]),
+    "add_to_group": InlineKeyboardMarkup([
+        [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{Config.BOT_USERNAME}?startgroup=true')],
+        [InlineKeyboardButton('️✨️ YouTube Linki ✨️', url=f'{link}')]
+    ])
+        }
         # Göndər istifadəçiyə
         await message.reply_video(
             video=video_file,
