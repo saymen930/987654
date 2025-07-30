@@ -13,12 +13,6 @@ from ..logging import LOGGER
 
 
 
-from telethon import TelegramClient, events
-from telethon.tl.types import MessageMediaDocument
-from telethon.tl.functions.messages import GetHistoryRequest
-from telethon.sessions import StringSession
-from telethon.errors import ChatWriteForbiddenError
-# Əlavə et
 
 
 
@@ -38,11 +32,6 @@ api_hash = config.API_HASH
 bot_token = config.BOT_TOKEN
 xaos = TelegramClient('client', api_id, api_hash).start(bot_token=bot_token)
 
-
-api_id = config.API_ID
-api_hash = config.API_HASH
-string_session = config.string_session
-str = TelegramClient(StringSession(string_session), api_id, api_hash)
 
 
 
