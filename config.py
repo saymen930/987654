@@ -33,7 +33,7 @@ BOT_NAME = os.environ.get("BOT_NAME", "𝐏𝐄𝐑𝐒𝐈𝐎𝐍𝐀𝐋 𝐌
 #Bot username
 
 #musiqi asistant
-userbot_username = os.environ.get("userbot_username", "Yu8987uio")
+userbot_username = os.environ.get("userbot_username", "PersionalMusic")
 string_session = getenv("string_session", "1ApWapzMBuxtcs3bv8n4QhnSJWiWx6d-8GutngYDwiJpEpMnBkvu7RxtZ5BnuoOi2WOXBaZBJcwQJQRUnkSwefUflCzX0yTVrhm0Admy97ZsFofO9OwHGcnEj6_MVFHsRjk_dccD7snwDbPL6SONVIEC62dAj4IP1E_uBOyMkXrh7WvxLSxcrSr5cp8HgJck7bhmKaWhvTxsLS0vPDQ_QZW-Utu7gHRW5jsur5V5t6ajKg3fiXBudG__N8CjvWoinkrTb6SjO88OE3cJYEjGqys6mE8IFo9GUnKcLfj2xQ2UDUvw7egKqMX0znyHdmwStEv1ibhrv2X5othrp59lEsOWOu84JA_w=")
 
 
