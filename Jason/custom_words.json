@@ -16,6 +16,8 @@
   "KORDON": ["kordon", "dron", "donor", "rondo", "kron", "kod", "don", "kor"],
   "NAQİL": ["naqil", "aqil", "liqa", "ilan", "qan", "qal", "ali", "ani", "il"],
   "AVTOMOBİL": ["avtomobil", "albom", "mobil", "batil", "talib", "taplo", "motal", "viola", "alim", "omba", "olma", "atil", "bolt", "atom", "lato", "mavi", "vali", "alov", "oval", "avto", "volt", "bal", "ali", "mal", "mil", "oba", "alo", "bol", "lom", "tab", "bit", "alt", "mat", "tam", "tol", "val", "avto"],
-  "SƏNAYE": ["sənaye", "yenə", "səna", "səy", "ney", "ayə", "say", "aye"]
+  "SƏNAYE": ["sənaye", "yenə", "səna", "səy", "ney", "ayə", "say", "aye"],
+  "MÜHƏNDİSLİK": ["mühəndislik", "mühəndis", "dikinə", "dənlik", "kəndli", "inəkli", "dinmək", "mənlik", "nəmlik", "minlik", "hədik", "dəlik", "dilək", "kilid", "dikmə", "həkim", "dəmli", "həlim", "dilim", "ilmək", "məlik", "kilim", "dənli", "dinli", "ilkin", "kinli", "nədim", "dinmə", "həmin", "minik", "nəmli", "dəli", "əhli", "ilik", "mədh", "həmd", "həmi", "kimi", "ilmə", "dini", "indi", "kənd", "əkin", "ikən", "ikən", "inək", "enli", "əmin", "himn", "əhd", "dik", "iki", "dil", "kəl", "ilk", "kil", "dəm", "əmi", "him", "kim", "mil", "dən", "din", "hin", "kin", "mən", "nəm", "min"]
+
   
 }
