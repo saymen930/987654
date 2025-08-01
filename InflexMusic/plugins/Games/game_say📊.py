@@ -4,7 +4,7 @@ import os
 from telethon import TelegramClient, events
 import json
 import config
-from Jason.vord import WORDS  # WORDS siyahısı bu faylda saxlanılır
+from Jason.word import word  # WORDS siyahısı bu faylda saxlanılır
 
 AZBUL = "Jason/custom_words.json"
 
@@ -25,6 +25,6 @@ async def sual_saylari_handler(event):
         cavab += "Hər hansısa fayl tapılmadı.\n"
 
     # WORDS siyahısındakı sözlərin sayı
-    cavab += f"📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 **Sözlərinin sayı:** {len(WORDS)}"
+    cavab += f"📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 **Sözlərinin sayı:** {len(word)}"
 
     await event.reply(cavab)
