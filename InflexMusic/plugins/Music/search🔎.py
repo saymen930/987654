@@ -1,5 +1,4 @@
 from InflexMusic import app
-#from InflexMusic.core.bot import pls as app
 from pyrogram.errors import FloodWait
 from pyrogram import Client, filters
 import os, youtube_dl, requests, aiohttp, wget, time, yt_dlp, logging, json
@@ -24,7 +23,7 @@ async def search(_, message: Message):
     m = await message.delete()  
     try:
         if len(message.command) < 2:
-            await message.reply_text("/search **Ah Canım Sevgilim!**")
+            await message.reply_text("/search Ah Canım Sevgilim!")
             return
         query = message.text.split(None, 1)[1]
         m = await message.reply_text("🔎 **Axtarılır...**")
@@ -32,10 +31,10 @@ async def search(_, message: Message):
         i = 0
         text = ""
         while i < 5:
-            text += f"🏷 **Ad:** __{results[i]['title']}__\n"
-            text += f"⏱ **Müddət:** `{results[i]['duration']}`\n"
-            text += f"👀 **Baxış:** `{results[i]['views']}`\n"
-            text += f"📣 **Youtube Kanalı:** {results[i]['channel']}\n"
+            text += f"🏷 Ad: __{results[i]['title']}__\n"
+            text += f"⏱ Müddət: `{results[i]['duration']}`\n"
+            text += f"👀 Baxış: `{results[i]['views']}`\n"
+            text += f"📣 Youtube Kanalı: {results[i]['channel']}\n"
             text += f"🔗: [Görmək Üçün Toxun](https://www.youtube.com{results[i]['url_suffix']})\n\n"
             i += 1
         await m.edit(text, disable_web_page_preview=True)
