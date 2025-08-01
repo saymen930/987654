@@ -134,7 +134,7 @@ async def ask_puan(event: events.NewMessage.Event):
     
     buttons = [
         [Button.inline("🇦🇿 𝙰𝚉𝙱𝚄𝙻", data="az_puan"),
-         Button.inline("📚  𝚂Ö𝚉 ", data="soz_puan")],
+         Button.inline("📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 ", data="soz_puan")],
         [Button.inline("📊 𝚂𝚃𝙰𝚃İ𝚂𝙺𝙰", data="s_puan"),
          Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
@@ -149,7 +149,7 @@ async def ask_puan(event: events.NewMessage.Event):
 async def handle_az_puan(event: events.CallbackQuery.Event):
     buttons = [
         [Button.inline("🇦🇿 𝙰𝚉𝙱𝚄𝙻", data="az_puan"),
-         Button.inline("📚 𝚂Ö𝚉", data="soz_puan")],
+         Button.inline("📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴", data="soz_puan")],
         [Button.inline("📊 𝚂𝚃𝙰𝚃İ𝚂𝙺𝙰", data="s_puan"),
          Button.inline("🗑️ 𝙱𝙰Ğ𝙻𝙰", data="cancel_game_msg")]
     ]
@@ -207,7 +207,7 @@ async def handle_soz_puan(event: events.CallbackQuery.Event):
 
     user_score = player_scores[chat_id][user_id]
     await event.edit(
-        f"📊 {event.sender.first_name}, sizin xalınız: {user_score} xal 🌟",
+        f"📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 Üçün Puan\n\n📊 {event.sender.first_name}, sizin xalınız: {user_score} xal 🌟",
         buttons=button
     )    
 
@@ -294,7 +294,7 @@ async def ask_game_start(event: events.NewMessage.Event):
     oyun_mesajlar.setdefault(event.chat_id, []).append(msg.id)
 
     # 10 saniyə sonra mesajı sil
-    await asyncio.sleep(10)
+    await asyncio.sleep(5)
     try:
         await client.delete_messages(event.chat_id, msg.id)
     except:
@@ -571,7 +571,7 @@ async def start_game(chat_id: int):
         state.used.add(ana_soz)
         state.last_activity = now
 
-    await client.send_message(chat_id, f"🧩 Aşağıdakı sözdən söz düzəldin:\n\n🌟 <code>{state.ana_soz}</code>", parse_mode="html")
+    await client.send_message(chat_id, f"🧩 Aşağıdakı sözdən söz düzəldin:\n\n📚 <code>{state.ana_soz}</code>", parse_mode="html")
 
     # hər söz üçün timer
     asyncio.create_task(sual_timer(chat_id))
@@ -644,7 +644,7 @@ async def check_word(event: events.NewMessage.Event):
         sender = await event.get_sender()
         await event.reply(
             f"✅ {sender.first_name} Cavab Doğrudur!\n"
-            f"📊 {xal} xal qazandınız.\n\n⭐ {game.ana_soz}"
+            f"📊 {xal} xal qazandınız.\n\n📚 {game.ana_soz}"
         )
 
         if len(game.tapilan) == len(game.cavablar):
@@ -667,7 +667,7 @@ async def handle_soz_real_game_start(event: events.CallbackQuery.Event):
 
     # Əgər oyun aktivdirsə — yeni oyun başladılmasın
     if chat_id in game_sessions and game_sessions[chat_id].get('active') == True:
-        return await event.answer("⚠️ Bu qrupda artıq aktiv oyun var!\n/bitir və ya /dayan əmri ilə dayandıra bilərsiniz.", alert=True)
+        return await event.answer("⚠️ Bu qrupda artıq aktiv oyun var!\n/bitir  əmri ilə dayandıra bilərsiniz.", alert=True)
 
     # Yeni söz seç və qarışdır
     word = get_random_word()
@@ -688,13 +688,12 @@ async def handle_soz_real_game_start(event: events.CallbackQuery.Event):
     buttons = [[Button.inline("🔃 Sözü dəyişmək", b'kec')]]
 
     await event.reply(
-        f"🎮 Söz Oyunu Başladı!\n\n"
+        f" 📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 Oyunu Başladı!\n\n"
         f"🔤 Qarışdırılmış söz: {scrambled}\n\n"
         f"Bu hərflərdən düzgün sözü tapın!\n"
         f"✅ Düzgün cavab: +5 xal\n"
         f"🛑 Bitirmək: /bitir\n"
-        f"📊 Xallar: /puan\n"
-        f"⏭️ Keçmək: /kec",
+        f"📊 Xallar: /puan\n",
         buttons=buttons
     )
 
@@ -805,12 +804,12 @@ async def stop_any_game(event: events.NewMessage.Event):
                 top_name = "Naməlum"
 
             await event.reply(
-                f"🏁 Söz Oyunu Bitdi!\n\n"
+                f"📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 Oyunu Bitdi!\n\n"
                 f"🏆 Ən yüksək xal: {top_name} - {top_score} xal\n\n"
                 f"Yeni oyun üçün /oyun yazın! 🎮"
             )
         else:
-            await event.reply("🏁 Söz Oyunu Bitdi! Yeni oyun üçün /oyun yazın! 🎮")
+            await event.reply("📚 𝚆𝙾𝚁𝙳 𝙶𝙰𝙼𝙴 oyunu Bitdi! Yeni oyun üçün /game yazın! 🎮")
 
     # Heç bir aktiv oyun yoxdursa
     if not oyun_dayandirildi:
