@@ -33,7 +33,7 @@ async def video_handler(client, message):
         if not link:
             if is_command:
                 if not query:
-                    return await message.reply("📌 İstifadə: /video Video adı və ya linki", quote=True)
+                    return await message.reply("📌 **İstifadə:** /video Video adı və ya linki", quote=True)
                 search_result = YoutubeSearch(query, max_results=1).to_dict()
                 if not search_result or not search_result[0].get("url_suffix"):
                     return await message.reply("❌ Video tapılmadı.")
@@ -42,7 +42,7 @@ async def video_handler(client, message):
             else:
                 return  # Sadə, amma uyğun olmayan mesaj – heç nə etmə
 
-        m = await message.reply("🔍 Videoya Yüklənir....")
+        m = await message.reply("🔍 **Videoya Yüklənir....**")
 
         ydl_opts = {
             "format": "best",
@@ -90,8 +90,8 @@ async def video_handler(client, message):
         [InlineKeyboardButton('🎬 VideoList', url=f'https://t.me/{config.PLAYLIST_NAME}')]
     ]),
     "add_to_group": InlineKeyboardMarkup([
-        [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{config.BOT_USERNAME}?startgroup=true')],
-        [InlineKeyboardButton('️✨️ YouTube Linki ✨️', url=f'{link}')]
+        [InlineKeyboardButton('️🔗 Qrupa əlavə et', url=f'https://t.me/{config.BOT_USERNAME}?startgroup=true')],
+        [InlineKeyboardButton('️▶️ YouTube Linki ', url=f'{link}')]
     
     ])
         }
