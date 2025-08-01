@@ -1,42 +1,65 @@
 from InflexMusic import app
-from pyrogram.errors import FloodWait
+import logging
 from pyrogram import Client, filters
-import os, youtube_dl, requests, aiohttp, wget, time, yt_dlp, logging, json
-from youtube_search import YoutubeSearch
-from pyrogram import Client
 from pyrogram.types import (
-    CallbackQuery,
     InlineKeyboardButton,
     InlineKeyboardMarkup,
     Message,
 )
+from youtube_search import YoutubeSearch
+
 
 logging.basicConfig(
-    level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
-logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 
-@app.on_message(filters.command("search", ["/", "!", "@", "."]))
-async def search(_, message: Message):
-    m = await message.delete()  
+
+@app.on_message(filters.command("search", ["/", ".", "!", "#"]))
+async def search_handler(client, message: Message):
     try:
         if len(message.command) < 2:
-            await message.reply_text("/search Ah Canım Sevgilim!")
+            await message.reply_text("📚 `/search Ah Canım Sevgilim`")
             return
+
         query = message.text.split(None, 1)[1]
-        m = await message.reply_text("🔎 **Axtarılır...**")
+        status_msg = await message.reply_text("🔎 **Axtarılır...**")
+
         results = YoutubeSearch(query, max_results=5).to_dict()
-        i = 0
+
         text = ""
-        while i < 5:
-            text += f"🏷 Ad: __{results[i]['title']}__\n"
-            text += f"⏱ Müddət: `{results[i]['duration']}`\n"
-            text += f"👀 Baxış: `{results[i]['views']}`\n"
-            text += f"📣 Youtube Kanalı: {results[i]['channel']}\n"
-            text += f"🔗: [Görmək Üçün Toxun](https://www.youtube.com{results[i]['url_suffix']})\n\n"
-            i += 1
-        await m.edit(text, disable_web_page_preview=True)
+        raw_buttons = []
+
+        for i, result in enumerate(results):
+            title = result["title"]
+            duration = result["duration"]
+            views = result["views"]
+            channel = result["channel"]
+            url_suffix = result["url_suffix"]
+            url = f"https://www.youtube.com{url_suffix}"
+
+            
+            text += f"🎬 {i+1}  __{title}__\n"
+            text += f"⏱ Müddət: `{duration}`\n"
+            text += f"👁 Baxış: `{views}`\n"
+            text += f"📺 Kanal: {channel}\n\n"
+
+            raw_buttons.append(InlineKeyboardButton(f"🎬 Video {i+1}", url=url))
+
+        buttons = []
+        for i in range(0, len(raw_buttons) - 1, 2):
+            buttons.append([raw_buttons[i], raw_buttons[i + 1]])
+        if len(raw_buttons) % 2 != 0:
+            buttons.append([raw_buttons[-1]])
+
+        reply_markup = InlineKeyboardMarkup(buttons)
+
+        await status_msg.edit_text(text, disable_web_page_preview=True, reply_markup=reply_markup)
+
     except Exception as e:
-        await m.edit(str(e))
+        logger.error(f"Xəta baş verdi: {e}")
+        await message.reply(f"❌ Xəta:\n`{e}`")
+
+
