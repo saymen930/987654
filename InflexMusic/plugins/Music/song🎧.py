@@ -20,15 +20,15 @@ def song(client, message):
     thumb_name = None
     try:
         if len(message.command) < 2:
-            message.reply("📌 İstifadə: /song Mahnının adı", quote=True)
+            message.reply("📌 **İstifadə:** /song Mahnının adı", quote=True)
             return
 
         query = " ".join(message.command[1:])
-        m = message.reply(f"🔍 Axtarılır: {query}")
+        m = message.reply(f"🔍 **Axtarılır:** __{query}__")
 
         results = YoutubeSearch(query, max_results=1).to_dict()
         if not results:
-            m.edit("❌ Mahnı tapılmadı.")
+            m.edit("❌ **Mahnı tapılmadı.**")
             return
 
         result = results[0]
@@ -70,8 +70,8 @@ def song(client, message):
         [InlineKeyboardButton('🎧 Playlist', url=f'https://t.me/{config.PLAYLIST_NAME}')]
     ]),
     "add_to_group": InlineKeyboardMarkup([
-        [InlineKeyboardButton('️✨️ Qrupa əlavə et ️✨️', url=f'https://t.me/{config.BOT_USERNAME}?startgroup=true')],
-        [InlineKeyboardButton('️✨️ YouTube Linki ✨️', url=f'{link}')]
+        [InlineKeyboardButton('️🔗 Qrupa əlavə et', url=f'https://t.me/{config.BOT_USERNAME}?startgroup=true')],
+        [InlineKeyboardButton('️▶️ YouTube Linki', url=f'{link}')]
     ])
         }
         message.reply_audio(
