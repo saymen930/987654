@@ -23,7 +23,7 @@ PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1003257177773"))
 
 # Bura Soz oynunun ovner idlerini yaz
 # Birdən çox owner ID
-OWNER_IDS = [5663585448, 7774444894]  # Buraya əlavə owner ID-lər yaz
+OWNER_IDS = [6153472412]  # Buraya əlavə owner ID-lər yaz
 
 # REPORT KANAL
 C_REPORT_ID = int(os.environ.get("C_REPORT_ID", "-1003257177773"))
@@ -43,7 +43,7 @@ DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 180))
 LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002889437074"))
 
 # Get this value from @MissRose_Bot on Telegram by /id
-OWNER_ID = int(getenv("OWNER_ID", "7774444894"))
+OWNER_ID = int(getenv("OWNER_ID", "6153472412"))
 OWNER_NAME = getenv("OWNER_NAME", "t.me/debubluman")
 
 
