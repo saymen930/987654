@@ -4,7 +4,7 @@ import os
 from telethon import TelegramClient, events
 import json
 import config
-from Jason.word import word  # WORDS siyahısı bu faylda saxlanılır
+from Jason import word  # WORDS siyahısı bu faylda saxlanılır
 
 AZBUL = "Jason/custom_words.json"
 
