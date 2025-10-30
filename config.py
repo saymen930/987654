@@ -16,9 +16,9 @@ API_HASH = getenv("API_HASH", "33ac02b7891c5396e6b305802d56cf4f")
 BOT_TOKEN = getenv("BOT_TOKEN", "7756181021:AAH8mPBjMb0SRB9LUAdZDdJxt5ZZaY6Oa4k")
 
 #KANAL
-PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "PersionalPlaylist")
-SPORT_K = os.environ.get("SPORT_K", "PersionalSupport") # Sport kanali
-BOT_USERNAME = os.environ.get("BOT_USERNAME", "PersionalMultiBot")
+PLAYLIST_NAME = os.environ.get("PLAYLIST_NAME", "VibeXPlayList")
+SPORT_K = os.environ.get("SPORT_K", "debublumann") # Sport kanali
+BOT_USERNAME = os.environ.get("BOT_USERNAME", "vibex_musicbot")
 PLAYLIST_ID = int(os.environ.get("PLAYLIST_ID", "-1002802790454"))
 
 # Bura Soz oynunun ovner idlerini yaz
@@ -29,7 +29,7 @@ OWNER_IDS = [5663585448, 7774444894]  # Buraya əlavə owner ID-lər yaz
 C_REPORT_ID = int(os.environ.get("C_REPORT_ID", "-1002856561752"))
 C_REPORT = os.environ.get("C_REPORT", "persionalreport")
 # Bot_name
-BOT_NAME = os.environ.get("BOT_NAME", "𝐏𝐄𝐑𝐒𝐈𝐎𝐍𝐀𝐋 𝐌𝐔𝐋𝐓𝐈 🇦🇿")
+BOT_NAME = os.environ.get("BOT_NAME", "𝐕𝐢𝐛𝐞𝐗 𝐌𝐮𝐬𝐢𝐜")
 #Bot username
 
 
@@ -44,7 +44,7 @@ LOG_GROUP_ID = int(getenv("LOG_GROUP_ID", "-1002889437074"))
 
 # Get this value from @MissRose_Bot on Telegram by /id
 OWNER_ID = int(getenv("OWNER_ID", "7774444894"))
-OWNER_NAME = getenv("OWNER_NAME", "t.me/PersionalOwner")
+OWNER_NAME = getenv("OWNER_NAME", "t.me/debublumann")
 
 
 # Fill Queue Limit . Example - 15
@@ -60,8 +60,8 @@ HEROKU_API_KEY = getenv("HEROKU_API_KEY", None)
 
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "main")
 
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/PersionalSupport")
-SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/PersionalDestek")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/debublumann")
+SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/debublumann")
 
 # Set this to True if you want the assistant to automatically leave chats after an interval
 AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", None))
